@@ -1,4 +1,4 @@
-ï»¿#pragma once
+#pragma once
 #include<iostream>
 #include<list>
 #include<map>
@@ -22,7 +22,7 @@ using std::tuple;
 using std::vector;
 
 
-/*-------------------------------------å£°æ˜--------------------------------------*/
+/*-------------------------------------ÉùÃ÷--------------------------------------*/
 template<class T1, class T2>
 void _print(const pair<T1, T2>& pa);
 
@@ -47,9 +47,9 @@ template<class T, class... Args>
 void print(const T& arg, const Args&... args);
 
 
-/*-------------------------------------å®šä¹‰--------------------------------------*/
+/*-------------------------------------¶¨Òå--------------------------------------*/
 template<class T1, class T2>
-void _print(const pair<T1, T2>& pa)  //è¾“å‡ºpairç±»å‹
+void _print(const pair<T1, T2>& pa)  //Êä³öpairÀàĞÍ
 {
 	cout << "Pair[";
 	_print(pa.first);
@@ -59,7 +59,7 @@ void _print(const pair<T1, T2>& pa)  //è¾“å‡ºpairç±»å‹
 }
 
 template<int Idx = 0, class... Ts>
-void _print(const tuple<Ts...>& tp)  //è¾“å‡ºtupleç±»
+void _print(const tuple<Ts...>& tp)  //Êä³ötupleÀà
 {
 	assert(Idx >= 0);
 	const int size_tp = std::tuple_size<tuple<Ts...>>::value;
@@ -82,7 +82,7 @@ void _print(const tuple<Ts...>& tp)  //è¾“å‡ºtupleç±»
 }
 
 template<class T1, class T2, class... Ts>
-void _print(const map<T1, T2, Ts...>& m)  //è¾“å‡ºlistç±»
+void _print(const map<T1, T2, Ts...>& m)  //Êä³ölistÀà
 {
 	cout << "map{";
 	int size = m.size();
@@ -136,7 +136,7 @@ void _print(const string& str)
 }
 
 template<class T>
-void _print(const T& arg)  //è¾“å‡ºintã€stringç­‰å•æ•°æ®ç±»å‹
+void _print(const T& arg)  //Êä³öint¡¢stringµÈµ¥Êı¾İÀàĞÍ
 {
 	if constexpr (isSameType<T, bool>())
 	{
@@ -150,7 +150,7 @@ void _print(const T& arg)  //è¾“å‡ºintã€stringç­‰å•æ•°æ®ç±»å‹
 }
 
 template<class T, int N>
-void _print(const T(&arr)[N])  //è¾“å‡ºint[]ã€char[]ç­‰æ•°ç»„ç±»å‹
+void _print(const T(&arr)[N])  //Êä³öint[]¡¢char[]µÈÊı×éÀàĞÍ
 {
 	if (isInTypes<T, char, wchar_t>())
 		cout << arr;
@@ -171,14 +171,14 @@ template<class T, class... Args>
 void print(const T& arg, const Args&... args)
 {
 	/*
-	å®ç°ç±»ä¼¼pythonçš„printè¾“å‡ºã€‚
-	-æ”¯æŒintã€floatã€charã€stringç­‰åŸºæœ¬ç±»å‹æ•°æ®çš„è¾“å‡ºï¼›
-	-æ”¯æŒint[]ã€float[]ç­‰åŸºæœ¬å¤šç»´æ•°ç»„ç±»å‹æ•°æ®çš„è¾“å‡ºï¼›
-	-æ”¯æŒvectorã€tupleã€pairã€listã€setã€mapåŠå…¶ç›¸äº’åµŒå¥—ç±»å‹æ•°æ®çš„è¾“å‡ºï¼›
-	-Warningï¼šå­˜åœ¨è¾“å…¥éæ”¯æŒç±»å‹æ•°æ®å¾—åˆ°é”™è¯¯ç»“æœä½†ä¸äº§ç”Ÿå¼‚å¸¸çš„å¯èƒ½ã€‚
+	ÊµÏÖÀàËÆpythonµÄprintÊä³ö¡£
+	-Ö§³Öint¡¢float¡¢char¡¢stringµÈ»ù±¾ÀàĞÍÊı¾İµÄÊä³ö£»
+	-Ö§³Öint[]¡¢float[]µÈ»ù±¾¶àÎ¬Êı×éÀàĞÍÊı¾İµÄÊä³ö£»
+	-Ö§³Övector¡¢tuple¡¢pair¡¢list¡¢set¡¢map¼°ÆäÏà»¥Ç¶Ì×ÀàĞÍÊı¾İµÄÊä³ö£»
+	-Warning£º´æÔÚÊäÈë·ÇÖ§³ÖÀàĞÍÊı¾İµÃµ½´íÎó½á¹ûµ«²»²úÉúÒì³£µÄ¿ÉÄÜ¡£
 	*/
 
-	//int _a[] = { (_print(args), cout << " ", 0)... };   //å¦ä¸€ç§å†™æ³•ï¼Œä½†å¯è¯»æ€§å·®ä¸€äº›
+	//int _a[] = { (_print(args), cout << " ", 0)... };   //ÁíÒ»ÖÖĞ´·¨£¬µ«¿É¶ÁĞÔ²îÒ»Ğ©
 	_print(arg);
 	cout << " ";
 	if constexpr (sizeof...(args) > 0)

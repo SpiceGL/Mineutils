@@ -1,4 +1,4 @@
-ï»¿#pragma once
+#pragma once
 #include<filesystem>
 #include<iostream>
 #include<map>
@@ -21,7 +21,7 @@ using cs = ColorStr;
 
 struct Path
 {
-	static void copy(string pth_from, string pth_to, string opt = "overwrite")  //é€’å½’å¤åˆ¶æ–‡ä»¶å’Œç›®å½•
+	static void copy(string pth_from, string pth_to, string opt = "overwrite")  //µİ¹é¸´ÖÆÎÄ¼şºÍÄ¿Â¼
 	{
 		if (Path::exists(pth_from))
 		{
@@ -36,23 +36,23 @@ struct Path
 				Path::_copyFile(pth_from, pth_to, opt);
 		}
 		else
-			print(cs::yellow("Path::copyDir:"), cs::cyan("pth_from= " + pth_from) + "ä¸å­˜åœ¨ï¼Œå› æ­¤æœªå¤åˆ¶ä»»ä½•ç›®å½•å’Œæ–‡ä»¶ï¼");
+			print(cs::yellow("Path::", __func__, ":"), cs::cyan("pth_from= " + pth_from) + "²»´æÔÚ£¬Òò´ËÎ´¸´ÖÆÈÎºÎÄ¿Â¼ºÍÎÄ¼ş£¡");
 	}
 
-	static void _copyDir(string pth_from, string pth_to)  //åªèƒ½å¤åˆ¶ç›®å½•ï¼Œç›®å½•ä¸‹çš„æ–‡ä»¶å’Œæ–‡ä»¶å¤¹éƒ½æ— æ³•å¤åˆ¶
+	static void _copyDir(string pth_from, string pth_to)  //Ö»ÄÜ¸´ÖÆÄ¿Â¼£¬Ä¿Â¼ÏÂµÄÎÄ¼şºÍÎÄ¼ş¼Ğ¶¼ÎŞ·¨¸´ÖÆ
 	{
 		fs::path pf(pth_from);
 		fs::path pt(pth_to);
 		fs::copy(pf, pt, fs::copy_options::skip_existing);
 	}
 
-	static bool _copyFile(string pth_from, string pth_to, string opt = "overwrite")  //å¤åˆ¶å•ä¸ªæ–‡ä»¶ï¼Œç”šè‡³ä¸èƒ½åˆ›å»ºç›®å½•
+	static bool _copyFile(string pth_from, string pth_to, string opt = "overwrite")  //¸´ÖÆµ¥¸öÎÄ¼ş£¬ÉõÖÁ²»ÄÜ´´½¨Ä¿Â¼
 	{
 		/*
 		opt:
-		"overwrite"è¡¨ç¤ºè¦†ç›–å·²å­˜åœ¨çš„ç›®æ ‡ï¼›
-		"skip"ä»£è¡¨è·³è¿‡å·²å­˜åœ¨çš„ç›®æ ‡ï¼›
-		"update"è¡¨ç¤ºä»…å½“pth_fromæœ€åä¿®æ”¹æ—¶é—´æ–°äºpth_toçš„æ—¶å€™è¦†ç›–ï¼Œå¦åˆ™è·³è¿‡ã€‚
+		"overwrite"±íÊ¾¸²¸ÇÒÑ´æÔÚµÄÄ¿±ê£»
+		"skip"´ú±íÌø¹ıÒÑ´æÔÚµÄÄ¿±ê£»
+		"update"±íÊ¾½öµ±pth_from×îºóĞŞ¸ÄÊ±¼äĞÂÓÚpth_toµÄÊ±ºò¸²¸Ç£¬·ñÔòÌø¹ı¡£
 		*/
 		fs::path pf(pth_from);
 		fs::path pt(pth_to);
@@ -64,46 +64,46 @@ struct Path
 		else if (opt == "update")
 			return fs::copy_file(pf, pt, fs::copy_options::update_existing);
 		else
-			throw "optè¾“å…¥æœ‰è¯¯ï¼";
+			throw "optÊäÈëÓĞÎó£¡";
 	}
 
-	static string cwd()  //è·å–å½“å‰ç»å¯¹è·¯å¾„
+	static string cwd()  //»ñÈ¡µ±Ç°¾ø¶ÔÂ·¾¶
 	{
 		return fs::current_path().string();
 	}
 
-	static bool exists(string pth)  //åˆ¤æ–­è·¯å¾„æ˜¯å¦å­˜åœ¨
+	static bool exists(string pth)  //ÅĞ¶ÏÂ·¾¶ÊÇ·ñ´æÔÚ
 	{
 		fs::path p(pth);
 		return fs::exists(p);
 	}
 
-	static string extension(string pth)  //è·å–è·¯å¾„çš„æ‰©å±•å
+	static string extension(string pth)  //»ñÈ¡Â·¾¶µÄÀ©Õ¹Ãû
 	{
 		fs::path p(pth);
 		return p.extension().string();
 	}
 
-	static bool isAbs(string pth)  //åˆ¤æ–­è·¯å¾„æ˜¯å¦ä¸ºç»å¯¹è·¯å¾„
+	static bool isAbs(string pth)  //ÅĞ¶ÏÂ·¾¶ÊÇ·ñÎª¾ø¶ÔÂ·¾¶
 	{
 		fs::path p(pth);
 		return p.is_absolute();
 	}
 
-	static bool isDir(string pth)  //åˆ¤æ–­è·¯å¾„æ˜¯å¦ä¸ºç›®å½•
+	static bool isDir(string pth)  //ÅĞ¶ÏÂ·¾¶ÊÇ·ñÎªÄ¿Â¼
 	{
 		fs::path p(pth);
 		return fs::is_directory(p);
 	}
 
-	static bool isFile(string pth)  //åˆ¤æ–­è·¯å¾„æ˜¯å¦ä¸ºæ–‡ä»¶
+	static bool isFile(string pth)  //ÅĞ¶ÏÂ·¾¶ÊÇ·ñÎªÎÄ¼ş
 	{
 		fs::path p(pth);
 		return fs::exists(p) and not fs::is_directory(p);
 	}
 
 	template<class... Strs>
-	static string join(string pth1, string pth2, Strs... pths)  //å®ç°ç±»ä¼¼pythonçš„os.path.joinåŠŸèƒ½
+	static string join(string pth1, string pth2, Strs... pths)  //ÊµÏÖÀàËÆpythonµÄos.path.join¹¦ÄÜ
 	{
 		fs::path p(pth1);
 		p /= pth2;
@@ -113,7 +113,7 @@ struct Path
 			return p.string();
 	}
 
-	static vector<string> listDir(string pth, bool return_path = true, set<string> ignore_names = {})  //è·å–ç›®å½•ä¸‹çš„ä¸€çº§æ–‡ä»¶å’Œç›®å½•
+	static vector<string> listDir(string pth, bool return_path = true, set<string> ignore_names = {})  //»ñÈ¡Ä¿Â¼ÏÂµÄÒ»¼¶ÎÄ¼şºÍÄ¿Â¼
 	{
 		fs::path p(pth);
 		vector<string> filenames;
@@ -137,13 +137,13 @@ struct Path
 		return filenames;
 	}
 
-	static bool makeDirs(string pth)  //åˆ›å»ºç›®å½•
+	static bool makeDirs(string pth)  //´´½¨Ä¿Â¼
 	{
 		fs::path p(pth);
 		return fs::create_directories(p);
 	}
 
-	static void move(string pth_from, string pth_to)  //ç§»åŠ¨ç›®å½•ï¼Œä¹Ÿå¯ç”¨äºé‡å‘½å
+	static void move(string pth_from, string pth_to)  //ÒÆ¶¯Ä¿Â¼£¬Ò²¿ÉÓÃÓÚÖØÃüÃû
 	{
 		fs::path pf(pth_from);
 		fs::path pt(pth_to);
@@ -152,7 +152,7 @@ struct Path
 		fs::rename(pf, pt);
 	}
 
-	static string parent(string pth)  //è·å–çˆ¶ç›®å½•
+	static string parent(string pth)  //»ñÈ¡¸¸Ä¿Â¼
 	{
 		fs::path p(pth);
 		if (p.is_absolute())
@@ -171,20 +171,20 @@ struct Path
 		}
 	}
 
-	static uintmax_t remove(string pth)  //é€’å½’åˆ é™¤ç›®å½•å’Œæ–‡ä»¶
+	static uintmax_t remove(string pth)  //µİ¹éÉ¾³ıÄ¿Â¼ºÍÎÄ¼ş
 	{
 		fs::path p(pth);
 		return fs::remove_all(p);
 	}
 
-	static string root(string pth)  //è¿”å›æ ¹ç›®å½•
+	static string root(string pth)  //·µ»Ø¸ùÄ¿Â¼
 	{
 		fs::path p(pth);
 		return p.root_path().string();
 	}
 
 	static string splitName(string pth, bool suffix = true)
-		//ä»è·¯å¾„å­—ç¬¦ä¸²è·å–æ–‡ä»¶å
+		//´ÓÂ·¾¶×Ö·û´®»ñÈ¡ÎÄ¼şÃû
 	{
 		fs::path p(pth);
 		if (suffix)
@@ -193,13 +193,17 @@ struct Path
 			return p.stem().string();
 	}
 
-	static vector<string> walk(string pth, bool return_path = true)  //éå†ç›®å½•ä¸‹çš„æ‰€æœ‰æ–‡ä»¶
+	static vector<string> walk(string pth, bool return_path = true)  //±éÀúÄ¿Â¼ÏÂµÄËùÓĞÎÄ¼ş
 	{
 		fs::path p(pth);
 		vector<string> filenames;
 		string filename;
 
-		assert(fs::is_directory(p));
+		if (not fs::is_directory(p))
+		{
+			print(cs::red("Path::", __func__, ":"), "ÊäÈëÂ·¾¶²»ÊÇÄ¿Â¼»ò²»´æÔÚ£¬³ÌĞòÒÑÖĞÖ¹£¡");
+			exit(0);
+		}
 		fs::directory_iterator iter(p);
 		for (auto& it : iter)
 		{	

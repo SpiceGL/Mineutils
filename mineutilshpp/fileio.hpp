@@ -1,4 +1,4 @@
-ï»¿#pragma once
+#pragma once
 #include<fstream>
 #include<iostream>
 #include<string>
@@ -6,7 +6,7 @@
 
 //void cvMatIntoFile(cv::Mat M, string filepath)
 //{
-//	//ä½¿ç”¨ofstreamæ¥è¾“å‡ºmat
+//	//Ê¹ÓÃofstreamÀ´Êä³ömat
 //	std::ofstream Fs(filepath);
 //	if (!Fs.is_open())
 //	{
@@ -21,10 +21,10 @@
 //		for (int j = 0; j < width; j++)
 //		{
 //			Fs << (float)M.ptr<float>(i)[j] << '\t';
-//			//ä¸åŠ ç±»å‹è½¬æ¢ç”¨txtæ‰“å¼€æ˜¯å­—ç¬¦
+//			//²»¼ÓÀàĞÍ×ª»»ÓÃtxt´ò¿ªÊÇ×Ö·û
 //		}
 //		Fs << std::endl;
 //	}
 //	Fs.close();
-//	cout << "å·²å°†Matå†…å®¹å†™å…¥æ–‡ä»¶" << filepath << endl;
+//	cout << "ÒÑ½«MatÄÚÈİĞ´ÈëÎÄ¼ş" << filepath << endl;
 //}

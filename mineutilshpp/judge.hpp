@@ -1,46 +1,46 @@
-ï»¿#pragma once
+//base
+#pragma once
 #include<type_traits>
 
 
-using std::cout;
 using std::decay;
 using std::is_same;
 
 
-template<class T1, class T2>
-constexpr bool isSameType(bool use_decay = true)
+template<class T1, class T2, class ...Ts>
+constexpr bool isSameType()
 {
 	/*
-	ç”¨äºåˆ¤æ–­ä¸¤ä¸ªç±»å‹æ˜¯ä¸æ˜¯ç›¸åŒç±»å‹ã€‚
-	-çˆ¶ç±»å’Œå­ç±»ä¸æ˜¯ç›¸åŒç±»å‹;
-	-å¦‚æœuse_decayä¸ºtrueï¼Œåˆ™æ¯”è¾ƒç±»å‹æ—¶å¿½ç•¥constå’Œ&ä¿®é¥°ï¼Œå¿½ç•¥åŒç±»å‹æ•°ç»„çš„é•¿åº¦ä¸åŒï¼›
-		--å‘ï¼šintå’Œconst intåˆ¤æ–­ç›¸åŒï¼Œä½†int[]å’Œconst int[]åˆ¤æ–­ä¸åŒï¼›
-	-å¦‚æœuse_decayä¸ºfalseï¼Œ ä¸¤ä¸ªç±»å‹éœ€ä¸¥æ ¼ç›¸åŒã€‚
+	ÓÃÓÚÅĞ¶ÏÀàĞÍÊÇ²»ÊÇÏàÍ¬ÀàĞÍ¡£
+	-¸¸ÀàºÍ×ÓÀà²»ÊÇÏàÍ¬ÀàĞÍ;
+	-±È½ÏÀàĞÍÊ±ºöÂÔconstºÍ&ĞŞÊÎ£¬ºöÂÔÍ¬ÀàĞÍÊı×éµÄ³¤¶È²»Í¬£»
+		-intºÍconst intÅĞ¶ÏÏàÍ¬£¬µ«int[]ºÍconst int[]ÅĞ¶Ï²»Í¬£»
+		-±¾ÖÊÊÇ³£Á¿Ö¸ÕëÓëÖ¸Õë³£Á¿ÅĞ¶Ï²»Í¬£¬Ö¸ÕëÓëÖ¸Õë³£Á¿ÅĞ¶ÏÏàÍ¬¡£
 	*/
-	if (use_decay)
-		return is_same<typename decay<T1>::type, typename decay<T2>::type>::value;
+	if constexpr (sizeof...(Ts) > 0)
+		return is_same<typename decay<T1>::type, typename decay<T2>::type>::value and isSameType<T1, Ts...>(true);
 	else
-		return is_same<T1, T2>::value;
+		return is_same<typename decay<T1>::type, typename decay<T2>::type>::value;
 }
 
-template<class T1, class T2>
-constexpr bool isSameType(T1& arg1, T2& arg2, bool use_decay = true)
+template<class T1, class T2, class ...Ts>
+constexpr bool isSameType(T1& arg1, T2& arg2, Ts& ...args)
 {
 	/*
-	ç”¨äºåˆ¤æ–­ä¸¤ä¸ªè¾“å…¥å‚æ•°æ˜¯ä¸æ˜¯ç›¸åŒç±»å‹ã€‚
+	ÓÃÓÚÅĞ¶ÏÊäÈë²ÎÊıÊÇ²»ÊÇÏàÍ¬ÀàĞÍ¡£
 	*/
-	return isSameType<T1, T2>(use_decay);
+	return isSameType<T1, T2, Ts...>();
 }
 
 
 template<class T, class T1, class... Types>
-constexpr bool isInTypes(bool use_decay = true)
+constexpr bool isInTypes()
 {
 	/*
-	ç”¨äºåˆ¤æ–­Tæ˜¯å¦å±äºåé¢çš„å¤šç§ç±»å‹ä¸­ã€‚
+	ÓÃÓÚÅĞ¶ÏTÊÇ·ñÊôÓÚºóÃæµÄ¶àÖÖÀàĞÍÖĞ¡£
 	*/
 	if constexpr (sizeof...(Types) > 0)
-		return isSameType<T, T1>(use_decay) or isInTypes<T, Types...>(use_decay);
+		return isSameType<T, T1>() or isInTypes<T, Types...>();
 	else
-		return isSameType<T, T1>(use_decay);
+		return isSameType<T, T1>();
 }

@@ -48,9 +48,22 @@ def main():
     target_encoding = "UTF-8-SIG"
     file_extensions = (".py", ".h", ".hpp", ".c", ".cpp")
     batchConvert(file_dir, backup_dir, target_encoding, file_extensions)
+    
+
+def showEncoding():
+    file_dir = "../mineutilshpp"
+    backup_dir = file_dir + "_backup"
+    target_encoding = "UTF-8-SIG"
+    file_extensions = (".py", ".h", ".hpp", ".c", ".cpp")
+    
+    file_paths = pt.walk(file_dir)
+    for fp in file_paths:
+        if pt.extension(fp) in file_extensions:
+            past_encoding = getEncodingFormat(fp)
+            print(cs.green("convertEncoding:"), cs.fuchsia(fp) + f"的编码格式为{past_encoding}。")
 
 
 if __name__ == '__main__':
-    print(pt.listDir("../mineutilshpp", ignore_names=["judge.hpp", "path.hpp"]))
+    showEncoding()
     
 

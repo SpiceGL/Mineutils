@@ -1,4 +1,4 @@
-ï»¿#pragma once
+#pragma once
 #include<string>
 
 #include<opencv2/opencv.hpp>
@@ -14,33 +14,32 @@ using std::string;
 using cs = ColorStr;
 
 
-/*------------------------------------å£°æ˜-------------------------------------*/
-void loopShowCV(string win_name, cv::Mat& img, float wait, bool use_break);
+/*------------------------------------ÉùÃ÷-------------------------------------*/
+bool loopShowCV(string win_name, cv::Mat& img, float wait);
 void quickShowCV(string win_name, cv::Mat& img, float wait, bool close, cv::Size size, pair<int, int> position, int flag);
-void quickPlayCV(string win_name, string video_path, float wait, cv::Size size, pair<int, int> position, int flag, bool use_break);
+void quickPlayCV(string win_name, string video_path, float wait, cv::Size size, pair<int, int> position, int flag);
 string setWindowCV(string win_name, cv::Size size, pair<int, int> position, int flag);
 
 
-/*------------------------------------å®šä¹‰-------------------------------------*/
-//å¿«é€Ÿæ˜¾ç¤ºå›¾åƒï¼Œçª—å£å±æ€§åœ¨å‡½æ•°å¤–è®¾ç½®ï¼Œå› æ­¤å¸¸ç”¨äºå¾ªç¯ä½“ä¸­
-void loopShowCV(string win_name, cv::Mat& img, float wait = 1, bool use_break = true)
+/*------------------------------------¶¨Òå-------------------------------------*/
+//¿ìËÙÏÔÊ¾Í¼Ïñ£¬´°¿ÚÊôĞÔÔÚº¯ÊıÍâÉèÖÃ£¬ÍÆ¼öÓÃÓÚÑ­»·ÌåÖĞ£¬ÈôÊÕµ½ÖĞÖ¹ĞÅºÅ£¬Ôò·µ»Øfalse
+bool loopShowCV(string win_name, cv::Mat& img, float wait = 1)
 {
 	cv::imshow(win_name, img);
 	int k = cv::waitKey(wait) & 0xff;
-	if (use_break and (k == 27 or k == int('q')))
-	{
-		print(cs::red("loopShowCV:"), "ç”¨æˆ·ä¸»åŠ¨ä¸­æ­¢ç¨‹åºï¼");
-		exit(1);
-	}
+	if (k == 27 or k == int('q'))
+		return false;
+	else
+		return true;
 }
 
-//å¿«é€Ÿæ˜¾ç¤ºå›¾åƒï¼Œä¸€æ­¥åˆ°ä½è®¾ç½®çª—å£å’Œæ˜¾ç¤ºå±æ€§
+//¿ìËÙÏÔÊ¾Í¼Ïñ£¬Ò»²½µ½Î»ÉèÖÃ´°¿ÚºÍÏÔÊ¾ÊôĞÔ
 void quickShowCV(string win_name, cv::Mat& img, 
 	float wait = 0, bool close = true, cv::Size size = {-1, -1}, 
 	pair<int, int> position = {-1, -1}, int flag = cv::WINDOW_FREERATIO)
 {
 	if (img.empty())
-		print(cs::red("quickShowCV:"), "è¾“å…¥å›¾åƒä¸ºç©ºï¼");
+		print(cs::yellow(__func__, ":"), "Í¼Ïñ´ò¿ªÊ§°Ü£¬ÒÑÌø¹ıÏÔÊ¾£¡");
 	else
 	{
 		cv::namedWindow(win_name, flag);
@@ -55,15 +54,14 @@ void quickShowCV(string win_name, cv::Mat& img,
 	}
 }
 
-//å¿«é€Ÿæ˜¾ç¤ºè§†é¢‘
+//¿ìËÙÏÔÊ¾ÊÓÆµ
 void quickPlayCV(string win_name, string video_path, 
-	float wait = 30, cv::Size size = { -1, -1 }, pair<int, int> position = { -1, -1 }, 
-	int flag = cv::WINDOW_FREERATIO, bool use_break = true)
+	float wait = 30, cv::Size size = { -1, -1 }, pair<int, int> position = { -1, -1 }, int flag = cv::WINDOW_FREERATIO)
 {
 	auto cap = cv::VideoCapture(video_path);
 	if (not cap.isOpened())
 	{
-		print(cs::red("quickPlayCV:"), "è§†é¢‘æ–‡ä»¶æ‰“å¼€å¤±è´¥ï¼");
+		print(cs::yellow(__func__, ":"), "ÊÓÆµÎÄ¼ş´ò¿ªÊ§°Ü£¬ÒÑÌø¹ı²¥·Å£¡");
 		return;
 	}
 	setWindowCV(win_name, size, position, flag);
@@ -74,14 +72,20 @@ void quickPlayCV(string win_name, string video_path,
 		if (not ret)
 		{
 			cv::destroyWindow(win_name);
-			print(cs::fuchsia("quickPlayCV:"), "è§†é¢‘å·²æ’­æ”¾ç»“æŸæˆ–ä¸­æ–­ã€‚");
+			print(cs::green(__func__, ":"), "ÊÓÆµÒÑ²¥·Å½áÊø¡£");
 			break;
 		}
-		loopShowCV(win_name, frame, wait, use_break);
+		bool go_on = loopShowCV(win_name, frame, wait);
+		if (not go_on)
+		{
+			cv::destroyWindow(win_name);
+			print(cs::yellow(__func__, ":"), "ÊÕµ½ÖĞÖ¹ĞÅºÅ£¬ÌáÇ°½áÊøÊÓÆµ²¥·Å£¡");
+			break;
+		}
 	}
 }
 
-//å¿«é€Ÿè®¾ç½®çª—å£å±æ€§
+//¿ìËÙÉèÖÃ´°¿ÚÊôĞÔ
 string setWindowCV(string win_name, 
 	cv::Size size = { -1, -1 }, pair<int, int> position = { -1, -1 }, int flag = cv::WINDOW_FREERATIO)
 {
@@ -108,7 +112,7 @@ void _printCVMat(cv::Mat M, pair<int, int> x_range = { 0, 5 }, pair<int, int> y_
 	cout << "------------------------" << endl;
 }
 
-void printCVMat(cv::Mat& M, pair<int, int> x_range = {0, 5}, pair<int, int> y_range = { 0, 5 })
+void printCVMat(const cv::Mat& M, pair<int, int> x_range = {0, 5}, pair<int, int> y_range = { 0, 5 })
 {
 	/*		C1	C2	C3	C4
 	CV_8U	0	8	16	24
@@ -122,5 +126,6 @@ void printCVMat(cv::Mat& M, pair<int, int> x_range = {0, 5}, pair<int, int> y_ra
 	if (M.type() == 0) _printCVMat<uchar>(M, x_range, y_range);
 	else if (M.type() == 16) _printCVMat<cv::Vec3b>(M, x_range, y_range);
 	else if (M.type() == 21) _printCVMat<cv::Vec3f>(M, x_range, y_range);
-	else throw "è¯¥å›¾åƒçš„cv::Mat::type()æš‚ä¸æ”¯æŒ";
+	else
+		print(cs::yellow(__func__, ":"), "¸ÃÍ¼ÏñµÄcv::Mat::type()Ôİ²»Ö§³Ö£¬ÒÑÌø¹ıÊä³ö!");
 }
