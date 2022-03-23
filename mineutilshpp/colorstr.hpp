@@ -1,3 +1,4 @@
+//base
 #pragma once
 #include <string>
 
@@ -112,4 +113,4 @@ private:
 	}
 };
 
-bool ColorStr::enabled = true;
+bool ColorStr::enabled = false;

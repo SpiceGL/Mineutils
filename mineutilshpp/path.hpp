@@ -7,8 +7,8 @@
 #include<vector>
 
 
-#include"print.hpp"
 #include"colorstr.hpp"
+#include"print.hpp"
 
 namespace fs = std::filesystem;
 using std::map;
@@ -16,11 +16,12 @@ using std::pair;
 using std::set;
 using std::string;
 using std::vector;
-using cs = ColorStr;
 
 
 struct Path
 {
+	using cs = ColorStr;
+
 	static void copy(string pth_from, string pth_to, string opt = "overwrite")  //递归复制文件和目录
 	{
 		if (Path::exists(pth_from))
