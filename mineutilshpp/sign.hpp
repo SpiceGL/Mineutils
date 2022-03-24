@@ -16,9 +16,7 @@ namespace sign
 			~SelfGarbo()
 			{
 				if (self)
-				{
 					delete self;
-				}
 			}
 		};
 		static SelfGarbo self_garbo;

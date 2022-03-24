@@ -36,8 +36,8 @@ void printMat(cv::Mat& img);
 template<class MatT>
 void _printCVMat(cv::Mat_<MatT> img, int xstart, int xend, int ystart, int yend);
 
-template<class MatT>
-void _printCVMat(cv::Mat_<MatT> img, int xstart, int xend, int ystart, int yend, int cstart, int cend);
+template<class cvVec>
+void _printCVMat(cv::Mat_<cvVec> img, int xstart, int xend, int ystart, int yend, int cstart, int cend);
 
 
 /*------------------------------------定义-------------------------------------*/
@@ -144,7 +144,7 @@ void printMat(cv::Mat& img, const Tx& x_range, const Ty& y_range, const Tc& c_ra
 	int xstart = x_norm_range.first, xend = x_norm_range.second;
 	int ystart = y_norm_range.first, yend = y_norm_range.second;
 	int cstart = c_norm_range.first, cend = c_norm_range.second;
-	print(xstart, xend, ystart, yend, cstart, cend);
+
 	if (img.type() == 0) 
 		_printCVMat<uchar>(img, xstart, xend, ystart, yend);
 	else if (img.type() == 16) 
@@ -177,6 +177,18 @@ void printMat(cv::Mat& img)
 template<class MatT>
 void _printCVMat(cv::Mat_<MatT> img, int xstart, int xend, int ystart, int yend)
 {
+	using namespace cv;
+	using cs = ColorStr;
+	int coutw, coutprec;
+	if (isInTypes<MatT, uchar>())
+		coutw = 3, coutprec = 2;
+	else if (isInTypes<MatT, float, double>())
+		coutw = 5, coutprec = 4;
+	else
+	{
+		print(cs::yellow(__func__, ":"), "暂未优化的类型，因此未调整输出宽度！");
+		coutw = 0, coutprec = 6;
+	}
 	if (yend - ystart == 1) 
 		cout << "cv::Mat{";
 	else cout << "cv::Mat{" << endl;
@@ -187,8 +199,8 @@ void _printCVMat(cv::Mat_<MatT> img, int xstart, int xend, int ystart, int yend)
 		for (int x = xstart; x < xend; x++)
 		{
 			if (x != xend - 1) 
-				cout << std::setw(cout_width) << std::setprecision(cout_width-1) << (int)img(y, x) << " ";
-			else cout << std::setw(cout_width) << std::setprecision(cout_width-1) << (int)img(y, x);
+				cout << std::setw(coutw) << std::setprecision(coutprec) << (int)img(y, x) << " ";
+			else cout << std::setw(coutw) << std::setprecision(coutprec) << (int)img(y, x);
 		}
 		if (y != yend - 1) 
 			cout << "]" << endl;
@@ -197,9 +209,21 @@ void _printCVMat(cv::Mat_<MatT> img, int xstart, int xend, int ystart, int yend)
 	cout << "}" << endl;
 }
 
-template<class MatT>
-void _printCVMat(cv::Mat_<MatT> img, int xstart, int xend, int ystart, int yend, int cstart, int cend)
+template<class cvVec>
+void _printCVMat(cv::Mat_<cvVec> img, int xstart, int xend, int ystart, int yend, int cstart, int cend)
 {
+	using namespace cv;
+	using cs = ColorStr;
+	int coutw, coutprec;
+	if (isInTypes<cvVec, Vec2b, Vec3b, Vec4b>())
+		coutw = 3, coutprec = 2;
+	else if (isInTypes<cvVec, Vec2f, Vec3f, Vec4f, Vec2d, Vec3d, Vec4d>())
+		coutw = 5, coutprec = 4;
+	else
+	{
+		print(cs::yellow(__func__, ":"), "暂未优化的类型，因此未调整输出宽度！");
+		coutw = 0, coutprec = 6;
+	}
 	if (yend - ystart == 1) 
 		cout << "cv::Mat{";
 	else cout << "cv::Mat{" << endl;
@@ -213,8 +237,8 @@ void _printCVMat(cv::Mat_<MatT> img, int xstart, int xend, int ystart, int yend,
 			for (int c = cstart; c < cend; c++)
 			{
 				if (c != cend - 1) 
-					cout << std::setw(4) << std::setprecision(3) << (int)img(y, x)[c] << " ";
-				else cout << std::setw(4) << std::setprecision(3) << (int)img(y, x)[c];
+					cout << std::setw(coutw) << std::setprecision(coutprec) << (int)img(y, x)[c] << " ";
+				else cout << std::setw(coutw) << std::setprecision(coutprec) << (int)img(y, x)[c];
 			}
 			if (x != xend - 1) 
 				cout << ") ";

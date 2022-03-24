@@ -40,9 +40,9 @@ void printMat(ncnn::Mat& m, const Tx& x_range, const Ty& y_range, const Tc& c_ra
 	int xstart = x_norm_range.first, xend = x_norm_range.second;
 	int ystart = y_norm_range.first, yend = y_norm_range.second;
 	int cstart = c_norm_range.first, cend = c_norm_range.second;
+
 	const float* ptr = nullptr;
 	int bias = ystart * m.w;
-
 	if (yend - ystart == 1)
 		cout << "ncnn::Mat{";
 	else
@@ -57,9 +57,9 @@ void printMat(ncnn::Mat& m, const Tx& x_range, const Ty& y_range, const Tc& c_ra
 			{
 				ptr = m.channel(c);
 				if (c != cend - 1)
-					cout << std::setw(4) << std::setprecision(3) << ptr[x + bias] << " ";
+					cout << std::setw(3) << std::setprecision(5) << ptr[x + bias] << " ";
 				else
-					cout << std::setw(4) << std::setprecision(3) << ptr[x + bias];
+					cout << std::setw(3) << std::setprecision(5) << ptr[x + bias];
 			}
 			if (x != xend - 1)
 				cout << ") ";
