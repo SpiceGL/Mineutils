@@ -48,8 +48,6 @@ void print(const T& arg, const Args&... args);
 
 
 /*-------------------------------------定义--------------------------------------*/
-//bool _print(const )
-
 template<class T1, class T2>
 void _print(const pair<T1, T2>& pa)  //输出pair类型
 {

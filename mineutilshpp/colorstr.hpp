@@ -14,6 +14,7 @@ public:
 	static bool enabled;
 
 public:
+	
 	template<class ...Strs>
 	static string black(string str, Strs ...strs)
 	{

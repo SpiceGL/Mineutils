@@ -1,4 +1,5 @@
 #pragma once
+#include"bbox.hpp"
 #include"colorstr.hpp"   //basic
 #include"fileio.hpp"   
 #include"index.hpp"   //based on print.hpp & sign.hpp

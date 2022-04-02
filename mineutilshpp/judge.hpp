@@ -3,10 +3,6 @@
 #include<type_traits>
 
 
-using std::decay;
-using std::is_same;
-
-
 template<class T1, class T2, class ...Ts>
 constexpr bool isSameType()
 {
@@ -17,6 +13,8 @@ constexpr bool isSameType()
 		-int和const int判断相同，但int[]和const int[]判断不同；
 		-本质是常量指针与指针常量判断不同，指针与指针常量判断相同。
 	*/
+	using std::decay;
+	using std::is_same;
 	if constexpr (sizeof...(Ts) > 0)
 		return is_same<typename decay<T1>::type, typename decay<T2>::type>::value and isSameType<T1, Ts...>(true);
 	else

@@ -1,8 +1,35 @@
 #pragma once
+#include<stdlib.h>
 #include"print.hpp"
 #include"sign.hpp"
 
 using std::pair;
+
+
+/*------------------------------------声明-------------------------------------*/
+int normIdx(int idx, int len);
+
+template<class T = pair<int, int>>
+pair<int, int> normRange(const T& range, int len);
+
+
+/*------------------------------------定义-------------------------------------*/
+int normIdx(int idx, int len)
+{
+	using cs = ColorStr;
+	int normal_idx;
+	if (idx >= 0 and idx < len)
+		normal_idx = idx;
+	else if (idx < 0 and idx >= -len)
+		normal_idx = idx + len;
+	else
+	{
+		print(cs::red(__func__, ":"), "idx=", idx, "超出索引范围，程序已中止！");
+		exit(0);
+	}
+	return normal_idx;
+}
+
 
 template<class T>
 pair<int, int> normRange(const T& range, int len)
@@ -23,7 +50,6 @@ pair<int, int> normRange(const T& range, int len)
 				exit(0);
 			}
 		}
-
 		else if constexpr (isSameType<T, pair<int, int>>())
 		{
 			int x1 = range.first, x2 = range.second;
@@ -36,7 +62,6 @@ pair<int, int> normRange(const T& range, int len)
 				x2 < len ? dst_end = x2 : dst_end = len;
 			else x2 >= -len ? dst_end = x2 + len : dst_end = 0;
 		}
-
 		else dst_start = 0, dst_end = len;
 	}
 	else

@@ -5,6 +5,7 @@
 #include<limits.h>
 #include<stdlib.h>
 
+#include"bbox.hpp"
 #include"colorstr.hpp"
 #include"index.hpp"
 #include"print.hpp"
@@ -17,21 +18,29 @@ using std::string;
 
 
 /*------------------------------------声明-------------------------------------*/
-string setWindowCV(string win_name, cv::Size size, pair<int, int> position, int flag);
-bool loopShowCV(string win_name, cv::Mat& img, float wait);
-void quickShowCV(string win_name, cv::Mat& img, float wait, bool close, cv::Size size, pair<int, int> position, int flag);
-void quickPlayCV(string win_name, string video_path, float wait, cv::Size size, pair<int, int> position, int flag);
+string setWindowCV(string win_name, cv::Size size = { -1, -1 }, 
+	pair<int, int> position = { -1, -1 }, int flag = cv::WINDOW_FREERATIO);
+
+bool loopShowCV(string win_name, cv::Mat& img, float wait = 1);
+
+void quickShowCV(string win_name, cv::Mat& img,
+	float wait = 0, bool close = true, cv::Size size = { -1, -1 },
+	pair<int, int> position = { -1, -1 }, int flag = cv::WINDOW_FREERATIO);
+
+void quickPlayCV(string win_name, string video_path, 
+	float wait = 30, cv::Size size = { -1, -1 }, 
+	pair<int, int> position = { -1, -1 }, int flag = cv::WINDOW_FREERATIO);
+
+void putLabel(cv::Mat& img, string label, cv::Point position,
+	cv::Scalar bg_color = { 0, 255, 0 }, cv::Scalar text_color = { 255,255,255 },
+	int text_thickness = 2);
+
+void putBbox(cv::Mat& img, LTRB& ltrb, string label = "",
+	cv::Scalar bbox_color = { 0,255,0 }, cv::Scalar text_color = { 255,255,255 },
+	int bbox_thickness = 3, int text_thickness = 2);
 
 template<class Tx = pair<int, int>, class Ty = pair<int, int>, class Tc = pair<int, int>>
-void printMat(cv::Mat& img, const Tx& x_range, const Ty& y_range, const Tc& c_range);
-
-template<class Tx = pair<int, int>, class Ty = pair<int, int>>
-void printMat(cv::Mat& img, const Tx& x_range, const Ty& y_range);
-
-template<class Tx = pair<int, int>>
-void printMat(cv::Mat& img, const Tx& x_range);
-
-void printMat(cv::Mat& img);
+void printMat(cv::Mat& img, Tx x_range = { 0, INT_MAX }, Ty y_range = { 0, INT_MAX }, Tc c_range = { 0, INT_MAX });
 
 template<class MatT>
 void _printCVMat(cv::Mat_<MatT> img, int xstart, int xend, int ystart, int yend);
@@ -42,8 +51,7 @@ void _printCVMat(cv::Mat_<cvVec> img, int xstart, int xend, int ystart, int yend
 
 /*------------------------------------定义-------------------------------------*/
 //快速设置窗口属性
-string setWindowCV(string win_name,
-	cv::Size size = { -1, -1 }, pair<int, int> position = { -1, -1 }, int flag = cv::WINDOW_FREERATIO)
+string setWindowCV(string win_name, cv::Size size, pair<int, int> position, int flag)
 {
 	cv::namedWindow(win_name, flag);
 	if (size.width != -1)
@@ -54,7 +62,7 @@ string setWindowCV(string win_name,
 }
 
 //快速显示图像，窗口属性在函数外设置，推荐用于循环体中，若收到中止信号，则返回false
-bool loopShowCV(string win_name, cv::Mat& img, float wait = 1)
+bool loopShowCV(string win_name, cv::Mat& img, float wait)
 {
 	cv::imshow(win_name, img);
 	int k = cv::waitKey(wait) & 0xff;
@@ -65,11 +73,9 @@ bool loopShowCV(string win_name, cv::Mat& img, float wait = 1)
 }
 
 
-
 //快速显示图像，一步到位设置窗口和显示属性
-void quickShowCV(string win_name, cv::Mat& img, 
-	float wait = 0, bool close = true, cv::Size size = {-1, -1}, 
-	pair<int, int> position = {-1, -1}, int flag = cv::WINDOW_FREERATIO)
+void quickShowCV(string win_name, cv::Mat& img, float wait, bool close, 
+	cv::Size size, pair<int, int> position, int flag)
 {
 	using cs = ColorStr;
 	if (img.empty())
@@ -89,8 +95,8 @@ void quickShowCV(string win_name, cv::Mat& img,
 }
 
 //快速显示视频
-void quickPlayCV(string win_name, string video_path, 
-	float wait = 30, cv::Size size = { -1, -1 }, pair<int, int> position = { -1, -1 }, int flag = cv::WINDOW_FREERATIO)
+void quickPlayCV(string win_name, string video_path, float wait, 
+	cv::Size size, pair<int, int> position, int flag)
 {
 	using cs = ColorStr;
 	auto cap = cv::VideoCapture(video_path);
@@ -121,12 +127,41 @@ void quickPlayCV(string win_name, string video_path,
 	cap.release();
 }
 
+
+/*---------------------------------------------------------------------------------*/
+void putLabel(cv::Mat& img, string label, cv::Point position, 
+	cv::Scalar bg_color, cv::Scalar text_color, int text_thickness)
+{
+	int* baseline = nullptr;
+	if (label.size() != 0)
+	{
+		cv::Size text_size = cv::getTextSize(label, 0, text_thickness / 3., text_thickness, baseline);
+		cv::Point c1 = position;
+		cv::Point c2 = { position.x + text_size.width, position.y - text_size.height };
+		cv::rectangle(img, c1, c2, bg_color, -1);
+		cv::putText(img, label, c1, 0, text_thickness / 3., text_color, text_thickness, cv::LINE_AA);
+	}
+}
+
+void putBbox(cv::Mat& img, LTRB& ltrb, string label, 
+	cv::Scalar bbox_color, cv::Scalar text_color, int bbox_thickness, int text_thickness)
+{
+	cv::Point c1 = { ltrb.left , ltrb.top };
+	cv::Point c2 = { ltrb.right , ltrb.bottom };
+	cv::rectangle(img, c1, c2, bbox_color, bbox_thickness);
+
+	c1.x -= bbox_thickness - 1;
+	c1.y -= bbox_thickness - 1;
+	putLabel(img, label, c1, bbox_color, text_color, text_thickness);
+}
+
+
+
 /*---------------------------------------------------------------------------------*/
 
 
-
 template<class Tx, class Ty, class Tc>
-void printMat(cv::Mat& img, const Tx& x_range, const Ty& y_range, const Tc& c_range)
+void printMat(cv::Mat& img, Tx x_range, Ty y_range, Tc c_range)
 {
 	/*		C1	C2	C3	C4
 	CV_8U	0	8	16	24
@@ -137,10 +172,11 @@ void printMat(cv::Mat& img, const Tx& x_range, const Ty& y_range, const Tc& c_ra
 	CV_32F	5	13	21	29
 	CV_64F	6	14	22	30 */
 	using cs = ColorStr;
+	using pt = pair<int, int>;
 
-	pair<int, int> x_norm_range = normRange(x_range, img.cols);
-	pair<int, int> y_norm_range = normRange(y_range, img.rows);
-	pair<int, int> c_norm_range = normRange(c_range, img.channels());
+	pt x_norm_range = normRange(x_range, img.cols);
+	pt y_norm_range = normRange(y_range, img.rows);
+	pt c_norm_range = normRange(c_range, img.channels());
 	int xstart = x_norm_range.first, xend = x_norm_range.second;
 	int ystart = y_norm_range.first, yend = y_norm_range.second;
 	int cstart = c_norm_range.first, cend = c_norm_range.second;
@@ -153,25 +189,6 @@ void printMat(cv::Mat& img, const Tx& x_range, const Ty& y_range, const Tc& c_ra
 		_printCVMat<cv::Vec3f>(img, xstart, xend, ystart, yend, cstart, cend);
 	else print(cs::yellow(__func__, ":"), "该图像的cv::Mat::type()暂不支持，已跳过输出!");
 }
-
-template<class Tx, class Ty>
-void printMat(cv::Mat& img, const Tx& x_range, const Ty& y_range)
-{
-	printMat(img, x_range, y_range, sign::ALL);
-}
-
-template<class Tx>
-void printMat(cv::Mat& img, const Tx& x_range)
-{
-	printMat(img, x_range, sign::ALL, sign::ALL);
-}
-
-void printMat(cv::Mat& img)
-{
-	printMat(img, sign::ALL, sign::ALL, sign::ALL);
-}
-
-
 
 
 template<class MatT>
