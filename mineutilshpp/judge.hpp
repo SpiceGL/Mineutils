@@ -21,8 +21,7 @@ namespace mineutils
 
 		if constexpr (sizeof...(Ts) > 0)
 			return is_same<typename decay<T1>::type, typename decay<T2>::type>::value and isSameType<T1, Ts...>(true);
-		else
-			return is_same<typename decay<T1>::type, typename decay<T2>::type>::value;
+		else return is_same<typename decay<T1>::type, typename decay<T2>::type>::value;
 	}
 
 	template<class T1, class T2, class ...Ts>
@@ -43,7 +42,6 @@ namespace mineutils
 		*/
 		if constexpr (sizeof...(Types) > 0)
 			return isSameType<T, T1>() or isInTypes<T, Types...>();
-		else
-			return isSameType<T, T1>();
+		else return isSameType<T, T1>();
 	}
 }

@@ -41,8 +41,7 @@ namespace mineutils
 		int bias = ystart * m.w;
 		if (yend - ystart == 1)
 			cout << "ncnn::Mat{";
-		else
-			cout << "ncnn::Mat{" << endl;
+		else cout << "ncnn::Mat{" << endl;
 		for (int y = ystart; y < yend; y++)
 		{
 			cout << "[";
@@ -54,19 +53,16 @@ namespace mineutils
 					ptr = m.channel(c);
 					if (c != cend - 1)
 						cout << std::setw(3) << std::setprecision(5) << ptr[x + bias] << " ";
-					else
-						cout << std::setw(3) << std::setprecision(5) << ptr[x + bias];
+					else cout << std::setw(3) << std::setprecision(5) << ptr[x + bias];
 				}
 				if (x != xend - 1)
 					cout << ") ";
-				else
-					cout << ")";
+				else cout << ")";
 			}
 			bias += m.w;
 			if (y != yend - 1)
 				cout << "]" << endl;
-			else
-				cout << "]";
+			else cout << "]";
 		}
 		cout << "}" << endl;
 	}

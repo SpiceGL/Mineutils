@@ -20,8 +20,7 @@ namespace mineutils
 			string color_str;
 			if (ColorStr::enabled)
 				color_str = "\033[30m" + ColorStr::_cat(str, strs...) + "\033[0m";
-			else
-				color_str = ColorStr::_cat(str, strs...);
+			else color_str = ColorStr::_cat(str, strs...);
 			return color_str;
 		}
 
@@ -31,8 +30,7 @@ namespace mineutils
 			string color_str;
 			if (ColorStr::enabled)
 				color_str = "\033[34m" + ColorStr::_cat(str, strs...) + "\033[0m";
-			else
-				color_str = ColorStr::_cat(str, strs...);
+			else color_str = ColorStr::_cat(str, strs...);
 			return color_str;
 		}
 
@@ -42,8 +40,7 @@ namespace mineutils
 			string color_str;
 			if (ColorStr::enabled)
 				color_str = "\033[36m" + ColorStr::_cat(str, strs...) + "\033[0m";
-			else
-				color_str = ColorStr::_cat(str, strs...);
+			else color_str = ColorStr::_cat(str, strs...);
 			return color_str;
 		}
 
@@ -53,8 +50,7 @@ namespace mineutils
 			string color_str;
 			if (ColorStr::enabled)
 				color_str = "\033[35m" + ColorStr::_cat(str, strs...) + "\033[0m";
-			else
-				color_str = ColorStr::_cat(str, strs...);
+			else color_str = ColorStr::_cat(str, strs...);
 			return color_str;
 		}
 
@@ -64,8 +60,7 @@ namespace mineutils
 			string color_str;
 			if (ColorStr::enabled)
 				color_str = "\033[32m" + ColorStr::_cat(str, strs...) + "\033[0m";
-			else
-				color_str = ColorStr::_cat(str, strs...);
+			else color_str = ColorStr::_cat(str, strs...);
 			return color_str;
 		}
 
@@ -75,8 +70,7 @@ namespace mineutils
 			string color_str;
 			if (ColorStr::enabled)
 				color_str = "\033[31m" + ColorStr::_cat(str, strs...) + "\033[0m";
-			else
-				color_str = ColorStr::_cat(str, strs...);
+			else color_str = ColorStr::_cat(str, strs...);
 			return color_str;
 		}
 
@@ -86,8 +80,7 @@ namespace mineutils
 			string color_str;
 			if (ColorStr::enabled)
 				color_str = "\033[37m" + ColorStr::_cat(str, strs...) + "\033[0m";
-			else
-				color_str = ColorStr::_cat(str, strs...);
+			else color_str = ColorStr::_cat(str, strs...);
 			return color_str;
 		}
 
@@ -97,8 +90,7 @@ namespace mineutils
 			string color_str;
 			if (ColorStr::enabled)
 				color_str = "\033[33m" + ColorStr::_cat(str, strs...) + "\033[0m";
-			else
-				color_str = ColorStr::_cat(str, strs...);
+			else color_str = ColorStr::_cat(str, strs...);
 			return color_str;
 		}
 
@@ -108,8 +100,7 @@ namespace mineutils
 		{
 			if constexpr (sizeof...(strs) > 0)
 				return str + ColorStr::_cat(strs...);
-			else
-				return str;
+			else return str;
 		}
 	};
 

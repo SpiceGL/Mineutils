@@ -69,8 +69,7 @@ namespace mineutils
 		int k = cv::waitKey(wait) & 0xff;
 		if (k == 27 or k == int('q'))
 			return false;
-		else
-			return true;
+		else return true;
 	}
 
 

@@ -78,8 +78,7 @@ namespace mineutils
 			_print(std::get<Idx>(tp));
 			_print<Idx + 1, Ts...>(tp);
 		}
-		else
-			cout << "]";
+		else cout << "]";
 	}
 
 	template<class T1, class T2, class... Ts>
@@ -146,8 +145,7 @@ namespace mineutils
 			else
 				cout << "false";
 		}
-		else
-			cout << arg;
+		else cout << arg;
 	}
 
 	template<class T, int N>
@@ -185,8 +183,7 @@ namespace mineutils
 		cout << " ";
 		if constexpr (sizeof...(args) > 0)
 			print(args...);
-		else
-			cout << endl;
+		else cout << endl;
 	}
 }
 

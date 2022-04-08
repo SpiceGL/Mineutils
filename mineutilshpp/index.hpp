@@ -1,7 +1,6 @@
 #pragma once
 #include<stdlib.h>
 #include"print.hpp"
-#include"sign.hpp"
 
 using std::pair;
 
@@ -46,7 +45,7 @@ namespace mineutils
 	{
 		using cs = ColorStr;
 		int dst_start, dst_end;
-		if (isInTypes<T, int, pair<int, int>, sign::All>())
+		if (isInTypes<T, int, pair<int, int>>())
 		{
 			if constexpr (isSameType<T, int>())
 			{
@@ -60,7 +59,7 @@ namespace mineutils
 					exit(0);
 				}
 			}
-			else if constexpr (isSameType<T, pair<int, int>>())
+			else
 			{
 				int x1 = range.first, x2 = range.second;
 
@@ -72,7 +71,6 @@ namespace mineutils
 					x2 < len ? dst_end = x2 : dst_end = len;
 				else x2 >= -len ? dst_end = x2 + len : dst_end = 0;
 			}
-			else dst_start = 0, dst_end = len;
 		}
 		else
 		{

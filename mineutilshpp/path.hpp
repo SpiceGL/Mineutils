@@ -34,11 +34,9 @@ namespace mineutils
 					for (auto pth : paths)
 						Path::copy(Path::join(pth_from, pth), Path::join(pth_to, pth), opt);
 				}
-				else
-					Path::_copyFile(pth_from, pth_to, opt);
+				else Path::_copyFile(pth_from, pth_to, opt);
 			}
-			else
-				print(cs::yellow("Path::", __func__, ":"), cs::cyan("pth_from= " + pth_from) + "不存在，因此未复制任何目录和文件！");
+			else print(cs::yellow("Path::", __func__, ":"), cs::cyan("pth_from= " + pth_from) + "不存在，因此未复制任何目录和文件！");
 		}
 
 		static void _copyDir(string pth_from, string pth_to)  //只能复制目录，目录下的文件和文件夹都无法复制
@@ -65,8 +63,7 @@ namespace mineutils
 				return fs::copy_file(pf, pt, fs::copy_options::skip_existing);
 			else if (opt == "update")
 				return fs::copy_file(pf, pt, fs::copy_options::update_existing);
-			else
-				throw "opt输入有误！";
+			else throw "opt输入有误！";
 		}
 
 		static string cwd()  //获取当前绝对路径
@@ -111,8 +108,7 @@ namespace mineutils
 			p /= pth2;
 			if constexpr (sizeof...(pths) > 0)
 				return Path::join(p.string(), pths...);
-			else
-				return p.string();
+			else return p.string();
 		}
 
 		static vector<string> listDir(string pth, bool return_path = true, set<string> ignore_names = {})  //获取目录下的一级文件和目录
@@ -131,8 +127,7 @@ namespace mineutils
 				{
 					if (return_path)
 						filename = Path::join(pth, it_name);
-					else
-						filename = it_name;
+					else filename = it_name;
 					filenames.push_back(filename);
 				}
 			}
@@ -168,8 +163,7 @@ namespace mineutils
 				}
 				else if (p.parent_path().string().size() == 0)
 					return "..";
-				else
-					return p.parent_path().string();
+				else return p.parent_path().string();
 			}
 		}
 
@@ -191,8 +185,7 @@ namespace mineutils
 			fs::path p(pth);
 			if (suffix)
 				return p.filename().string();
-			else
-				return p.stem().string();
+			else return p.stem().string();
 		}
 
 		static vector<string> walk(string pth, bool return_path = true)  //遍历目录下的所有文件
@@ -218,13 +211,7 @@ namespace mineutils
 						vector<string> sub_filenames = Path::walk(it_path, return_path);
 						filenames.insert(filenames.end(), sub_filenames.begin(), sub_filenames.end());
 					}
-					else
-					{
-						if (return_path)
-							filenames.push_back(it_path);
-						else
-							filenames.push_back(it_name);
-					}
+					else return_path ? filenames.push_back(it_path) : filenames.push_back(it_name);
 				}
 			}
 			return filenames;
