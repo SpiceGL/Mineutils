@@ -50,7 +50,7 @@ def main_ocr():
     api_id = '23638418'
     api_key = '6tIPlZnueQSqzSITpjgH8GQU'
     secret_key = 'rD1EZB5yZrkXXc4AukA2Yj9cx0YnUMZf'
-    client = AipOcr(api_id, api_key, secret_key)  # 到这里都是固定用法
+    client = AipOcr(api_id, api_key, secret_key)
     
     novel_dirpath = "E:/Project/005-OCR/novel2"
     chapter_dirpaths = pt.listDir(novel_dirpath)
@@ -69,6 +69,6 @@ def main_crop():
 
 
 if __name__ == '__main__':
-    main_ocr()
+    pass
     
     
