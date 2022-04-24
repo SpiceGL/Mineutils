@@ -98,12 +98,9 @@ namespace mineutils
 		template<class ...Strs>
 		static string _cat(string str, Strs ...strs)
 		{
-			return str + ColorStr::_cat(strs...);
-		}
-
-		static string _cat(string str)
-		{
-			return str;
+			if constexpr (sizeof...(strs) > 0)
+				return str + ColorStr::_cat(strs...);
+			else return str;
 		}
 	};
 

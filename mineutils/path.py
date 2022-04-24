@@ -44,7 +44,8 @@ class Path:
         if not files_waiting:
             print(ColorStr.yellow("Path.copy:"), f"{wildcard_path}不存在，因此未复制任何文件！")
         else:
-            cls.makeDirs(new_dir)
+            if not os.path.exists(new_dir):
+                os.makedirs(new_dir)
             for file in files_waiting:
                 file_name = cls.splitName(file)
                 new_path = os.path.join(new_dir, file_name)
@@ -144,7 +145,7 @@ class Path:
             img_paths = [os.path.join(dirpath, name) for name in names if cls.isImage(name)]
             return img_paths
         else:
-            img_names = [name for name in names if cls.isImage(name)]
+            img_names = [name for name in names if cls.isImageType(name)]
             return img_names
 
     @classmethod
@@ -167,7 +168,8 @@ class Path:
         if not files_waiting:
             print(ColorStr.yellow("Path.move:"), f"{wildcard_path}不存在，因此未移动任何文件！")
         else:
-            cls.makeDirs(new_dir)
+            if not os.path.exists(new_dir):
+                os.makedirs(new_dir)
             for file in files_waiting:
                 file_name = cls.splitName(file)
                 new_path = os.path.join(new_dir, file_name)
@@ -232,7 +234,21 @@ class Path:
     def _removeReadonly(cls, func, path, execinfo):
         os.chmod(path, stat.S_IWUSR)  # 修改文件权限
         func(path)
-        
+
+    @classmethod
+    def rename(cls, path: str, new_name_path: str):
+        """
+        --将符合要求的文件或文件夹移动到新文件夹下。
+        --wildcard_path是可以用通配符表示的一类文件/文件夹。
+        """
+        if cls.parent(path) != cls.parent(new_name_path):
+            print(ColorStr.red("Path.rename:"), f"{path}与目标路径{new_name_path}应在同一目录下！程序已中止！")
+            exit(0)
+        if not os.path.isdir(path) and not os.path.isfile(path):
+            print(ColorStr.yellow("Path.rename:"), f"{path}不存在，因此未重命名任何文件！")
+        else:
+            shutil.move(path, new_name_path)
+                
     @classmethod
     def walk(cls, dirpath, return_path=True):
         """

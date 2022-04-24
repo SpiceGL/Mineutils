@@ -1,16 +1,24 @@
 #pragma once
-#include<filesystem>
+
 #include<iostream>
 #include<map>
 #include<set>
 #include<string>
 #include<vector>
 
+#if defined(WIN32) or defined(_WIN32) or defined(__WIN32) and !defined(__CYGWIN__)
+#include<direct.h>
+#include<io.h>
+#else
+#include<dirent.h>
+#endif
+
+#include<stdlib.h>
+#include<sys/stat.h>
 
 #include"colorstr.hpp"
 #include"print.hpp"
 
-namespace fs = std::filesystem;
 using std::map;
 using std::pair;
 using std::set;
@@ -21,200 +29,244 @@ namespace mineutils
 {
 	struct Path
 	{
+		/*
+		封装一些常用的路径相关操作。
+		-以/等分隔符结尾的路径会被当作/前的目录路径
+		*/
 		using cs = ColorStr;
 
-		static void copy(string pth_from, string pth_to, string opt = "overwrite")  //递归复制文件和目录
+		static bool exists(string pth)   //判断路径是否存在
 		{
-			if (Path::exists(pth_from))
-			{
-				if (Path::isDir(pth_from))
-				{
-					Path::_copyDir(pth_from, pth_to);
-					auto paths = Path::listDir(pth_from, false);
-					for (auto pth : paths)
-						Path::copy(Path::join(pth_from, pth), Path::join(pth_to, pth), opt);
-				}
-				else Path::_copyFile(pth_from, pth_to, opt);
-			}
-			else print(cs::yellow("Path::", __func__, ":"), cs::cyan("pth_from= " + pth_from) + "不存在，因此未复制任何目录和文件！");
+			pth = Path::normPath(pth);
+			struct stat buffer;
+			return stat(pth.c_str(), &buffer) == 0;
 		}
 
-		static void _copyDir(string pth_from, string pth_to)  //只能复制目录，目录下的文件和文件夹都无法复制
+		static string extension(string pth)   //获取输入的后缀名
 		{
-			fs::path pf(pth_from);
-			fs::path pt(pth_to);
-			fs::copy(pf, pt, fs::copy_options::skip_existing);
-		}
-
-		static bool _copyFile(string pth_from, string pth_to, string opt = "overwrite")  //复制单个文件，甚至不能创建目录
-		{
-			/*
-			opt:
-			"overwrite"表示覆盖已存在的目标；
-			"skip"代表跳过已存在的目标；
-			"update"表示仅当pth_from最后修改时间新于pth_to的时候覆盖，否则跳过。
-			*/
-			fs::path pf(pth_from);
-			fs::path pt(pth_to);
-
-			if (opt == "overwrite")
-				return fs::copy_file(pf, pt, fs::copy_options::overwrite_existing);
-			else if (opt == "skip")
-				return fs::copy_file(pf, pt, fs::copy_options::skip_existing);
-			else if (opt == "update")
-				return fs::copy_file(pf, pt, fs::copy_options::update_existing);
-			else throw "opt输入有误！";
-		}
-
-		static string cwd()  //获取当前绝对路径
-		{
-			return fs::current_path().string();
-		}
-
-		static bool exists(string pth)  //判断路径是否存在
-		{
-			fs::path p(pth);
-			return fs::exists(p);
-		}
-
-		static string extension(string pth)  //获取路径的扩展名
-		{
-			fs::path p(pth);
-			return p.extension().string();
+			string name = Path::splitName(pth);
+			if (name.find(".") == -1)
+				return "";
+			else return name.substr(name.find_last_of('.') + 1);
 		}
 
 		static bool isAbs(string pth)  //判断路径是否为绝对路径
 		{
-			fs::path p(pth);
-			return p.is_absolute();
+			pth = Path::normPath(pth);
+			if (pth.find(":/") != -1)
+				return pth.substr(1, 2) == ":/";
+			else return pth.substr(0, 1) == "/";
 		}
 
 		static bool isDir(string pth)  //判断路径是否为目录
 		{
-			fs::path p(pth);
-			return fs::is_directory(p);
+			pth = Path::normPath(pth);
+			struct stat buffer;
+			if (stat(pth.c_str(), &buffer) == 0)
+			{
+				if (buffer.st_mode & S_IFDIR)
+					return true;
+			}
+			return false;
 		}
 
-		static bool isFile(string pth)  //判断路径是否为文件
+		static bool isFile(string pth)  //判断路径是否为目录
 		{
-			fs::path p(pth);
-			return fs::exists(p) and not fs::is_directory(p);
+			pth = Path::normPath(pth);
+			struct stat buffer;
+			if (stat(pth.c_str(), &buffer) == 0)
+			{
+				if (buffer.st_mode & S_IFREG)
+					return true;
+			}
+			return false;
 		}
 
 		template<class... Strs>
 		static string join(string pth1, string pth2, Strs... pths)  //实现类似python的os.path.join功能
 		{
-			fs::path p(pth1);
-			p /= pth2;
-			if constexpr (sizeof...(pths) > 0)
-				return Path::join(p.string(), pths...);
-			else return p.string();
+			pth1 = Path::normPath(pth1);
+			pth2 = Path::normPath(pth2);
+			string pth = pth1 + "/" + pth2;
+			return Path::normPath(Path::_join(pth, pths...));
 		}
 
+		template<class... Strs>
+		static string _join(string pth1, string pth2, Strs... pths)
+		{
+			pth2 = Path::normPath(pth2);
+			string pth = pth1 + "/" + pth2;
+			return Path::_join(pth, pths...);
+		}
+
+		static string _join(string pth)
+		{
+			return pth;
+		}
+#if defined(WIN32) or defined(_WIN32) or defined(__WIN32) and !defined(__CYGWIN__)
 		static vector<string> listDir(string pth, bool return_path = true, set<string> ignore_names = {})  //获取目录下的一级文件和目录
 		{
-			fs::path p(pth);
-			vector<string> filenames;
-			string filename;
+			pth = Path::normPath(pth);
+			intptr_t hFile = 0;
+			struct _finddata_t fileinfo;
+			vector<string> files;
+			string p = pth;
 
-			assert(fs::is_directory(p));
-			fs::directory_iterator iter(p);
-			for (auto& it : iter)
-			{
-				string it_name = it.path().filename().string();
-				auto find_res = ignore_names.find(it_name);
-				if (find_res == ignore_names.end() and it_name != "..")
-				{
-					if (return_path)
-						filename = Path::join(pth, it_name);
-					else filename = it_name;
-					filenames.push_back(filename);
-				}
-			}
-			return filenames;
-		}
-
-		static bool makeDirs(string pth)  //创建目录
-		{
-			fs::path p(pth);
-			return fs::create_directories(p);
-		}
-
-		static void move(string pth_from, string pth_to)  //移动目录，也可用于重命名
-		{
-			fs::path pf(pth_from);
-			fs::path pt(pth_to);
-			if (not fs::exists(pt.parent_path()))
-				fs::create_directories(pt.parent_path());
-			fs::rename(pf, pt);
-		}
-
-		static string parent(string pth)  //获取父目录
-		{
-			fs::path p(pth);
-			if (p.is_absolute())
-				return p.parent_path().string();
-			else
-			{
-				if (p.filename().string() == "..")
-				{
-					p /= "..";
-					return p.string();
-				}
-				else if (p.parent_path().string().size() == 0)
-					return "..";
-				else return p.parent_path().string();
-			}
-		}
-
-		static uintmax_t remove(string pth)  //递归删除目录和文件
-		{
-			fs::path p(pth);
-			return fs::remove_all(p);
-		}
-
-		static string root(string pth)  //返回根目录
-		{
-			fs::path p(pth);
-			return p.root_path().string();
-		}
-
-		static string splitName(string pth, bool suffix = true)
-			//从路径字符串获取文件名
-		{
-			fs::path p(pth);
-			if (suffix)
-				return p.filename().string();
-			else return p.stem().string();
-		}
-
-		static vector<string> walk(string pth, bool return_path = true)  //遍历目录下的所有文件
-		{
-			fs::path p(pth);
-			vector<string> filenames;
-			string filename;
-
-			if (not fs::is_directory(p))
+			if (not Path::isDir(pth))
 			{
 				print(cs::red("Path::", __func__, ":"), "输入路径不是目录或不存在，程序已中止！");
 				exit(0);
 			}
-			fs::directory_iterator iter(p);
-			for (auto& it : iter)
+			if ((hFile = _findfirst(p.append("/*").c_str(), &fileinfo)) != -1) 
 			{
-				string it_name = it.path().filename().string();
-				string it_path = Path::join(pth, it_name);
-				if (it_name != "..")
+				do 
 				{
-					if (Path::isDir(it_path))
+					string fname = fileinfo.name;
+					bool ignore = (ignore_names.find(fname) != ignore_names.end());
+
+					if (!ignore and fname != "." and fname != "..")
 					{
-						vector<string> sub_filenames = Path::walk(it_path, return_path);
-						filenames.insert(filenames.end(), sub_filenames.begin(), sub_filenames.end());
+						// 保存文件的全路径
+
+						if (return_path)
+							files.push_back(Path::join(pth, fname));
+						else files.push_back(fname);
 					}
-					else return_path ? filenames.push_back(it_path) : filenames.push_back(it_name);
+				} while (_findnext(hFile, &fileinfo) == 0);  //寻找下一个，成功返回0，否则-1
+				_findclose(hFile);
+			}
+			return files;
+		}
+
+		static bool makeDirs(string pth, bool warn = true)  //创建目录
+		{
+			pth = Path::normPath(pth);
+			size_t sep_pos;
+			string pth_tree;
+			if (Path::isAbs(pth))
+				sep_pos = 2;
+			else sep_pos = 0;
+			bool mk_res = true;
+			do
+			{
+				sep_pos = pth.find("/", sep_pos + 1);
+				pth_tree = pth.substr(0, sep_pos);
+				if (not Path::isDir(pth_tree))
+					_mkdir(pth_tree.c_str());
+			} while (sep_pos != -1);
+			return Path::isDir(pth);
+		}
+#else
+		static vector<string> listDir(string pth, bool return_path = true, set<string> ignore_names = {})
+		{
+			DIR* pDir;
+			struct dirent* ptr;
+			vector<string> files;
+
+			if (not Path::isDir(pth))
+			{
+				print(cs::red("Path::", __func__, ":"), "输入路径不是目录或不存在，程序已中止！");
+				exit(0);
+			}
+			pDir = opendir(pth.c_str());
+			while ((ptr = readdir(pDir)) != nullptr) 
+			{
+				string fname = ptr->d_name;
+				bool ignore = (ignore_names.find(fname) != ignore_names.end());
+				if (!ignore and fname != "." and fname != "..")
+				{
+					if (return_path)
+						files.push_back(Path::join(pth, fname));
+					else files.push_back(fname);
 				}
+			}
+			closedir(pDir);
+			return files;
+		}
+
+		static bool makeDirs(string pth, bool warn = true)  //创建目录
+		{
+			pth = Path::normPath(pth);
+			size_t sep_pos = 0;
+			string pth_tree;
+			do
+			{
+				sep_pos = pth.find("/", sep_pos + 1);
+				pth_tree = pth.substr(0, sep_pos);
+				if (not Path::isDir(pth_tree))
+					mkdir(pth_tree.c_str(), 0777);
+			} while (sep_pos != -1);
+			return Path::isDir(pth);
+		}
+#endif
+
+		static string normPath(string pth)   //将windows路径中的\\变为标准的/分隔符
+		{
+			size_t pos;
+			while (pth.find("\\") != -1)
+			{
+				pos = pth.find("\\");
+				pth.replace(pos, 1, "/");
+			}
+
+			while (pth.find("//") != -1)
+			{
+				pos = pth.find("//");
+				pth.replace(pos, 2, "/");
+			}
+
+			while (pth.find("./") != -1)
+			{
+				pos = pth.find("./");
+				pth.replace(pos, 2, "");
+			}
+			if (pth.rfind("/.") != -1 and pth.rfind("/.") == pth.size() - 2)
+			{
+				pos = pth.rfind("/.");
+				pth.replace(pos + 1, 1, "");
+			}
+
+			if (pth.rfind("/") == pth.size() - 1)
+			{
+				if (pth.find(":/") == 1 and pth.size() > 4)
+					pth.replace(pth.size() - 1, 1, "");
+				if (pth.find(":/") == -1 and pth.size() > 1)
+					pth.replace(pth.size() - 1, 1, "");
+			}
+			return pth;
+		}
+
+		static string splitName(string pth, bool suffix = true)  //从路径字符串获取文件名
+		{
+			pth = Path::normPath(pth);
+			string name = pth.substr(pth.find_last_of('/') + 1);
+			if (not suffix)
+				name = name.substr(0, name.find_last_of("."));
+			return name;
+		}
+
+		static vector<string> walk(string pth, bool return_path = true)  //遍历目录下的所有文件
+		{
+			vector<string> filenames;
+			string filename;
+
+			if (not Path::isDir(pth))
+			{
+				print(cs::red("Path::", __func__, ":"), "输入路径不是目录或不存在，程序已中止！");
+				exit(0);
+			}
+			vector<string> listdir_res = Path::listDir(pth, return_path);
+			for (string& f_d : listdir_res)
+			{
+				if (Path::isDir(f_d))
+				{
+					vector<string> sub_filenames = Path::walk(f_d, return_path);
+					filenames.insert(filenames.end(), sub_filenames.begin(), sub_filenames.end());
+				}
+				else return_path ? filenames.push_back(f_d) : filenames.push_back(f_d);
 			}
 			return filenames;
 		}
+		
 	};
 }

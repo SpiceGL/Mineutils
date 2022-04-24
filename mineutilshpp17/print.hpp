@@ -9,7 +9,6 @@
 #include<assert.h>
 
 #include"judge.hpp"
-#include"sign.hpp"
 
 
 using std::cout;
@@ -28,14 +27,8 @@ namespace mineutils
 	template<class T1, class T2>
 	void _print(const pair<T1, T2>& pa);
 
-	template<int Idx = 0, class... Ts>
+	template<int Idx, class... Ts>
 	void _print(const tuple<Ts...>& tp);
-
-	template<int Idx, class... Ts>
-	void _print_tuple(const tuple<Ts...>& tp, const int& size_tp, Sign::CaseTag1& tag);
-
-	template<int Idx, class... Ts>
-	void _print_tuple(const tuple<Ts...>& tp, const int& size_tp, Sign::CaseTag0& tag);
 
 	template<class T1, class T2, class... Ts>
 	void _print(const map<T1, T2, Ts...>& m);
@@ -44,8 +37,6 @@ namespace mineutils
 	void _print(const CTer<T, Ts...>& nm);
 
 	void _print(const string& str);
-
-	void _print(const bool& arg);
 
 	template<class T>
 	void _print(const T& arg);
@@ -56,7 +47,6 @@ namespace mineutils
 	template<class T, class... Args>
 	void print(const T& arg, const Args&... args);
 
-	void print();
 
 	/*-------------------------------------定义--------------------------------------*/
 	template<class T1, class T2>
@@ -69,39 +59,26 @@ namespace mineutils
 		cout << "]";
 	}
 
-	template<int Idx, class... Ts>
+	template<int Idx = 0, class... Ts>
 	void _print(const tuple<Ts...>& tp)  //输出tuple类
 	{
 		assert(Idx >= 0);
 		const int size_tp = std::tuple_size<tuple<Ts...>>::value;
-		if (Idx == 0) 
+		if (Idx == 0)
 			cout << "Tup[";
-		constexpr int type_id = (Idx < size_tp);
-		auto type_tag = std::get<type_id>(Sign::Diode_TAGS);
-		_print_tuple<Idx, Ts...>(tp, size_tp, type_tag);
-	}
 
-	template<int Idx, class... Ts>
-	void _print_tuple(const tuple<Ts...>& tp, const int& size_tp, Sign::CaseTag1& tag)
-	{
-		if (Idx < size_tp - 1)
+		if constexpr (Idx < size_tp - 1)
 		{
 			_print(std::get<Idx>(tp));
 			cout << " ";
 			_print<Idx + 1, Ts...>(tp);
 		}
-		else if (Idx == size_tp - 1)
+		else if constexpr (Idx == size_tp - 1)
 		{
 			_print(std::get<Idx>(tp));
 			_print<Idx + 1, Ts...>(tp);
 		}
-		else throw "Error Idx!";
-	}
-
-	template<int Idx, class... Ts>
-	void _print_tuple(const tuple<Ts...>& tp, const int& size_tp, Sign::CaseTag0& tag)
-	{
-		cout << "]";
+		else cout << "]";
 	}
 
 	template<class T1, class T2, class... Ts>
@@ -158,17 +135,17 @@ namespace mineutils
 		cout << str;
 	}
 
-	void _print(const bool& arg)
-	{
-		if (arg)
-			cout << "true";
-		else cout << "false";
-	}
-
 	template<class T>
 	void _print(const T& arg)  //输出int、string等单数据类型
 	{
-		cout << arg;
+		if constexpr (isSameType<T, bool>())
+		{
+			if (arg)
+				cout << "true";
+			else
+				cout << "false";
+		}
+		else cout << arg;
 	}
 
 	template<class T, int N>
@@ -204,12 +181,9 @@ namespace mineutils
 		//int _a[] = { (_print(args), cout << " ", 0)... };   //另一种写法，但可读性差一些
 		_print(arg);
 		cout << " ";
-		print(args...);
-	}
-
-	void print()
-	{
-		cout << endl;
+		if constexpr (sizeof...(args) > 0)
+			print(args...);
+		else cout << endl;
 	}
 }
 

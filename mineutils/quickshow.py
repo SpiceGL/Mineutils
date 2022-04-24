@@ -63,6 +63,7 @@ def loopShowCV(window_name: str,
         if k & 0xff == 27 or k & 0xff == ord("q"):
             cv2.destroyAllWindows()
             raise Error("函数loopShowCV: 用户主动停止循环并退出程序")
+    return k
 
 
 if __name__ == "__main__":

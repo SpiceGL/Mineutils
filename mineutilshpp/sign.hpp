@@ -1,35 +1,15 @@
 #pragma once
 #include<iostream>
+#include<tuple>
 
-namespace sign
+using std::tuple;
+
+namespace Sign
 {
-	class All
-	{
-	private:
-		All() {}
-		All(const All& a) {}
-		static All* self;
+	struct CaseTag0	{};
+	struct CaseTag1 {};
 
-		class SelfGarbo
-		{
-		public:
-			~SelfGarbo()
-			{
-				if (self)
-					delete self;
-			}
-		};
-		static SelfGarbo self_garbo;
-
-	public:
-		static All& getInstance()
-		{
-			if (self == nullptr)
-				self = new All;
-			return *self;
-		}
-	};
-
-	All* All::self = nullptr;
-	All& ALL = All::getInstance();
+	CaseTag0 tag0;
+	CaseTag1 tag1;
+	tuple<CaseTag0, CaseTag1> Diode_TAGS(tag0, tag1);
 }
