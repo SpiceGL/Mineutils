@@ -70,7 +70,7 @@ namespace mineutils
 			return false;
 		}
 
-		static bool isFile(string pth)  //判断路径是否为目录
+		static bool isFile(string pth)  //判断路径是否为文件
 		{
 			pth = Path::normPath(pth);
 			struct stat buffer;
@@ -103,6 +103,7 @@ namespace mineutils
 		{
 			return pth;
 		}
+
 #if defined(WIN32) or defined(_WIN32) or defined(__WIN32) and !defined(__CYGWIN__)
 		static vector<string> listDir(string pth, bool return_path = true, set<string> ignore_names = {})  //获取目录下的一级文件和目录
 		{
@@ -266,7 +267,6 @@ namespace mineutils
 				else return_path ? filenames.push_back(f_d) : filenames.push_back(f_d);
 			}
 			return filenames;
-		}
-		
+		}	
 	};
 }

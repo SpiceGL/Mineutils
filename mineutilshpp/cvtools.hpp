@@ -267,10 +267,4 @@ namespace mineutils
 		}
 		cout << "}" << endl;
 	}
-
-	//std::ostream& operator<<(std::ostream& cout, cv::Mat& img)   //添加对print的支持
-	//{
-	//	printMat(img);
-	//	return cout;
-	//}
 }

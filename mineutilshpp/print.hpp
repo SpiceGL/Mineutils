@@ -25,6 +25,11 @@ using std::vector;
 namespace mineutils
 {
 	/*-------------------------------------声明--------------------------------------*/
+	template<class T, class... Args>
+	void print(const T& arg, const Args&... args);
+
+	void print();
+
 	template<class T1, class T2>
 	void _print(const pair<T1, T2>& pa);
 
@@ -53,12 +58,28 @@ namespace mineutils
 	template<class T, int N>
 	void _print(const T(&arr)[N]);
 
-	template<class T, class... Args>
-	void print(const T& arg, const Args&... args);
-
-	void print();
-
 	/*-------------------------------------定义--------------------------------------*/
+	template<class T, class... Args>
+	void print(const T& arg, const Args&... args)
+	{	/*
+		实现类似python的print输出。
+		-支持int、float、char、string等基本类型数据的输出；
+		-支持int[]、float[]等基本多维数组类型数据的输出；
+		-支持vector、tuple等STL容器内容的输出；
+		-支持外部扩展对第三方类型的支持（重载<<操作符或_print函数）；
+		-Warning：存在输入非支持类型数据得到错误结果但不产生异常的可能。
+		*/
+		_print(arg);
+		cout << " ";
+		print(args...);
+		//int _a[] = { (_print(args), cout << " ", 0)... };   //另一种写法，但可读性差一些
+	}
+
+	void print()
+	{
+		cout << endl;
+	}
+
 	template<class T1, class T2>
 	void _print(const pair<T1, T2>& pa)  //输出pair类型
 	{
@@ -77,7 +98,7 @@ namespace mineutils
 		if (Idx == 0) 
 			cout << "Tup[";
 		constexpr int type_id = (Idx < size_tp);
-		auto type_tag = std::get<type_id>(Sign::Diode_TAGS);
+		auto& type_tag = std::get<type_id>(Sign::BOOL_TAGS);
 		_print_tuple<Idx, Ts...>(tp, size_tp, type_tag);
 	}
 
@@ -130,14 +151,7 @@ namespace mineutils
 	template<template<class C, class... Cs> class CTer, class T, class... Ts>
 	void _print(const CTer<T, Ts...>& cter)
 	{
-		/*
-		string class_name =  typeid(cter).name();
-		size_t name_start_idx = class_name.find("std::", 0) + 5;
-		size_t name_len = class_name.find("<", 0) - name_start_idx;
-		string name = class_name.substr(name_start_idx, name_len);
-		cout << name << "[";
-		*/
-		cout << "[";
+		cout << "CTer[";
 		int size = cter.size();
 		if (size > 0)
 		{
@@ -155,7 +169,7 @@ namespace mineutils
 
 	void _print(const string& str)
 	{
-		cout << str;
+		cout << "\"" << str << "\"";
 	}
 
 	void _print(const bool& arg)
@@ -168,14 +182,16 @@ namespace mineutils
 	template<class T>
 	void _print(const T& arg)  //输出int、string等单数据类型
 	{
-		cout << arg;
+		if (isInTypes<T, char, wchar_t>())
+			cout << "\'" << arg << "\'";
+		else cout << arg;
 	}
 
 	template<class T, int N>
 	void _print(const T(&arr)[N])  //输出int[]、char[]等数组类型
 	{
 		if (isInTypes<T, char, wchar_t>())
-			cout << arr;
+			cout << "\"" << arr << "\"";
 		else
 		{
 			cout << "[";
@@ -187,29 +203,6 @@ namespace mineutils
 			_print(arr[N - 1]);
 			cout << "]";
 		}
-	}
-
-	template<class T, class... Args>
-	void print(const T& arg, const Args&... args)
-	{
-		/*
-		实现类似python的print输出。
-		-支持int、float、char、string等基本类型数据的输出；
-		-支持int[]、float[]等基本多维数组类型数据的输出；
-		-支持vector、tuple等STL容器内容的输出；
-		-支持外部扩展对第三方类型的支持（重载<<操作符）；
-		-Warning：存在输入非支持类型数据得到错误结果但不产生异常的可能。
-		*/
-
-		//int _a[] = { (_print(args), cout << " ", 0)... };   //另一种写法，但可读性差一些
-		_print(arg);
-		cout << " ";
-		print(args...);
-	}
-
-	void print()
-	{
-		cout << endl;
 	}
 }
 
