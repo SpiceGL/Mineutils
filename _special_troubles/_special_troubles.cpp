@@ -1,13 +1,16 @@
 ﻿#include<iostream>
+#include<string>
+#include"net.h"
 
 using std::cout;
 using std::endl;
+using std::string;
 
 namespace trouble001   
 /*
     -当func1是模板函数时：
         当func1的输入是自定义类型M的对象时，能找到func2；
-        当func1的输入是内置类型int时，找不到func2。
+        当func1的输入是内置类型int时(或string甚至ncnn::Mat)，找不到func2。
     -当func1的输入类型是自定义类型M时：
         当func1是模板函数时，能找到func2；
         当func1是普通函数时，找不到func2。
@@ -76,7 +79,7 @@ namespace trouble002
 
 int main()
 {
-    trouble002::main();
+    trouble001::main();
     return 0;
 }
 

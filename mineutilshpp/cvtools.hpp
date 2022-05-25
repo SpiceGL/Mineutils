@@ -1,7 +1,7 @@
 #pragma once
 #include<string>
 
-#include<opencv2/opencv.hpp>
+#include<opencv2/core/core.hpp>
 #include<limits.h>
 #include<stdlib.h>
 
@@ -206,13 +206,12 @@ namespace mineutils
 			print(cs::yellow(__func__, ":"), "暂未优化的类型，因此未调整输出宽度！");
 			coutw = 0, coutprec = 6;
 		}
-		if (yend - ystart == 1)
-			cout << "cv::Mat{";
-		else cout << "cv::Mat{" << endl;
-
+		cout << "cv::Mat{";
 		for (int y = ystart; y < yend; y++)
 		{
-			cout << "[";
+			if (y == ystart)
+				cout << "[";
+			else cout << std::setw(9) << "[";
 			for (int x = xstart; x < xend; x++)
 			{
 				if (x != xend - 1)
@@ -241,13 +240,13 @@ namespace mineutils
 			print(cs::yellow(__func__, ":"), "暂未优化的类型，因此未调整输出宽度！");
 			coutw = 0, coutprec = 6;
 		}
-		if (yend - ystart == 1)
-			cout << "cv::Mat{";
-		else cout << "cv::Mat{" << endl;
-
+		
+		cout << "cv::Mat{";
 		for (int y = ystart; y < yend; y++)
 		{
-			cout << "[";
+			if (y == ystart)
+				cout << "[";
+			else cout << std::setw(9) << "[";
 			for (int x = xstart; x < xend; x++)
 			{
 				cout << "(";

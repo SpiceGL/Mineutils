@@ -59,6 +59,7 @@ namespace mineutils
 	void _print(const T(&arr)[N]);
 
 	/*-------------------------------------定义--------------------------------------*/
+
 	template<class T, class... Args>
 	void print(const T& arg, const Args&... args)
 	{	/*
@@ -66,7 +67,7 @@ namespace mineutils
 		-支持int、float、char、string等基本类型数据的输出；
 		-支持int[]、float[]等基本多维数组类型数据的输出；
 		-支持vector、tuple等STL容器内容的输出；
-		-支持外部扩展对第三方类型的支持（重载<<操作符或_print函数）；
+		-支持外部扩展对第三方类型的支持（重载<<操作符）；
 		-Warning：存在输入非支持类型数据得到错误结果但不产生异常的可能。
 		*/
 		_print(arg);
@@ -205,14 +206,5 @@ namespace mineutils
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
 
 

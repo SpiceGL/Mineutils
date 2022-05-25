@@ -19,7 +19,7 @@ namespace Sign
 			if (self == nullptr)
 			{
 				CaseTag0 tag0;
-				self == &tag0;
+				self = &tag0;
 			}
 			return *self;
 		}
@@ -38,7 +38,7 @@ namespace Sign
 			if (self == nullptr)
 			{
 				CaseTag1 tag0;
-				self == &tag0;
+				self = &tag0;
 			}
 			return *self;
 		}

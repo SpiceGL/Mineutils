@@ -86,9 +86,7 @@ namespace mineutils
 		static string join(string pth1, string pth2, Strs... pths)  //实现类似python的os.path.join功能
 		{
 			pth1 = Path::normPath(pth1);
-			pth2 = Path::normPath(pth2);
-			string pth = pth1 + "/" + pth2;
-			return Path::normPath(Path::_join(pth, pths...));
+			return Path::normPath(Path::_join(pth1, pth2, pths...));
 		}
 
 		template<class... Strs>
@@ -203,35 +201,37 @@ namespace mineutils
 
 		static string normPath(string pth)   //将windows路径中的\\变为标准的/分隔符
 		{
+			//string::find只有完全匹配才返回正确idx，string::find_first_of在有一个字符匹配时就返回正确idx
 			size_t pos;
 			while (pth.find("\\") != -1)
 			{
 				pos = pth.find("\\");
 				pth.replace(pos, 1, "/");
 			}
-
 			while (pth.find("//") != -1)
 			{
 				pos = pth.find("//");
 				pth.replace(pos, 2, "/");
 			}
-
-			while (pth.find("./") != -1)
+			while (pth.find("/./") != -1)
 			{
-				pos = pth.find("./");
-				pth.replace(pos, 2, "");
+				pos = pth.find("/./");
+				pth.replace(pos, 3, "/");
+			}
+			if (pth.find("./") == 0)
+			{
+				pth.replace(0, 2, "");
 			}
 			if (pth.rfind("/.") != -1 and pth.rfind("/.") == pth.size() - 2)
 			{
 				pos = pth.rfind("/.");
 				pth.replace(pos + 1, 1, "");
 			}
-
 			if (pth.rfind("/") == pth.size() - 1)
 			{
 				if (pth.find(":/") == 1 and pth.size() > 4)
 					pth.replace(pth.size() - 1, 1, "");
-				if (pth.find(":/") == -1 and pth.size() > 1)
+				else if (pth.find(":/") == -1 and pth.size() > 1)
 					pth.replace(pth.size() - 1, 1, "");
 			}
 			return pth;
@@ -240,7 +240,7 @@ namespace mineutils
 		static string splitName(string pth, bool suffix = true)  //从路径字符串获取文件名
 		{
 			pth = Path::normPath(pth);
-			string name = pth.substr(pth.find_last_of('/') + 1);
+			string name = pth.substr(pth.find_last_of('/') + 1);  
 			if (not suffix)
 				name = name.substr(0, name.find_last_of("."));
 			return name;

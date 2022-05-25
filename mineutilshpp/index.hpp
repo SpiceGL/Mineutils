@@ -9,21 +9,12 @@ namespace mineutils
 {
     /*------------------------------------ÉùÃ÷-------------------------------------*/
 
-	pair<int, int> allRange();
-
-	int normIdx(int idx, int len);
-
-	pair<int, int> normRange(pair<int, int> range, int len);
-
-	pair<int, int> normRange(int idx, int len);
-
 
 	/*------------------------------------¶¨Òå-------------------------------------*/
 	pair<int, int> allRange()
 	{
 		return { 0, INT_MAX };
 	}
-
 
 	int normIdx(int idx, int len)
 	{
