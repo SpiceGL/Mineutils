@@ -33,13 +33,13 @@ namespace mineutils
 	template<class T1, class T2>
 	void _print(const pair<T1, T2>& pa);
 
-	template<int Idx = 0, class... Ts>
+	template<size_t Idx = 0, class... Ts>
 	void _print(const tuple<Ts...>& tp);
 
-	template<int Idx, class... Ts>
+	template<size_t Idx, class... Ts>
 	void _print_tuple(const tuple<Ts...>& tp, const int& size_tp, Sign::CaseTag1& tag);
 
-	template<int Idx, class... Ts>
+	template<size_t Idx, class... Ts>
 	void _print_tuple(const tuple<Ts...>& tp, const int& size_tp, Sign::CaseTag0& tag);
 
 	template<class T1, class T2, class... Ts>
@@ -91,10 +91,9 @@ namespace mineutils
 		cout << "]";
 	}
 
-	template<int Idx, class... Ts>
+	template<size_t Idx, class... Ts>
 	void _print(const tuple<Ts...>& tp)  //Êä³ötupleÀà
 	{
-		assert(Idx >= 0);
 		const int size_tp = std::tuple_size<tuple<Ts...>>::value;
 		if (Idx == 0) 
 			cout << "Tup[";
@@ -103,7 +102,7 @@ namespace mineutils
 		_print_tuple<Idx, Ts...>(tp, size_tp, type_tag);
 	}
 
-	template<int Idx, class... Ts>
+	template<size_t Idx, class... Ts>
 	void _print_tuple(const tuple<Ts...>& tp, const int& size_tp, Sign::CaseTag1& tag)
 	{
 		if (Idx < size_tp - 1)
@@ -120,7 +119,7 @@ namespace mineutils
 		else throw "Error Idx!";
 	}
 
-	template<int Idx, class... Ts>
+	template<size_t Idx, class... Ts>
 	void _print_tuple(const tuple<Ts...>& tp, const int& size_tp, Sign::CaseTag0& tag)
 	{
 		cout << "]";

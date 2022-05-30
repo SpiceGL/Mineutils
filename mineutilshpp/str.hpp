@@ -25,7 +25,7 @@ namespace mineutils
 		return buffer.str();
 	}
 	
-	string int2str(int n, int len = 0)
+	string zfillInt(int n, int len = 0)   //输入int值，返回len长度的字符串
 	{
 		string s = std::to_string(n);
 		if (s.length() < len)
@@ -68,26 +68,26 @@ namespace mineutils
 	}
 
 	template<class... Ts>
-	string fstr(string s, Ts... args)
+	string fstr(string s, Ts... args)   //实现类似于python的f-string功能，将字符串中的{}替换为后面从参数
 	{
 		return _fstr(s, args...);	
 	}
+	
 
 	vector<string> split(string s, string sep=" ", bool ignore_emptystr=true)
 	{
 		vector<string> strs;
 		size_t sep_pos;
-		string s0 = s, s1;   //s0存放已处理的字段，s1存放未处理的字段
-		while ((sep_pos = s0.find(sep)) != -1)
+		string s_in;   //s_in存放已处理的字段，s存放待处理的字段
+		while ((sep_pos = s.find(sep)) != -1)
 		{
-			s0 = s.substr(0, sep_pos);
-			s1 = s.substr(sep_pos + sep.length());
-			if ((ignore_emptystr and s0.length() != 0) or !ignore_emptystr)
-				strs.push_back(s0);
-			s = s1, s0 = s;
+			s_in = s.substr(0, sep_pos);
+			s = s.substr(sep_pos + sep.length());
+			if ((ignore_emptystr and s_in.length() != 0) or !ignore_emptystr)
+				strs.push_back(s_in);
 		}
-		if ((ignore_emptystr and s0.length() != 0) or !ignore_emptystr)
-			strs.push_back(s0);
+		if ((ignore_emptystr and s.length() != 0) or !ignore_emptystr)
+			strs.push_back(s);
 		return strs;
 	}
 
