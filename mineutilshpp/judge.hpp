@@ -4,12 +4,11 @@
 
 #include"sign.hpp"
 
-using std::decay;
-using std::is_same;
-
 
 namespace mineutils
 {
+	using std::decay;
+	using std::is_same;
 /*--------------------------------------------ÉùÃ÷----------------------------------------------*/
 	template<class T1, class T2, class ...Ts>
 	bool isSameType();

@@ -4,24 +4,26 @@
 #include<string>
 #include<stdlib.h>
 
-#include"colorstr.hpp"
+#include"str.hpp"
 #include"index.hpp"
-#include"print.hpp"
 
 
 namespace mineutils
 {
-	class BaseBbox
+	using std::cout;
+	using std::endl;
+
+
+	class BaseBox
 	{
 	public:
 		using cs = ColorStr;
-		using Bbox = std::initializer_list<int>;
-
-		BaseBbox(const Bbox& input_list)
+		using Box = std::initializer_list<int>;
+		BaseBox(const Box& input_list)
 		{
 			if (input_list.size() != 4)
 			{
-				print(cs::red("BaseBbox::", __func__, ":"), "输入长度必须为4！");
+				cout << cs::red("BaseBox::", __func__, ":") << " 输入长度必须为4！" << endl;
 				exit(0);
 			}
 			int idx = 0;
@@ -42,11 +44,11 @@ namespace mineutils
 		}
 	};
 
-
-	class LTRB :public BaseBbox
+	/*左-上-右-下排列的bbox坐标*/
+	class LTRB :public BaseBox
 	{
 	public:
-		LTRB(const Bbox& input_list) :BaseBbox(input_list) {}
+		LTRB(const Box& input_list) :BaseBox(input_list) {}
 
 		int& left = data[0];
 		int& top = data[1];
@@ -55,10 +57,10 @@ namespace mineutils
 	};
 
 
-	class XYWH :public BaseBbox
+	class XYWH :public BaseBox
 	{
 	public:
-		XYWH(const Bbox& input_list) :BaseBbox(input_list) {}
+		XYWH(const Box& input_list) :BaseBox(input_list) {}
 
 		int& x = data[0];
 		int& y = data[1];
@@ -68,10 +70,15 @@ namespace mineutils
 
 
 	/*------------------------------------------------------------------------------*/
-
-	std::ostream& operator<<(std::ostream& cout, const BaseBbox& bbox)   //添加对print的支持
+	//std::ostream& operator<<(std::ostream& cout, const BaseBbox& bbox)   //添加对print的支持，bbox要么const &要么不引用
+	//{
+	//	_print(bbox.data);
+	//	return cout;
+	//}
+	void _print(const BaseBox& bbox)
 	{
-		_print(bbox.data);
-		return cout;
+		cout << bbox.data[0] << " " << bbox.data[1] << " "
+			<< bbox.data[2] << " " << bbox.data[3];
 	}
+
 }

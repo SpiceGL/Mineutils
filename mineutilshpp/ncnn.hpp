@@ -4,23 +4,20 @@
 #include<limits.h>
 #include<stdlib.h>
 
-#include"colorstr.hpp"
+#include"ncnn/net.h"
+
 #include"index.hpp"
-#include"judge.hpp"
-#include"net.h"
-#include"print.hpp"
 #include"sign.hpp"
-
-
-using std::cout;
-using std::endl;
-using std::pair;
-using std::string;
-using std::vector;
+#include"str.hpp"
 
 
 namespace mineutils
 {
+	using std::cout;
+	using std::endl;
+	using std::pair;
+	using std::string;
+	using std::vector;
 	/*----------------------------------ÉùÃ÷--------------------------------------*/
 	vector<ncnn::Mat> quickRunNcnn(string param_path, string model_path, ncnn::Mat& in, int in_id, vector<int> out_ids);
 
@@ -68,7 +65,7 @@ namespace mineutils
 		{
 			if (y == ystart)
 				cout << "[";
-			else cout << std::setw(11) << "[";
+			else cout << zfillStr("", 10) << "[";
 			for (int x = xstart; x < xend; x++)
 			{
 				cout << "(";
@@ -76,8 +73,8 @@ namespace mineutils
 				{
 					ptr = m.channel(c);
 					if (c != cend - 1)
-						cout << std::setw(3) << std::setprecision(5) << ptr[x + bias] << " ";
-					else cout << std::setw(3) << std::setprecision(5) << ptr[x + bias];
+						cout <<  ptr[x + bias] << " ";
+					else cout <<  ptr[x + bias];
 				}
 				if (x != xend - 1)
 					cout << ") ";

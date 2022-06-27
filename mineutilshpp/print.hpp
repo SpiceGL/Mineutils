@@ -12,18 +12,18 @@
 #include"sign.hpp"
 
 
-using std::cout;
-using std::endl;
-using std::list;
-using std::map;
-using std::pair;
-using std::set;
-using std::string;
-using std::tuple;
-using std::vector;
-
 namespace mineutils
 {
+	using std::cout;
+	using std::endl;
+	using std::list;
+	using std::map;
+	using std::pair;
+	using std::set;
+	using std::string;
+	using std::tuple;
+	using std::vector;
+
 	/*-------------------------------------声明--------------------------------------*/
 	template<class T, class... Args>
 	void print(const T& arg, const Args&... args);
@@ -84,7 +84,7 @@ namespace mineutils
 	template<class T1, class T2>
 	void _print(const pair<T1, T2>& pa)  //输出pair类型
 	{
-		cout << "Pair[";
+		cout << "[";
 		_print(pa.first);
 		cout << " ";
 		_print(pa.second);
@@ -96,7 +96,7 @@ namespace mineutils
 	{
 		const int size_tp = std::tuple_size<tuple<Ts...>>::value;
 		if (Idx == 0) 
-			cout << "Tup[";
+			cout << "[";
 		constexpr int type_id = (Idx < size_tp);
 		auto& type_tag = std::get<type_id>(Sign::BOOL_TAGS);
 		_print_tuple<Idx, Ts...>(tp, size_tp, type_tag);
@@ -128,7 +128,7 @@ namespace mineutils
 	template<class T1, class T2, class... Ts>
 	void _print(const map<T1, T2, Ts...>& m)  //输出list类
 	{
-		cout << "map{";
+		cout << "{";
 		int size = m.size();
 		if (size > 0)
 		{
@@ -151,7 +151,7 @@ namespace mineutils
 	template<template<class C, class... Cs> class CTer, class T, class... Ts>
 	void _print(const CTer<T, Ts...>& cter)
 	{
-		cout << "CTer[";
+		cout << "[";
 		int size = cter.size();
 		if (size > 0)
 		{

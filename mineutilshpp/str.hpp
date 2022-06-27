@@ -4,18 +4,117 @@
 #include<string>
 #include<vector>
 #include<stdlib.h>
-#include"colorstr.hpp"
-#include"judge.hpp"
-#include"print.hpp"
-
-using std::string;
-using std::vector;
 
 namespace mineutils
 {
+	using std::cout;
+	using std::endl;
+	using std::string;
+	using std::vector;
 	/*---------------------------------声明-------------------------------------*/
 
 	/*---------------------------------定义-------------------------------------*/
+	class ColorStr
+	{
+	private:
+		ColorStr() {}
+	public:
+		static bool enabled;
+
+		template<class ...Strs>
+		static string black(string str, Strs ...strs)
+		{
+			string color_str;
+			if (ColorStr::enabled)
+				color_str = "\033[30m" + ColorStr::_cat(str, strs...) + "\033[0m";
+			else color_str = ColorStr::_cat(str, strs...);
+			return color_str;
+		}
+
+		template<class ...Strs>
+		static string blue(string str, Strs ...strs)
+		{
+			string color_str;
+			if (ColorStr::enabled)
+				color_str = "\033[34m" + ColorStr::_cat(str, strs...) + "\033[0m";
+			else color_str = ColorStr::_cat(str, strs...);
+			return color_str;
+		}
+
+		template<class ...Strs>
+		static string cyan(string str, Strs ...strs)
+		{
+			string color_str;
+			if (ColorStr::enabled)
+				color_str = "\033[36m" + ColorStr::_cat(str, strs...) + "\033[0m";
+			else color_str = ColorStr::_cat(str, strs...);
+			return color_str;
+		}
+
+		template<class ...Strs>
+		static string fuchsia(string str, Strs ...strs)  //??òmagenta
+		{
+			string color_str;
+			if (ColorStr::enabled)
+				color_str = "\033[35m" + ColorStr::_cat(str, strs...) + "\033[0m";
+			else color_str = ColorStr::_cat(str, strs...);
+			return color_str;
+		}
+
+		template<class ...Strs>
+		static string green(string str, Strs ...strs)
+		{
+			string color_str;
+			if (ColorStr::enabled)
+				color_str = "\033[32m" + ColorStr::_cat(str, strs...) + "\033[0m";
+			else color_str = ColorStr::_cat(str, strs...);
+			return color_str;
+		}
+
+		template<class ...Strs>
+		static string red(string str, Strs ...strs)
+		{
+			string color_str;
+			if (ColorStr::enabled)
+				color_str = "\033[31m" + ColorStr::_cat(str, strs...) + "\033[0m";
+			else color_str = ColorStr::_cat(str, strs...);
+			return color_str;
+		}
+
+		template<class ...Strs>
+		static string white(string str, Strs ...strs)
+		{
+			string color_str;
+			if (ColorStr::enabled)
+				color_str = "\033[37m" + ColorStr::_cat(str, strs...) + "\033[0m";
+			else color_str = ColorStr::_cat(str, strs...);
+			return color_str;
+		}
+
+		template<class ...Strs>
+		static string yellow(string str, Strs ...strs)
+		{
+			string color_str;
+			if (ColorStr::enabled)
+				color_str = "\033[33m" + ColorStr::_cat(str, strs...) + "\033[0m";
+			else color_str = ColorStr::_cat(str, strs...);
+			return color_str;
+		}
+
+	private:
+		template<class ...Strs>
+		static string _cat(string str, Strs ...strs)
+		{
+			return str + ColorStr::_cat(strs...);
+		}
+
+		static string _cat(string str)
+		{
+			return str;
+		}
+	};
+	bool ColorStr::enabled = false;
+
 
 	template<class T>
 	string toStr(const T& arg)
@@ -35,6 +134,15 @@ namespace mineutils
 		return s;
 	}
 
+	string zfillStr(string s, int len = 0)
+	{
+		if (s.length() < len)
+		{
+			s = string(len - s.length(), ' ') + s;
+		}
+		return s;
+	}
+
 	/*--------------------------------------------------------------------------*/
 
 	string _fstr(string& s)
@@ -43,7 +151,7 @@ namespace mineutils
 		size_t pos = s.find("{}");
 		if (pos != -1)
 		{
-			print(cs::red(__func__, ":"), "fstring待替换参数量过少，程序已中止！");
+			cout << cs::red(__func__, ":") << " fstring待替换参数量过少，程序已中止！" << endl;
 			exit(0);
 		}
 		return s;
@@ -56,19 +164,19 @@ namespace mineutils
 		size_t pos = s.find("{}");
 		if (pos != -1)
 		{
-			string s_arg = toStr(arg);
-			s.replace(pos, 2, s_arg);
+			string arg_s = toStr(arg);
+			s.replace(pos, 2, arg_s);
 		}
 		else
 		{
-			print(cs::red(__func__, ":"), "fstring待替换参数量过多，程序已中止！");
+			cout << cs::red(__func__, ":") << "fstring待替换参数量过多，程序已中止！" << endl;
 			exit(0);
 		}
 		return _fstr(s, args...);
 	}
 
 	template<class... Ts>
-	string fstr(string s, Ts... args)   //实现类似于python的f-string功能，将字符串中的{}替换为后面从参数
+	string fstr(string s, Ts... args)   //实现类似于python的f-string功能，将字符串中的{}替换为后面的参数
 	{
 		return _fstr(s, args...);	
 	}

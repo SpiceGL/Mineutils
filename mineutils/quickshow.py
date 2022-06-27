@@ -12,10 +12,10 @@ from mineutils.colorstr import ColorStr
 
 def quickShowCV(window_name: str,
                 img: "ndarray",
-                flag=cv2.WINDOW_NORMAL, 
+                flag=cv2.WINDOW_AUTOSIZE,
                 size=(),
                 position=(),
-                wait=0, 
+                wait=1,
                 close=False):
     """
     --快速进行一次显示CV2图像的操作。
@@ -27,14 +27,14 @@ def quickShowCV(window_name: str,
         cv2.moveWindow(window_name, *position)
         
     cv2.imshow(window_name, img)
-    k = cv2.waitKey(wait)
+    k = cv2.waitKey(wait) & 0xff
     if close:
         cv2.destroyWindow(window_name)
     
 
 
 def setWindowCV(window_name: str,
-                flag=cv2.WINDOW_NORMAL,
+                flag=cv2.WINDOW_AUTOSIZE,
                 size=(),
                 position=()) -> str:
     """
@@ -51,19 +51,17 @@ def setWindowCV(window_name: str,
 
 def loopShowCV(window_name: str,
                img,
-               wait=0,
-               user_break=False):
+               wait=1):
     """
     --用于在循环中显示CV2图像。
     --与setWindowCV配合使用，避免循环中重复设置window。
     """
     cv2.imshow(window_name, img)
-    k = cv2.waitKey(wait)
-    if user_break:
-        if k & 0xff == 27 or k & 0xff == ord("q"):
-            cv2.destroyAllWindows()
-            raise Error("函数loopShowCV: 用户主动停止循环并退出程序")
-    return k
+    k = cv2.waitKey(wait) & 0xff
+    if k == 27 or k == ord('q'):
+        return False
+    else:
+        return True
 
 
 if __name__ == "__main__":

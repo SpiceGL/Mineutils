@@ -1,12 +1,14 @@
 #pragma once
 #include<limits.h>
 #include<stdlib.h>
-#include"print.hpp"
+#include"str.hpp"
 
-using std::pair;
 
 namespace mineutils
 {
+	using std::cout;
+	using std::endl;
+	using std::pair;
     /*------------------------------------声明-------------------------------------*/
 
 
@@ -15,6 +17,7 @@ namespace mineutils
 	{
 		return { 0, INT_MAX };
 	}
+
 
 	int normIdx(int idx, int len)
 	{
@@ -26,7 +29,7 @@ namespace mineutils
 			normal_idx = idx + len;
 		else
 		{
-			print(cs::red(__func__, ":"), "idx=", idx, "超出索引范围，程序已中止！");
+			cout << cs::red(__func__, ":") << fstr(" idx={}超出索引范围，程序已中止！", idx) << endl;
 			exit(0);
 		}
 		return normal_idx;
@@ -57,7 +60,7 @@ namespace mineutils
 			dst_start = idx + len, dst_end = idx + len + 1;
 		else
 		{
-			print(cs::red(__func__, ":"), "idx=", idx, "超出索引范围，程序已中止！");
+			cout << cs::red(__func__, ":") << fstr(" idx={}超出索引范围，程序已中止！", idx) << endl;
 			exit(0);
 		}
 		return { dst_start, dst_end };

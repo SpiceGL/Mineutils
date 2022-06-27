@@ -1,7 +1,6 @@
 #pragma once
 
 #include<iostream>
-#include<map>
 #include<set>
 #include<string>
 #include<vector>
@@ -16,17 +15,19 @@
 #include<stdlib.h>
 #include<sys/stat.h>
 
-#include"colorstr.hpp"
-#include"print.hpp"
+#include"str.hpp"
 
-using std::map;
-using std::pair;
-using std::set;
-using std::string;
-using std::vector;
 
 namespace mineutils
 {
+	using std::cout;
+	using std::endl;
+	using std::pair;
+	using std::set;
+	using std::string;
+	using std::vector;
+
+
 	struct Path
 	{
 		/*
@@ -113,7 +114,7 @@ namespace mineutils
 
 			if (not Path::isDir(pth))
 			{
-				print(cs::red("Path::", __func__, ":"), "输入路径不是目录或不存在，程序已中止！");
+				cout << cs::red("Path::", __func__, ":") << " 输入路径不是目录或不存在，程序已中止！" << endl;
 				exit(0);
 			}
 			if ((hFile = _findfirst(p.append("/*").c_str(), &fileinfo)) != -1) 
@@ -164,7 +165,7 @@ namespace mineutils
 
 			if (not Path::isDir(pth))
 			{
-				print(cs::red("Path::", __func__, ":"), "输入路径不是目录或不存在，程序已中止！");
+				cout << cs::red("Path::", __func__, ":") << " 输入路径不是目录或不存在，程序已中止！" << endl;
 				exit(0);
 			}
 			pDir = opendir(pth.c_str());
@@ -253,7 +254,7 @@ namespace mineutils
 
 			if (not Path::isDir(pth))
 			{
-				print(cs::red("Path::", __func__, ":"), "输入路径不是目录或不存在，程序已中止！");
+				cout << cs::red("Path::", __func__, ":") << " 输入路径不是目录或不存在，程序已中止！" << endl;
 				exit(0);
 			}
 			vector<string> listdir_res = Path::listDir(pth, return_path);
