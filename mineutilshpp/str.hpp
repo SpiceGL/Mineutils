@@ -1,5 +1,6 @@
 #pragma once
 #include<algorithm>
+#include<iomanip>
 #include<sstream>
 #include<string>
 #include<vector>
@@ -124,22 +125,41 @@ namespace mineutils
 		return buffer.str();
 	}
 	
-	string zfillInt(int n, int len = 0)   //输入int值，返回len长度的字符串
+	string zfillInt(int n, int len = 0, char padding = '0')   //输入int值，返回len长度的字符串
 	{
 		string s = std::to_string(n);
 		if (s.length() < len)
 		{
-			s = string(len - s.length(), '0') + s;
+			s = string(len - s.length(), padding) + s;
 		}
 		return s;
 	}
 
-	string zfillStr(string s, int len = 0)
+	string zfillFlt(float f, int int_len = 0, int flt_len = 4, 
+		char int_padding = ' ', char flt_padding = '0')
 	{
-		if (s.length() < len)
+		std::ostringstream buffer;
+		buffer << std::setprecision(flt_len) << f;
+		string s = buffer.str();
+
+		/*找到输入小数的整数部分和小数部分，分别处理并合并*/
+		string int_part, flt_part;
+		size_t point_pos = s.find(".");
+		if (point_pos != -1)
 		{
-			s = string(len - s.length(), ' ') + s;
+			int_part = s.substr(0, point_pos + 1);
+			flt_part = s.substr(point_pos + 1);
 		}
+		else
+		{
+			int_part = s;
+			flt_part = "";
+		}
+		if (int_part.length() < int_len)
+			int_part = string(int_len - int_part.length(), int_padding) + int_part;
+		if (flt_part.length() < flt_len)
+			flt_part = flt_part + string(flt_len - flt_part.length(), flt_padding);
+		s = int_part + "." + flt_part;
 		return s;
 	}
 
@@ -151,7 +171,7 @@ namespace mineutils
 		size_t pos = s.find("{}");
 		if (pos != -1)
 		{
-			cout << cs::red(__func__, ":") << " fstring待替换参数量过少，程序已中止！" << endl;
+			cout << cs::red(__func__, ":") << " fstr待替换参数量过少，程序已中止！" << endl;
 			exit(0);
 		}
 		return s;
@@ -169,7 +189,7 @@ namespace mineutils
 		}
 		else
 		{
-			cout << cs::red(__func__, ":") << "fstring待替换参数量过多，程序已中止！" << endl;
+			cout << cs::red(__func__, ":") << "fstr待替换参数量过多，程序已中止！" << endl;
 			exit(0);
 		}
 		return _fstr(s, args...);

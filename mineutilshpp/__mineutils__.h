@@ -5,7 +5,7 @@
 #include"judge.hpp"   //base on sign.hpp
 #include"path.hpp"   //based on str.hpp
 #include"ncnn.hpp"   //based on sign.hpp, str.hpp & index.hpp
-#include"points.hpp"   //based on str.hpp & index.hpp
+#include"points.hpp"   //based on str.hpp, index.hpp & judge.hpp
 #include"cv.hpp"   //based on str.hpp & points.hpp
 #include"print.hpp"   //based on judge.hpp & sign.hpp, ands expand by points.hpp & cv.hpp
 

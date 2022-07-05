@@ -65,7 +65,7 @@ namespace mineutils
 		{
 			if (y == ystart)
 				cout << "[";
-			else cout << zfillStr("", 10) << "[";
+			else cout << string(10, ' ') << "[";
 			for (int x = xstart; x < xend; x++)
 			{
 				cout << "(";

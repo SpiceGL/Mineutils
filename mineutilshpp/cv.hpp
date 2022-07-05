@@ -9,7 +9,6 @@
 #include"str.hpp"
 
 
-
 namespace mineutils
 {
 	using std::cout;
@@ -45,15 +44,21 @@ namespace mineutils
 	void printMat(const cv::Mat& img, Tx x_range = { 0, INT_MAX }, Ty y_range = { 0, INT_MAX }, Tc c_range = { 0, INT_MAX });
 
 	template<class MatT>
-	void _printCVMat(cv::Mat_<MatT> img, int xstart, int xend, int ystart, int yend);
+	void _printCVMat(cv::Mat_<MatT> img, int xstart, int xend, int ystart, int yend, bool isInt);
 
 	template<class cvVec>
-	void _printCVMat(cv::Mat_<cvVec> img, int xstart, int xend, int ystart, int yend, int cstart, int cend);
+	void _printCVMat(cv::Mat_<cvVec> img, int xstart, int xend, int ystart, int yend, int cstart, int cend, bool isInt);
 
 	void _print(const cv::Mat& img);
 
 	template<class T>
 	void _print(const cv::Point_<T>& pt);
+
+	template<class T>
+	void _print(const cv::Point3_<T>& pt);
+
+	template<class T>
+	void _print(const cv::Size_<T>& pt);
 
 	/*------------------------------------定义-------------------------------------*/
 	/*快速设置窗口属性*/
@@ -83,20 +88,15 @@ namespace mineutils
 		cv::Size size, pair<int, int> position, int flag)
 	{
 		using cs = ColorStr;
-		if (img.empty())
-			cout << cs::yellow(__func__, ":") << "图像打开失败，已跳过显示！" << endl;
-		else
-		{
-			cv::namedWindow(win_name, flag);
-			if (size.width != -1)
-				cv::resizeWindow(win_name, size);
-			if (position.first != -1)
-				cv::moveWindow(win_name, position.first, position.second);
-			cv::imshow(win_name, img);
-			cv::waitKey(wait);
-			if (close)
-				cv::destroyWindow(win_name);
-		}
+		cv::namedWindow(win_name, flag);
+		if (size.width != -1)
+			cv::resizeWindow(win_name, size);
+		if (position.first != -1)
+			cv::moveWindow(win_name, position.first, position.second);
+		cv::imshow(win_name, img);
+		cv::waitKey(wait);
+		if (close)
+			cv::destroyWindow(win_name);
 	}
 
 	/*快速显示视频*/
@@ -204,26 +204,26 @@ namespace mineutils
 		int cstart = c_norm_range.first, cend = c_norm_range.second;
 
 		if (img.type() == 0)
-			_printCVMat<uchar>(img, xstart, xend, ystart, yend);
+			_printCVMat<uchar>(img, xstart, xend, ystart, yend, true);
 		else if (img.type() == 4)
-			_printCVMat<int>(img, xstart, xend, ystart, yend);
+			_printCVMat<int>(img, xstart, xend, ystart, yend, true);
 		else if (img.type() == 5)
-			_printCVMat<float>(img, xstart, xend, ystart, yend);
+			_printCVMat<float>(img, xstart, xend, ystart, yend, false);
 
 		else if (img.type() == 16)
-			_printCVMat<cv::Vec3b>(img, xstart, xend, ystart, yend, cstart, cend);
+			_printCVMat<cv::Vec3b>(img, xstart, xend, ystart, yend, cstart, cend, true);
 		else if (img.type() == 20)
-			_printCVMat<cv::Vec3i>(img, xstart, xend, ystart, yend, cstart, cend);
+			_printCVMat<cv::Vec3i>(img, xstart, xend, ystart, yend, cstart, cend, true);
 		else if (img.type() == 21)
-			_printCVMat<cv::Vec3f>(img, xstart, xend, ystart, yend, cstart, cend);
+			_printCVMat<cv::Vec3f>(img, xstart, xend, ystart, yend, cstart, cend, false);
 		else if (img.type() == 22)
-			_printCVMat<cv::Vec3d>(img, xstart, xend, ystart, yend, cstart, cend);
+			_printCVMat<cv::Vec3d>(img, xstart, xend, ystart, yend, cstart, cend, false);
 		else cout << cs::yellow(__func__, ":") << " 该图像的cv::Mat::type()暂不支持，已跳过输出!" << endl;
 	}
 
 
 	template<class MatT>
-	void _printCVMat(cv::Mat_<MatT> img, int xstart, int xend, int ystart, int yend)
+	void _printCVMat(cv::Mat_<MatT> img, int xstart, int xend, int ystart, int yend, bool isInt)
 	{
 		using cs = ColorStr;
 		cout << "cv::Mat{";
@@ -231,38 +231,56 @@ namespace mineutils
 		{
 			if (y == ystart)
 				cout << "[";
-			else cout << zfillStr("", 8) << "[";
+			else cout << string(8, ' ') << "[";
 			for (int x = xstart; x < xend; x++)
 			{
-				if (x != xend - 1)
-					cout << (float)img(y, x) << " ";
-				else cout << (float)img(y, x);
+				if (isInt)
+				{
+					cout << zfillInt((int)img(y, x), 3, ' ');
+					if (x != xend - 1)
+						cout << " ";
+				}
+				else
+				{
+					cout << zfillFlt((float)img(y, x), 3, 4);
+					if (x != xend - 1)
+						cout << " ";
+				}
 			}
 			if (y != yend - 1)
 				cout << "]" << endl;
 			else cout << "]";
 		}
-		cout << "}" << endl;
+		cout << "}";
 	}
 
 	template<class cvVec>
-	void _printCVMat(cv::Mat_<cvVec> img, int xstart, int xend, int ystart, int yend, int cstart, int cend)
+	void _printCVMat(cv::Mat_<cvVec> img, int xstart, int xend, int ystart, int yend, int cstart, int cend, bool isInt)
 	{
 		using cs = ColorStr;
-		cout << "{";
+		cout << "cv::Mat{";
 		for (int y = ystart; y < yend; y++)
 		{
 			if (y == ystart)
 				cout << "[";
-			else cout << "[";
+			else cout << string(8, ' ') << "[";
 			for (int x = xstart; x < xend; x++)
 			{
 				cout << "(";
 				for (int c = cstart; c < cend; c++)
 				{
-					if (c != cend - 1)
-						cout << (int)img(y, x)[c] << " ";
-					else cout << (int)img(y, x)[c];
+					if (isInt)
+					{
+						cout << zfillInt((int)img(y, x)[c], 5, ' ');
+						if (c != cend - 1)
+							cout << " ";
+					}
+					else
+					{
+						cout << zfillFlt((float)img(y, x)[c], 3, 4, ' ', '0');
+						if (c != cend - 1)
+							cout << " ";
+					}
 				}
 				if (x != xend - 1)
 					cout << ") ";
@@ -272,12 +290,13 @@ namespace mineutils
 				cout << "]" << endl;
 			else cout << "]";
 		}
-		cout << "}" << endl;
+		cout << "}";
 	}
 
 
 	void _print(const cv::Mat& img)  //可能是opencv源码using了cv::print导致print(cv::Mat)被劫持
 	{
+		cout << endl;
 		printMat(img);
 	}
 

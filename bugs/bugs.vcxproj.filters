@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="_special_troubles.cpp">
+    <ClCompile Include="bugs.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

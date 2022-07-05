@@ -1,4 +1,5 @@
 #pragma once
+#include<exception>
 #include<iostream>
 #include<list>
 #include<map>
@@ -45,8 +46,17 @@ namespace mineutils
 	template<class T1, class T2, class... Ts>
 	void _print(const map<T1, T2, Ts...>& m);
 
+	template<class T, class... Ts>
+	void _print(const list<T, Ts...>& l);
+
+	template<class T, class... Ts>
+	void _print(const set<T, Ts...>& st);
+
+	template<class T, class... Ts>
+	void _print(const vector<T, Ts...>& vec);
+
 	template<template<class C, class... Cs> class CTer, class T, class... Ts>
-	void _print(const CTer<T, Ts...>& nm);
+	void _print_stdcter(const CTer<T, Ts...>& cter);
 
 	void _print(const string& str);
 
@@ -66,13 +76,13 @@ namespace mineutils
 		实现类似python的print输出。
 		-支持int、float、char、string等基本类型数据的输出；
 		-支持int[]、float[]等基本多维数组类型数据的输出；
-		-支持vector、tuple等STL容器内容的输出；
-		-支持外部扩展对第三方类型的支持（重载<<操作符）；
+		-支持vector、tuple等常用STL容器内容的输出；
+		-支持外部扩展对第三方类型的支持（重载<<操作或_print）；
 		-Warning：存在输入非支持类型数据得到错误结果但不产生异常的可能。
 		*/
 		_print(arg);
 		cout << " ";
-		print(args...);
+		mineutils::print(args...);
 		//int _a[] = { (_print(args), cout << " ", 0)... };   //另一种写法，但可读性差一些
 	}
 
@@ -126,7 +136,7 @@ namespace mineutils
 	}
 
 	template<class T1, class T2, class... Ts>
-	void _print(const map<T1, T2, Ts...>& m)  //输出list类
+	void _print(const map<T1, T2, Ts...>& m)  //输出map类
 	{
 		cout << "{";
 		int size = m.size();
@@ -148,8 +158,26 @@ namespace mineutils
 		cout << "}";
 	}
 
+	template<class T, class... Ts>
+	void _print(const list<T, Ts...>& l)
+	{
+		_print_stdcter(l);
+	}
+
+	template<class T, class... Ts>
+	void _print(const set<T, Ts...>& st)
+	{
+		_print_stdcter(st);
+	}
+
+	template<class T, class... Ts>
+	void _print(const vector<T, Ts...>& vec)
+	{
+		_print_stdcter(vec);
+	}
+
 	template<template<class C, class... Cs> class CTer, class T, class... Ts>
-	void _print(const CTer<T, Ts...>& cter)
+	void _print_stdcter(const CTer<T, Ts...>& cter)
 	{
 		cout << "[";
 		int size = cter.size();

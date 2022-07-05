@@ -1,5 +1,4 @@
 #pragma once
-
 #include<iostream>
 #include<set>
 #include<string>
@@ -11,7 +10,6 @@
 #else
 #include<dirent.h>
 #endif
-
 #include<stdlib.h>
 #include<sys/stat.h>
 
