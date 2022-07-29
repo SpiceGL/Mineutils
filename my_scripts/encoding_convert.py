@@ -1,9 +1,6 @@
 import os
-
 import chardet
 import codecs
-import sys
-sys.path.append("..")
 
 from mineutils.colorstr import ColorStr as cs
 from mineutils.path import Path as pt
@@ -39,9 +36,6 @@ def batchConvert(file_dir, backup_dir, target_encoding, file_extensions=()):
             convertEncoding(fp, target_encoding)
             
 
-
-
-
 def main():
     file_dir = "../mineutilshpp"
     backup_dir = file_dir + "_backup"
@@ -64,7 +58,7 @@ def showEncoding():
 
 
 if __name__ == '__main__':
-    a = [1,2,3]
-    print(a[-1:1])
+    import sys
+    sys.path.append("..")
     
 

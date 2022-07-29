@@ -13,11 +13,9 @@ namespace mineutils
 
 
 	/*------------------------------------∂®“Â-------------------------------------*/
-	pair<int, int> allRange()
-	{
-		return { 0, INT_MAX };
-	}
-
+#define ALLIDX { 0, INT_MAX }
+	
+	
 
 	int normIdx(int idx, int len)
 	{

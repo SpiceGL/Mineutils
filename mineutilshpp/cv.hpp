@@ -15,6 +15,7 @@ namespace mineutils
 	using std::endl;
 	using std::pair;
 	using std::string;
+
 	/*------------------------------------声明-------------------------------------*/
 	string setWindowCV(string win_name, cv::Size size = { -1, -1 },
 		pair<int, int> position = { -1, -1 }, int flag = cv::WINDOW_FREERATIO);
@@ -23,19 +24,20 @@ namespace mineutils
 
 	void quickShowCV(string win_name, cv::Mat& img,
 		float wait = 1, bool close = false, cv::Size size = { -1, -1 },
-		pair<int, int> position = { -1, -1 }, int flag = cv::WINDOW_AUTOSIZE);
+		pair<int, int> position = { -1, -1 }, int flag = cv::WINDOW_FREERATIO);
 
 	void quickPlayCV(string win_name, string video_path,
 		float wait = 30, cv::Size size = { -1, -1 },
 		pair<int, int> position = { -1, -1 }, int flag = cv::WINDOW_FREERATIO);
 
 	void putLabelCV(cv::Mat& img, string label, cv::Point position, cv::Scalar text_color = { 255,255,255 },
-		int text_thickness = 2, int word_type = cv::FONT_HERSHEY_SIMPLEX, int word_scale = 1, 
+		int word_type = cv::FONT_HERSHEY_SIMPLEX, int word_scale = 1, int text_thickness = 2,
 		bool have_bg = true, cv::Scalar bg_color = {255, 0, 0});
 
 	void putBoxCV(cv::Mat& img, LTRB ltrb, string label = "",
 		cv::Scalar bbox_color = { 0,255,0 }, cv::Scalar text_color = { 255,255,255 },
-		int bbox_thickness = 3, int text_thickness = 2, int word_type = cv::FONT_HERSHEY_SIMPLEX, int word_scale = 0.67);
+		int word_type = cv::FONT_HERSHEY_SIMPLEX, float word_scale = 1, 
+		int bbox_thickness = 3, int text_thickness = 2);
 
 	template<class T>
 	void channelInit(cv::Mat& mat, cv::Point3_<T> channel_value = {0, 0, 0});
@@ -44,10 +46,10 @@ namespace mineutils
 	void printMat(const cv::Mat& img, Tx x_range = { 0, INT_MAX }, Ty y_range = { 0, INT_MAX }, Tc c_range = { 0, INT_MAX });
 
 	template<class MatT>
-	void _printCVMat(cv::Mat_<MatT> img, int xstart, int xend, int ystart, int yend, bool isInt);
+	void _printCVMat(const cv::Mat& img, int xstart, int xend, int ystart, int yend, bool isInt);
 
 	template<class cvVec>
-	void _printCVMat(cv::Mat_<cvVec> img, int xstart, int xend, int ystart, int yend, int cstart, int cend, bool isInt);
+	void _printCVMat(const cv::Mat& img, int xstart, int xend, int ystart, int yend, int cstart, int cend, bool isInt);
 
 	void _print(const cv::Mat& img);
 
@@ -58,9 +60,16 @@ namespace mineutils
 	void _print(const cv::Point3_<T>& pt);
 
 	template<class T>
-	void _print(const cv::Size_<T>& pt);
+	void _print(const cv::Size_<T>& sz);
+
+	void _print(const cv::MatSize& sz);
+
+	template<class T>
+	void _print(const cv::Rect_<T>& rect);
 
 	/*------------------------------------定义-------------------------------------*/
+	
+	
 	/*快速设置窗口属性*/
 	string setWindowCV(string win_name, cv::Size size, pair<int, int> position, int flag)
 	{
@@ -77,9 +86,11 @@ namespace mineutils
 	{
 		cv::imshow(win_name, img);
 		int k = cv::waitKey(wait) & 0xff;
+		bool go_on;
 		if (k == 27 or k == int('q'))
-			return false;
-		else return true;
+			go_on = false;
+		else go_on = true;
+		return go_on;
 	}
 
 
@@ -136,27 +147,27 @@ namespace mineutils
 	/*---------------------------------------------------------------------------------*/
 	/*为图像添加文字*/
 	void putLabelCV(cv::Mat& img, string label, cv::Point position, cv::Scalar text_color, 
-		int text_thickness, int word_type, int word_scale, bool have_bg, cv::Scalar bg_color)
+		int word_type, float word_scale, int text_thickness, bool have_bg, cv::Scalar bg_color)
 	{
 		/*	position：文字左下角位置 */
 		if (label.size() != 0)
 		{
-			cv::Point c1 = position;
-			cv::putText(img, label, c1, word_type, word_scale, text_color, text_thickness, cv::LINE_AA);
+			cv::Point& c1 = position;
 			if (have_bg)
 			{
 				int* baseline = nullptr;
 				cv::Size text_size = cv::getTextSize(label, word_type, word_scale, text_thickness, baseline);
-				cv::Point c2 = { position.x + text_size.width, position.y - text_size.height };
+				cv::Point c2 = { c1.x + text_size.width, c1.y - (int)(text_size.height*1.2) };
 				cv::rectangle(img, c1, c2, bg_color, -1);
 			}
+			cv::putText(img, label, c1, word_type, word_scale, text_color, text_thickness, cv::LINE_AA);
 		}
 	}
 
 	/*为图像添加检测框及标签*/
 	void putBoxCV(cv::Mat& img, LTRB ltrb, string label,
-		cv::Scalar bbox_color, cv::Scalar text_color, 
-		int bbox_thickness, int text_thickness, int word_type, int word_scale)
+		cv::Scalar bbox_color, cv::Scalar text_color, int word_type, float word_scale, 
+		int bbox_thickness, int text_thickness)
 	{
 		cv::Point c1 = { ltrb.left , ltrb.top };
 		cv::Point c2 = { ltrb.right , ltrb.bottom };
@@ -164,8 +175,21 @@ namespace mineutils
 
 		c1.x -= bbox_thickness - 1;
 		c1.y -= bbox_thickness - 1;
-		putLabelCV(img, label, c1, text_color, text_thickness, word_type, word_scale, true, bbox_color);
+		
+		if (label.size() > 0)
+		{
+			cv::Point label_pos = c1;
+			int* baseline = nullptr;
+			cv::Size text_size = cv::getTextSize(label, word_type, word_scale, text_thickness, baseline);
+			if (label_pos.x + text_size.width > img.cols)
+				label_pos.x = img.cols - text_size.width;
+			if (label_pos.y - text_size.height < 0)
+				label_pos.y = c1.y + text_size.height;
+			putLabelCV(img, label, label_pos, text_color, word_type, word_scale, text_thickness, true, bbox_color);
+		}
 	}
+
+
 
 	/*---------------------------------------------------------------------------------*/
 	/*自定义3个通道的值*/
@@ -223,7 +247,7 @@ namespace mineutils
 
 
 	template<class MatT>
-	void _printCVMat(cv::Mat_<MatT> img, int xstart, int xend, int ystart, int yend, bool isInt)
+	void _printCVMat(const cv::Mat& img, int xstart, int xend, int ystart, int yend, bool isInt)
 	{
 		using cs = ColorStr;
 		cout << "cv::Mat{";
@@ -232,17 +256,18 @@ namespace mineutils
 			if (y == ystart)
 				cout << "[";
 			else cout << string(8, ' ') << "[";
+			auto* ptr = img.ptr<MatT>(y);
 			for (int x = xstart; x < xend; x++)
 			{
 				if (isInt)
 				{
-					cout << zfillInt((int)img(y, x), 3, ' ');
+					cout << zfillInt(ptr[x], 3, ' ');
 					if (x != xend - 1)
 						cout << " ";
 				}
 				else
 				{
-					cout << zfillFlt((float)img(y, x), 3, 4);
+					cout << zfillFlt(ptr[x], 3, 4, 4, ' ', '0');
 					if (x != xend - 1)
 						cout << " ";
 				}
@@ -255,7 +280,7 @@ namespace mineutils
 	}
 
 	template<class cvVec>
-	void _printCVMat(cv::Mat_<cvVec> img, int xstart, int xend, int ystart, int yend, int cstart, int cend, bool isInt)
+	void _printCVMat(const cv::Mat& img, int xstart, int xend, int ystart, int yend, int cstart, int cend, bool isInt)
 	{
 		using cs = ColorStr;
 		cout << "cv::Mat{";
@@ -264,6 +289,7 @@ namespace mineutils
 			if (y == ystart)
 				cout << "[";
 			else cout << string(8, ' ') << "[";
+			auto* ptr = img.ptr<cvVec>(y);
 			for (int x = xstart; x < xend; x++)
 			{
 				cout << "(";
@@ -271,13 +297,13 @@ namespace mineutils
 				{
 					if (isInt)
 					{
-						cout << zfillInt((int)img(y, x)[c], 5, ' ');
+						cout << zfillInt(ptr[x][c], 5, ' ');
 						if (c != cend - 1)
 							cout << " ";
 					}
 					else
 					{
-						cout << zfillFlt((float)img(y, x)[c], 3, 4, ' ', '0');
+						cout << zfillFlt(ptr[x][c], 3, 4, 4, ' ', '0');
 						if (c != cend - 1)
 							cout << " ";
 					}
@@ -317,5 +343,19 @@ namespace mineutils
 	void _print(const cv::Size_<T>& sz)
 	{
 		cout << "(" << sz.width << ", " << sz.height << ")";
+	}
+
+	void _print(const cv::MatSize& sz)
+	{
+		cout << "(" << sz << ")";
+	}
+
+	template<class T>
+	void _print(const cv::Rect_<T>& rect)
+	{
+		cout << "(" << rect.x << " "
+			<< rect.y << " "
+			<< rect.width << " "
+			<< rect.height << ")";
 	}
 }

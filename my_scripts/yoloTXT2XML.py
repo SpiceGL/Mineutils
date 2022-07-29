@@ -102,11 +102,10 @@ def makexml(txt_path, xml_path, pic_path, class_dict):  # 读取txt路径，xml�
         f = open(os.path.join(xml_path, name[0:-4] + ".xml"), 'w')
         xmlBuilder.writexml(f, indent='\t', newl='\n', addindent='\t', encoding='utf-8')
         f.close()
+        
+        
+def main():
 
-
-if __name__ == '__main__':
-    from mineutils import useProjDir
-    useProjDir(splitsrt="my_tools")
     txt_path = "../ZTC950V763_20211123/labels"
     xml_path = "../ZTC950V763_20211123/Annotations"
     img_path = "../ZTC950V763_20211123/imgs"
@@ -114,3 +113,7 @@ if __name__ == '__main__':
     
     # print(Path.listdir(".."))
     makexml(txt_path, xml_path, img_path, class_dict)
+
+
+if __name__ == '__main__':
+    main()

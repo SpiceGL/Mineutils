@@ -19,7 +19,9 @@ namespace mineutils
 	using std::string;
 	using std::vector;
 	/*----------------------------------ÉùÃ÷--------------------------------------*/
-	vector<ncnn::Mat> quickRunNcnn(string param_path, string model_path, ncnn::Mat& in, int in_id, vector<int> out_ids);
+	vector<ncnn::Mat> quickRunNcnn(ncnn::Net& net, ncnn::Mat& in, string in_name, vector<string> out_names);
+
+	vector<ncnn::Mat> quickRunNcnn(string param_path, string model_path, ncnn::Mat& in, string in_name, vector<string> out_names);
 
 	template<class Tx = pair<int, int>, class Ty = pair<int, int>, class Tc = pair<int, int>>
 	void printMat(const ncnn::Mat& m, Tx x_range = { 0, INT_MAX }, Ty y_range = { 0, INT_MAX }, Tc c_range = { 0, INT_MAX });
@@ -27,23 +29,28 @@ namespace mineutils
 
 
 	/*----------------------------------¶¨Òå--------------------------------------*/
+	vector<ncnn::Mat> quickRunNcnn(ncnn::Net& net, ncnn::Mat& in, string in_name, vector<string> out_names)
+	{
+		
+		ncnn::Extractor extractor = net.create_extractor();
+		extractor.input(in_name.c_str(), in);
 
-	vector<ncnn::Mat> quickRunNcnn(string param_path, string model_path, ncnn::Mat& in, int in_id, vector<int> out_ids)
+		vector<ncnn::Mat> outs;
+		ncnn::Mat out;
+		for (string out_id : out_names)
+		{
+			extractor.extract(out_id.c_str(), out);
+			outs.push_back(out);
+		}
+		return outs;
+	}
+
+	vector<ncnn::Mat> quickRunNcnn(string param_path, string model_path, ncnn::Mat& in, string in_name, vector<string> out_names)
 	{
 		ncnn::Net net;
 		net.load_param(param_path.c_str());
 		net.load_model(model_path.c_str());
-		ncnn::Extractor extractor = net.create_extractor();
-		extractor.input(in_id, in);
-
-		vector<ncnn::Mat> outs;
-		ncnn::Mat out;
-		for (int out_id : out_ids)
-		{
-			extractor.extract(out_id, out);
-			outs.push_back(out);
-		}
-		return outs;
+		return quickRunNcnn(net, in, in_name, out_names);
 	}
 
 
@@ -100,5 +107,15 @@ namespace mineutils
 		for (auto mat : mats)
 			printMat(mat);
 		cout << "}" << endl;
+	}
+
+	void _print(const ncnn::Mat& m)
+	{
+		printMat(m);
+	}
+
+	void _print(const vector<ncnn::Mat>& mats)
+	{
+		printMats(mats);
 	}
 }

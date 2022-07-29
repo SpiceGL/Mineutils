@@ -125,21 +125,21 @@ namespace mineutils
 		return buffer.str();
 	}
 	
-	string zfillInt(int n, int len = 0, char padding = '0')   //输入int值，返回len长度的字符串
+	string zfillInt(int n, int min_len = 0, char padding = '0')   //输入int值，返回len长度的字符串
 	{
 		string s = std::to_string(n);
-		if (s.length() < len)
+		if (s.length() < min_len)
 		{
-			s = string(len - s.length(), padding) + s;
+			s = string(min_len - s.length(), padding) + s;
 		}
 		return s;
 	}
 
-	string zfillFlt(float f, int int_len = 0, int flt_len = 4, 
-		char int_padding = ' ', char flt_padding = '0')
+	string zfillFlt(float f, int min_len_int = 0, int min_len_flt = 4, 
+		size_t flt_precision = 8, char int_padding = ' ', char flt_padding = '0')
 	{
 		std::ostringstream buffer;
-		buffer << std::setprecision(flt_len) << f;
+		buffer << std::setprecision(min_len_flt) << f;
 		string s = buffer.str();
 
 		/*找到输入小数的整数部分和小数部分，分别处理并合并*/
@@ -147,7 +147,7 @@ namespace mineutils
 		size_t point_pos = s.find(".");
 		if (point_pos != -1)
 		{
-			int_part = s.substr(0, point_pos + 1);
+			int_part = s.substr(0, point_pos);
 			flt_part = s.substr(point_pos + 1);
 		}
 		else
@@ -155,10 +155,10 @@ namespace mineutils
 			int_part = s;
 			flt_part = "";
 		}
-		if (int_part.length() < int_len)
-			int_part = string(int_len - int_part.length(), int_padding) + int_part;
-		if (flt_part.length() < flt_len)
-			flt_part = flt_part + string(flt_len - flt_part.length(), flt_padding);
+		if (int_part.length() < min_len_int)
+			int_part = string(min_len_int - int_part.length(), int_padding) + int_part;
+		if (flt_part.length() < min_len_flt)
+			flt_part = flt_part + string(min_len_flt - flt_part.length(), flt_padding);
 		s = int_part + "." + flt_part;
 		return s;
 	}

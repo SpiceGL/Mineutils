@@ -16,10 +16,11 @@ namespace mineutils
 	using std::endl;
 
 
-
 	template<class T>
 	class BaseBox
 	{
+	protected:
+		T data[4];
 	public:
 		using cs = ColorStr;
 		using Box = std::initializer_list<T>;
@@ -38,8 +39,7 @@ namespace mineutils
 			}
 		}
 
-	public:
-		T data[4];
+
 
 		T& operator[](int idx)
 		{
@@ -47,11 +47,17 @@ namespace mineutils
 			return this->data[idx];
 		}
 
-		T roundIntOnly(T x)
+		const T& operator[](int idx) const
+		{
+			idx = normIdx(idx, 4);
+			return this->data[idx];
+		}
+
+		static T roundWhenInt(float x)
 		{
 			if (isInTypes<T, char, unsigned char, short, unsigned short, 
 				int, unsigned int, long, unsigned long, long long, unsigned long long>())
-				return floor(x + 0.5);
+				return round(x);
 			else return x;
 		}
 	};
@@ -69,13 +75,9 @@ namespace mineutils
 		T& right = this->data[2];
 		T& bottom = this->data[3];
 
-		XYWHBox<T> toXYWH()
+		LTRBBox<int> toPixel()
 		{
-			T w = right - left;
-			T h = bottom - top;
-			T x = this->roundIntOnly((float)left + (float)w / 2);
-			T y = this->roundIntOnly((float)top + (float)h / 2);
-			return { x,y,w,h };
+			return { (int)round(left), (int)round(top), (int)round(right), (int)round(bottom) };
 		}
 	};
 
@@ -91,34 +93,45 @@ namespace mineutils
 		T& width = this->data[2];
 		T& height = this->data[3];
 
-		LTRBBox<T> toLTRB()
+		XYWHBox<int> toPixel()
 		{
-			T l = this->roundIntOnly(x - (float)width / 2);
-			T t = this->roundIntOnly(y - (float)height / 2);
-			T r = this->roundIntOnly(x + (float)width / 2);
-			T b = this->roundIntOnly(y + (float)height / 2);
-			return { l,t,r,b };
+			return { (int)round(x), (int)round(y), (int)round(width), (int)round(height) };
 		}
+
 	};
 
+
+	template<class T>
+	LTRBBox<T> toLTRB(const XYWHBox<T>& box)
+	{
+		T l = BaseBox<T>::roundWhenInt(box.x - (float)box.width / 2);
+		T t = BaseBox<T>::roundWhenInt(box.y - (float)box.height / 2);
+		T r = BaseBox<T>::roundWhenInt(box.x + (float)box.width / 2);
+		T b = BaseBox<T>::roundWhenInt(box.y + (float)box.height / 2);
+		return { l,t,r,b };
+	}
+
+	template<class T>
+	XYWHBox<T> toXYWH(const LTRBBox<T>& box)
+	{
+		T w = box.right - box.left;
+		T h = box.bottom - box.top;
+		T x = BaseBox<T>::roundWhenInt(box.left + (float)w / 2);
+		T y = BaseBox<T>::roundWhenInt(box.top + (float)h / 2);
+		return { x,y,w,h };
+	}
 
 	/*------------------------------------------------------------------------------*/
 	template<class T>
 	std::ostream& operator<<(std::ostream& cout, const BaseBox<T>& bbox)   //添加对print的支持，bbox要么const &要么不引用
 	{
-		cout << "[" << bbox.data[0] << " " << bbox.data[1] << " "
-			<< bbox.data[2] << " " << bbox.data[3] << "]";
+		cout << "[" << bbox[0] << " " << bbox[1] << " "
+			<< bbox[2] << " " << bbox[3] << "]";
 		return cout;
 	}
-	//template<class T>
-	//void _print(const BaseBox<T>& box)
-	//{
-	//	cout << "[" << bbox.data[0] << " " << bbox.data[1] << " "
-	//		<< bbox.data[2] << " " << bbox.data[3] << "]";
-	//}
 
 	using LTRB = LTRBBox<int>; 
-	using LTRB_F = LTRBBox<float>;
+	using LTRBf = LTRBBox<float>;
 	using XYWH = XYWHBox<int>;
-	using XYWH_F = XYWHBox<float>;
+	using XYWHf = XYWHBox<float>;
 }

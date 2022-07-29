@@ -210,7 +210,7 @@ class Path:
         --从路径中分离出不带后缀名的文件名。
         """
         if path[-1] == "/":
-            print(ColorStr.yellow("Path.splitName()"), f"{path}值最后一位是'/'！")
+            # print(ColorStr.yellow("Path.splitName()"), f"{path}值最后一位是'/'！")
             # raise Error("111")
             path = path[0:-1]
         if suffix:
