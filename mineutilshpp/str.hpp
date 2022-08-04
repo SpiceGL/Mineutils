@@ -53,7 +53,7 @@ namespace mineutils
 		}
 
 		template<class ...Strs>
-		static string fuchsia(string str, Strs ...strs)  //??¨°magenta
+		static string fuchsia(string str, Strs ...strs)  //
 		{
 			string color_str;
 			if (ColorStr::enabled)
@@ -264,4 +264,3 @@ namespace mineutils
 	*/
 
 }
-

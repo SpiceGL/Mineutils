@@ -19,9 +19,11 @@ namespace mineutils
 	using std::string;
 	using std::vector;
 	/*----------------------------------声明--------------------------------------*/
-	vector<ncnn::Mat> quickRunNcnn(ncnn::Net& net, ncnn::Mat& in, string in_name, vector<string> out_names);
+	void loadNcnn(ncnn::Net& net_out, string param_path, string bin_path);
+	
+	vector<ncnn::Mat> quickRunNcnn(ncnn::Net& net_in, ncnn::Mat& input, string in_name, vector<string> out_names);
 
-	vector<ncnn::Mat> quickRunNcnn(string param_path, string model_path, ncnn::Mat& in, string in_name, vector<string> out_names);
+	vector<ncnn::Mat> quickRunNcnn(string param_path, string model_path, ncnn::Mat& input, string in_name, vector<string> out_names);
 
 	template<class Tx = pair<int, int>, class Ty = pair<int, int>, class Tc = pair<int, int>>
 	void printMat(const ncnn::Mat& m, Tx x_range = { 0, INT_MAX }, Ty y_range = { 0, INT_MAX }, Tc c_range = { 0, INT_MAX });
@@ -29,11 +31,21 @@ namespace mineutils
 
 
 	/*----------------------------------定义--------------------------------------*/
-	vector<ncnn::Mat> quickRunNcnn(ncnn::Net& net, ncnn::Mat& in, string in_name, vector<string> out_names)
+	void loadNcnn(ncnn::Net& net_out, string param_path, string bin_path)
+	{
+		using cs = ColorStr;
+		//ncnn::Net net;
+		if (net_out.load_param(param_path.c_str()))
+			cout << cs::yellow(__func__, ":") << fstr(" 加载param文件{}失败！", param_path);
+		if (net_out.load_model(bin_path.c_str()))
+			cout << cs::yellow(__func__, ":") << fstr(" 加载bin文件{}失败！", bin_path);
+	}
+	
+	vector<ncnn::Mat> quickRunNcnn(ncnn::Net& net_in, ncnn::Mat& input, string in_name, vector<string> out_names)
 	{
 		
-		ncnn::Extractor extractor = net.create_extractor();
-		extractor.input(in_name.c_str(), in);
+		ncnn::Extractor extractor = net_in.create_extractor();
+		extractor.input(in_name.c_str(), input);
 
 		vector<ncnn::Mat> outs;
 		ncnn::Mat out;
@@ -45,12 +57,12 @@ namespace mineutils
 		return outs;
 	}
 
-	vector<ncnn::Mat> quickRunNcnn(string param_path, string model_path, ncnn::Mat& in, string in_name, vector<string> out_names)
+	vector<ncnn::Mat> quickRunNcnn(string param_path, string model_path, ncnn::Mat& input, string in_name, vector<string> out_names)
 	{
 		ncnn::Net net;
 		net.load_param(param_path.c_str());
 		net.load_model(model_path.c_str());
-		return quickRunNcnn(net, in, in_name, out_names);
+		return quickRunNcnn(net, input, in_name, out_names);
 	}
 
 
