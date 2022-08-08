@@ -50,7 +50,8 @@ namespace mineutils
 			return this->data[idx];
 		}
 
-		static T roundWhenInt(float x)
+		/*在对象是整型的时候四舍五入*/
+		static T roundWhenInt(float x)   
 		{
 			if (isInTypes<T, char, unsigned char, short, unsigned short,
 				int, unsigned int, long, unsigned long, long long, unsigned long long>())
