@@ -31,7 +31,7 @@ namespace mineutils
 
 
 	/*----------------------------------定义--------------------------------------*/
-	void loadNcnn(ncnn::Net& net_out, string param_path, string bin_path)
+	inline void loadNcnn(ncnn::Net& net_out, string param_path, string bin_path)
 	{
 		using cs = ColorStr;
 		//ncnn::Net net;
@@ -41,7 +41,7 @@ namespace mineutils
 			cout << cs::yellow(__func__, ":") << fstr(" 加载bin文件{}失败！", bin_path);
 	}
 	
-	vector<ncnn::Mat> quickRunNcnn(ncnn::Net& net_in, ncnn::Mat& input, string in_name, vector<string> out_names)
+	inline vector<ncnn::Mat> quickRunNcnn(ncnn::Net& net_in, ncnn::Mat& input, string in_name, vector<string> out_names)
 	{
 		
 		ncnn::Extractor extractor = net_in.create_extractor();
@@ -57,7 +57,7 @@ namespace mineutils
 		return outs;
 	}
 
-	vector<ncnn::Mat> quickRunNcnn(string param_path, string model_path, ncnn::Mat& input, string in_name, vector<string> out_names)
+	inline vector<ncnn::Mat> quickRunNcnn(string param_path, string model_path, ncnn::Mat& input, string in_name, vector<string> out_names)
 	{
 		ncnn::Net net;
 		net.load_param(param_path.c_str());
@@ -67,7 +67,7 @@ namespace mineutils
 
 
 	template<class Tx, class Ty, class Tc>
-	void printMat(const ncnn::Mat& m, Tx x_range, Ty y_range, Tc c_range)   //输出ncnn的Mat，只支持三维图像Mat
+	inline void printMat(const ncnn::Mat& m, Tx x_range, Ty y_range, Tc c_range)   //输出ncnn的Mat，只支持三维图像Mat
 	{
 		using Range = pair<int, int>;
 		Range x_norm_range = normRange(x_range, m.w);
@@ -113,7 +113,7 @@ namespace mineutils
 	//	return cout;
 	//}
 
-	void printMats(const vector<ncnn::Mat>& mats)
+	inline void printMats(const vector<ncnn::Mat>& mats)
 	{
 		cout << "Mats{" << endl;
 		for (auto mat : mats)
@@ -121,12 +121,12 @@ namespace mineutils
 		cout << "}" << endl;
 	}
 
-	void _print(const ncnn::Mat& m)
+	inline void _print(const ncnn::Mat& m)
 	{
 		printMat(m);
 	}
 
-	void _print(const vector<ncnn::Mat>& mats)
+	inline void _print(const vector<ncnn::Mat>& mats)
 	{
 		printMats(mats);
 	}

@@ -71,7 +71,7 @@ namespace mineutils
 	
 	
 	/*快速设置窗口属性*/
-	string setWindowCV(string win_name, cv::Size size, pair<int, int> position, int flag)
+	inline string setWindowCV(string win_name, cv::Size size, pair<int, int> position, int flag)
 	{
 		cv::namedWindow(win_name, flag);
 		if (size.width != -1)
@@ -82,7 +82,7 @@ namespace mineutils
 	}
 
 	/*快速显示图像，窗口属性在函数外设置，推荐用于循环体中，若收到中止信号，则返回false*/
-	bool loopShowCV(string win_name, cv::Mat& img, float wait)
+	inline bool loopShowCV(string win_name, cv::Mat& img, float wait)
 	{
 		cv::imshow(win_name, img);
 		int k = cv::waitKey(wait) & 0xff;
@@ -95,7 +95,7 @@ namespace mineutils
 
 
 	/*快速显示图像，一步到位设置窗口和显示属性*/
-	void quickShowCV(string win_name, cv::Mat& img, float wait, bool close,
+	inline void quickShowCV(string win_name, cv::Mat& img, float wait, bool close,
 		cv::Size size, pair<int, int> position, int flag)
 	{
 		using cs = ColorStr;
@@ -111,7 +111,7 @@ namespace mineutils
 	}
 
 	/*快速显示视频*/
-	void quickPlayCV(string win_name, string video_path, float wait,
+	inline void quickPlayCV(string win_name, string video_path, float wait,
 		cv::Size size, pair<int, int> position, int flag)
 	{
 		using cs = ColorStr;
@@ -146,7 +146,7 @@ namespace mineutils
 
 	/*---------------------------------------------------------------------------------*/
 	/*为图像添加文字*/
-	void putLabelCV(cv::Mat& img, string label, cv::Point position, cv::Scalar text_color, 
+	inline void putLabelCV(cv::Mat& img, string label, cv::Point position, cv::Scalar text_color,
 		int word_type, float word_scale, int text_thickness, bool have_bg, cv::Scalar bg_color)
 	{
 		/*	position：文字左下角位置 */
@@ -165,7 +165,7 @@ namespace mineutils
 	}
 
 	/*为图像添加检测框及标签*/
-	void putBoxCV(cv::Mat& img, LTRB ltrb, string label,
+	inline void putBoxCV(cv::Mat& img, LTRB ltrb, string label,
 		cv::Scalar bbox_color, cv::Scalar text_color, int word_type, float word_scale, 
 		int bbox_thickness, int text_thickness)
 	{
@@ -194,7 +194,7 @@ namespace mineutils
 	/*---------------------------------------------------------------------------------*/
 	/*自定义3个通道的值*/
 	template<class T>
-	void channelInit(cv::Mat& mat, cv::Point3_<T> channel_value)
+	inline void channelInit(cv::Mat& mat, cv::Point3_<T> channel_value)
 	{
 		vector<cv::Mat> ma_mb_mc;
 		cv::split(mat, ma_mb_mc);
@@ -207,7 +207,7 @@ namespace mineutils
 
 	/*显示cv::Mat的值*/
 	template<class Tx, class Ty, class Tc>
-	void printMat(const cv::Mat& img, Tx x_range, Ty y_range, Tc c_range)
+	inline void printMat(const cv::Mat& img, Tx x_range, Ty y_range, Tc c_range)
 	{
 		/*		C1	C2	C3	C4
 		CV_8U	0	8	16	24       uchar
@@ -247,7 +247,7 @@ namespace mineutils
 
 
 	template<class MatT>
-	void _printCVMat(const cv::Mat& img, int xstart, int xend, int ystart, int yend, bool isInt)
+	inline void _printCVMat(const cv::Mat& img, int xstart, int xend, int ystart, int yend, bool isInt)
 	{
 		using cs = ColorStr;
 		cout << "cv::Mat{";
@@ -280,7 +280,7 @@ namespace mineutils
 	}
 
 	template<class cvVec>
-	void _printCVMat(const cv::Mat& img, int xstart, int xend, int ystart, int yend, int cstart, int cend, bool isInt)
+	inline void _printCVMat(const cv::Mat& img, int xstart, int xend, int ystart, int yend, int cstart, int cend, bool isInt)
 	{
 		using cs = ColorStr;
 		cout << "cv::Mat{";
@@ -320,7 +320,7 @@ namespace mineutils
 	}
 
 
-	void _print(const cv::Mat& img)  //可能是opencv源码using了cv::print导致print(cv::Mat)被劫持
+	inline void _print(const cv::Mat& img)  //可能是opencv源码using了cv::print导致print(cv::Mat)被劫持
 	{
 		cout << endl;
 		printMat(img);
@@ -328,30 +328,30 @@ namespace mineutils
 
 
 	template<class T>
-	void _print(const cv::Point_<T>& pt)
+	inline void _print(const cv::Point_<T>& pt)
 	{
 		cout << "(" << pt.x << ", " << pt.y << ")";
 	}
 
 	template<class T>
-	void _print(const cv::Point3_<T>& pt)
+	inline void _print(const cv::Point3_<T>& pt)
 	{
 		cout << "(" << pt.x << ", " << pt.y << ", " << pt.z << ")";
 	}
 
 	template<class T>
-	void _print(const cv::Size_<T>& sz)
+	inline void _print(const cv::Size_<T>& sz)
 	{
 		cout << "(" << sz.width << ", " << sz.height << ")";
 	}
 
-	void _print(const cv::MatSize& sz)
+	inline void _print(const cv::MatSize& sz)
 	{
 		cout << "(" << sz << ")";
 	}
 
 	template<class T>
-	void _print(const cv::Rect_<T>& rect)
+	inline void _print(const cv::Rect_<T>& rect)
 	{
 		cout << "(" << rect.x << " "
 			<< rect.y << " "

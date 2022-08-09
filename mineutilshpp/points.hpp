@@ -129,7 +129,7 @@ namespace mineutils
 
 	/*------------------------------------------------------------------------------*/
 	template<class T>
-	std::ostream& operator<<(std::ostream& cout, const BaseBox<T>& bbox)   //添加对print的支持，bbox要么const &要么不引用
+	inline std::ostream& operator<<(std::ostream& cout, const BaseBox<T>& bbox)   //添加对print的支持，bbox要么const &要么不引用
 	{
 		cout << "[" << bbox[0] << " " << bbox[1] << " "
 			<< bbox[2] << " " << bbox[3] << "]";

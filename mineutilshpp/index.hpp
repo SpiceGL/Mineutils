@@ -17,7 +17,7 @@ namespace mineutils
 	
 	
 
-	int normIdx(int idx, int len)
+	inline int normIdx(int idx, int len)
 	{
 		using cs = ColorStr;
 		int normal_idx;
@@ -33,7 +33,7 @@ namespace mineutils
 		return normal_idx;
 	}
 
-	pair<int, int> normRange(pair<int, int> range, int len)
+	inline pair<int, int> normRange(pair<int, int> range, int len)
 	{
 		int dst_start, dst_end;
 		int x1 = range.first, x2 = range.second;
@@ -48,7 +48,7 @@ namespace mineutils
 		return { dst_start, dst_end };
 	}
 
-	pair<int, int> normRange(int idx, int len)
+	inline pair<int, int> normRange(int idx, int len)
 	{
 		using cs = ColorStr;
 		int dst_start, dst_end;

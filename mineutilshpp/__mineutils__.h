@@ -9,7 +9,6 @@
 #include"cv.hpp"   //based on str.hpp & points.hpp
 #include"print.hpp"   //based on judge.hpp & sign.hpp, ands expand by points.hpp & cv.hpp
 
-
 /*
 TOP					   print.hpp
 						cv.hpp

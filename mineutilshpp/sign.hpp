@@ -6,22 +6,28 @@ using std::tuple;
 
 namespace Sign
 {
+	class CaseTag0;
+	class CaseTag1;
+
+
+	static CaseTag0* tag0_ptr = nullptr;
+	static CaseTag1* tag1_ptr = nullptr;
+
 	class CaseTag0
 	{
 	private:
 		CaseTag0() {}
 		CaseTag0(CaseTag0& tag) {}
-		static CaseTag0* self;
 
 	public:
 		static CaseTag0& getInstance()
 		{
-			if (self == nullptr)
+			if (tag0_ptr == nullptr)
 			{
 				CaseTag0 tag0;
-				self = &tag0;
+				tag0_ptr = &tag0;
 			}
-			return *self;
+			return *tag0_ptr;
 		}
 	};
 
@@ -30,24 +36,20 @@ namespace Sign
 	private:
 		CaseTag1() {}
 		CaseTag1(CaseTag1& tag) {}
-		static CaseTag1* self;
 
 	public:
 		static CaseTag1& getInstance()
 		{
-			if (self == nullptr)
+			if (tag1_ptr == nullptr)
 			{
 				CaseTag1 tag0;
-				self = &tag0;
+				tag1_ptr = &tag0;
 			}
-			return *self;
+			return *tag1_ptr;
 		}
 	};
 
-	CaseTag0* CaseTag0::self = nullptr;
-	CaseTag1* CaseTag1::self = nullptr;
-
-	tuple<CaseTag0&, CaseTag1&> _creat_BOOL_TAGS()
+	inline tuple<CaseTag0&, CaseTag1&> _creat_BOOL_TAGS()
 	{
 		CaseTag0& tag0 = CaseTag0::getInstance();
 		CaseTag1& tag1 = CaseTag1::getInstance();
@@ -55,5 +57,5 @@ namespace Sign
 		return BOOL_TAGS;
 	}
 
-	tuple<CaseTag0&, CaseTag1&> BOOL_TAGS = _creat_BOOL_TAGS();
+	static tuple<CaseTag0&, CaseTag1&> BOOL_TAGS = _creat_BOOL_TAGS();
 }

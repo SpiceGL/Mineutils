@@ -15,18 +15,18 @@ namespace mineutils
 	/*---------------------------------声明-------------------------------------*/
 
 	/*---------------------------------定义-------------------------------------*/
+	static bool ColorStr_enabled = false;   //在main函数cpp中更改，就可以影响全局，否则不影响
+
 	class ColorStr
 	{
 	private:
 		ColorStr() {}
 	public:
-		static bool enabled;
-
 		template<class ...Strs>
 		static string black(string str, Strs ...strs)
 		{
 			string color_str;
-			if (ColorStr::enabled)
+			if (ColorStr_enabled)
 				color_str = "\033[30m" + ColorStr::_cat(str, strs...) + "\033[0m";
 			else color_str = ColorStr::_cat(str, strs...);
 			return color_str;
@@ -36,7 +36,7 @@ namespace mineutils
 		static string blue(string str, Strs ...strs)
 		{
 			string color_str;
-			if (ColorStr::enabled)
+			if (ColorStr_enabled)
 				color_str = "\033[34m" + ColorStr::_cat(str, strs...) + "\033[0m";
 			else color_str = ColorStr::_cat(str, strs...);
 			return color_str;
@@ -46,7 +46,7 @@ namespace mineutils
 		static string cyan(string str, Strs ...strs)
 		{
 			string color_str;
-			if (ColorStr::enabled)
+			if (ColorStr_enabled)
 				color_str = "\033[36m" + ColorStr::_cat(str, strs...) + "\033[0m";
 			else color_str = ColorStr::_cat(str, strs...);
 			return color_str;
@@ -56,7 +56,7 @@ namespace mineutils
 		static string fuchsia(string str, Strs ...strs)  //
 		{
 			string color_str;
-			if (ColorStr::enabled)
+			if (ColorStr_enabled)
 				color_str = "\033[35m" + ColorStr::_cat(str, strs...) + "\033[0m";
 			else color_str = ColorStr::_cat(str, strs...);
 			return color_str;
@@ -66,7 +66,7 @@ namespace mineutils
 		static string green(string str, Strs ...strs)
 		{
 			string color_str;
-			if (ColorStr::enabled)
+			if (ColorStr_enabled)
 				color_str = "\033[32m" + ColorStr::_cat(str, strs...) + "\033[0m";
 			else color_str = ColorStr::_cat(str, strs...);
 			return color_str;
@@ -76,7 +76,7 @@ namespace mineutils
 		static string red(string str, Strs ...strs)
 		{
 			string color_str;
-			if (ColorStr::enabled)
+			if (ColorStr_enabled)
 				color_str = "\033[31m" + ColorStr::_cat(str, strs...) + "\033[0m";
 			else color_str = ColorStr::_cat(str, strs...);
 			return color_str;
@@ -86,7 +86,7 @@ namespace mineutils
 		static string white(string str, Strs ...strs)
 		{
 			string color_str;
-			if (ColorStr::enabled)
+			if (ColorStr_enabled)
 				color_str = "\033[37m" + ColorStr::_cat(str, strs...) + "\033[0m";
 			else color_str = ColorStr::_cat(str, strs...);
 			return color_str;
@@ -96,7 +96,7 @@ namespace mineutils
 		static string yellow(string str, Strs ...strs)
 		{
 			string color_str;
-			if (ColorStr::enabled)
+			if (ColorStr_enabled)
 				color_str = "\033[33m" + ColorStr::_cat(str, strs...) + "\033[0m";
 			else color_str = ColorStr::_cat(str, strs...);
 			return color_str;
@@ -114,18 +114,17 @@ namespace mineutils
 			return str;
 		}
 	};
-	bool ColorStr::enabled = false;
 
 
 	template<class T>
-	string toStr(const T& arg)
+	inline string toStr(const T& arg)
 	{
 		std::ostringstream buffer;
 		buffer << arg;
 		return buffer.str();
 	}
 	
-	string zfillInt(int n, int min_len = 0, char padding = '0')   //输入int值，返回len长度的字符串
+	inline string zfillInt(int n, int min_len = 0, char padding = '0')   //输入int值，返回len长度的字符串
 	{
 		string s = std::to_string(n);
 		if (s.length() < min_len)
@@ -135,7 +134,7 @@ namespace mineutils
 		return s;
 	}
 
-	string zfillFlt(float f, int min_len_int = 0, int min_len_flt = 4, 
+	inline string zfillFlt(float f, int min_len_int = 0, int min_len_flt = 4,
 		size_t flt_precision = 8, char int_padding = ' ', char flt_padding = '0')
 	{
 		std::ostringstream buffer;
@@ -165,7 +164,7 @@ namespace mineutils
 
 	/*--------------------------------------------------------------------------*/
 
-	string _fstr(string& s)
+	inline string _fstr(string& s)
 	{
 		using cs = ColorStr;
 		size_t pos = s.find("{}");
@@ -178,7 +177,7 @@ namespace mineutils
 	}
 	
 	template<class T, class... Ts>
-	string _fstr(string& s, T& arg, Ts&... args)
+	inline string _fstr(string& s, T& arg, Ts&... args)
 	{
 		using cs = ColorStr;
 		size_t pos = s.find("{}");
@@ -196,13 +195,13 @@ namespace mineutils
 	}
 
 	template<class... Ts>
-	string fstr(string s, Ts... args)   //实现类似于python的f-string功能，将字符串中的{}替换为后面的参数
+	inline string fstr(string s, Ts... args)   //实现类似于python的f-string功能，将字符串中的{}替换为后面的参数
 	{
 		return _fstr(s, args...);	
 	}
 	
 
-	vector<string> split(string s, string sep=" ", bool ignore_emptystr=true)
+	inline vector<string> split(string s, string sep=" ", bool ignore_emptystr=true)
 	{
 		vector<string> strs;
 		size_t sep_pos;

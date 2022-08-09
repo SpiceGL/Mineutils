@@ -71,7 +71,7 @@ namespace mineutils
 	/*-------------------------------------定义--------------------------------------*/
 
 	template<class T, class... Args>
-	void print(const T& arg, const Args&... args)
+	inline void print(const T& arg, const Args&... args)
 	{	/*
 		实现类似python的print输出。
 		-支持int、float、char、string等基本类型数据的输出；
@@ -86,13 +86,13 @@ namespace mineutils
 		//int _a[] = { (_print(args), cout << " ", 0)... };   //另一种写法，但可读性差一些
 	}
 
-	void print()
+	inline void print()
 	{
 		cout << endl;
 	}
 
 	template<class T1, class T2>
-	void _print(const pair<T1, T2>& pa)  //输出pair类型
+	inline void _print(const pair<T1, T2>& pa)  //输出pair类型
 	{
 		cout << "[";
 		_print(pa.first);
@@ -102,7 +102,7 @@ namespace mineutils
 	}
 
 	template<size_t Idx, class... Ts>
-	void _print(const tuple<Ts...>& tp)  //输出tuple类
+	inline void _print(const tuple<Ts...>& tp)  //输出tuple类
 	{
 		const int size_tp = std::tuple_size<tuple<Ts...>>::value;
 		if (Idx == 0) 
@@ -113,7 +113,7 @@ namespace mineutils
 	}
 
 	template<size_t Idx, class... Ts>
-	void _print_tuple(const tuple<Ts...>& tp, const int& size_tp, Sign::CaseTag1& tag)
+	inline void _print_tuple(const tuple<Ts...>& tp, const int& size_tp, Sign::CaseTag1& tag)
 	{
 		if (Idx < size_tp - 1)
 		{
@@ -130,13 +130,13 @@ namespace mineutils
 	}
 
 	template<size_t Idx, class... Ts>
-	void _print_tuple(const tuple<Ts...>& tp, const int& size_tp, Sign::CaseTag0& tag)
+	inline void _print_tuple(const tuple<Ts...>& tp, const int& size_tp, Sign::CaseTag0& tag)
 	{
 		cout << "]";
 	}
 
 	template<class T1, class T2, class... Ts>
-	void _print(const map<T1, T2, Ts...>& m)  //输出map类
+	inline void _print(const map<T1, T2, Ts...>& m)  //输出map类
 	{
 		cout << "{";
 		int size = m.size();
@@ -159,25 +159,25 @@ namespace mineutils
 	}
 
 	template<class T, class... Ts>
-	void _print(const list<T, Ts...>& l)
+	inline void _print(const list<T, Ts...>& l)
 	{
 		_print_stdcter(l);
 	}
 
 	template<class T, class... Ts>
-	void _print(const set<T, Ts...>& st)
+	inline void _print(const set<T, Ts...>& st)
 	{
 		_print_stdcter(st);
 	}
 
 	template<class T, class... Ts>
-	void _print(const vector<T, Ts...>& vec)
+	inline void _print(const vector<T, Ts...>& vec)
 	{
 		_print_stdcter(vec);
 	}
 
 	template<template<class C, class... Cs> class CTer, class T, class... Ts>
-	void _print_stdcter(const CTer<T, Ts...>& cter)
+	inline void _print_stdcter(const CTer<T, Ts...>& cter)
 	{
 		cout << "[";
 		int size = cter.size();
@@ -195,12 +195,12 @@ namespace mineutils
 		cout << "]";
 	}
 
-	void _print(const string& str)
+	inline void _print(const string& str)
 	{
 		cout << "\"" << str << "\"";
 	}
 
-	void _print(const bool& arg)
+	inline void _print(const bool& arg)
 	{
 		if (arg)
 			cout << "true";
@@ -208,7 +208,7 @@ namespace mineutils
 	}
 
 	template<class T>
-	void _print(const T& arg)  //输出int、string等单数据类型
+	inline void _print(const T& arg)  //输出int、string等单数据类型
 	{
 		if (isInTypes<T, char, wchar_t>())
 			cout << "\'" << arg << "\'";
@@ -216,7 +216,7 @@ namespace mineutils
 	}
 
 	template<class T, int N>
-	void _print(const T(&arr)[N])  //输出int[]、char[]等数组类型
+	inline void _print(const T(&arr)[N])  //输出int[]、char[]等数组类型
 	{
 		if (isInTypes<T, char, wchar_t>())
 			cout << "\"" << arr << "\"";

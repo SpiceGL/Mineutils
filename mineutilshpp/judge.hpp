@@ -33,7 +33,7 @@ namespace mineutils
 
 /*--------------------------------------------定义----------------------------------------------*/
 	template<class T1, class T2, class ...Ts>
-	bool isSameType()
+	inline bool isSameType()
 	{
 		/*
 		用于判断类型是不是相同类型。
@@ -48,7 +48,7 @@ namespace mineutils
 	}
 
 	template<class T1, class T2, class ...Ts>
-	bool isSameType(T1& arg1, T2& arg2, Ts& ...args)
+	inline bool isSameType(T1& arg1, T2& arg2, Ts& ...args)
 	{
 		/*
 		用于判断输入参数是不是相同类型。
@@ -57,20 +57,20 @@ namespace mineutils
 	}
 
 	template<class T1, class T2, class ...Ts>
-	bool _isSameType(Sign::CaseTag1& tag)
+	inline bool _isSameType(Sign::CaseTag1& tag)
 	{
 		return is_same<typename decay<T1>::type, typename decay<T2>::type>::value and isSameType<T1, Ts...>();
 	}
 
 	template<class T1, class T2>
-	bool _isSameType(Sign::CaseTag0& tag)
+	inline bool _isSameType(Sign::CaseTag0& tag)
 	{
 		return is_same<typename decay<T1>::type, typename decay<T2>::type>::value;
 	}
 
 
 	template<class T, class T1, class... Types>
-	bool isInTypes()
+	inline bool isInTypes()
 	{
 		/*
 		用于判断T是否属于后面的多种类型。
@@ -81,13 +81,13 @@ namespace mineutils
 	}
 
 	template<class T, class T1, class... Types>
-	bool _isInTypes(Sign::CaseTag1& tag)
+	inline bool _isInTypes(Sign::CaseTag1& tag)
 	{
 		return isSameType<T, T1>() or isInTypes<T, Types...>();
 	}
 
 	template<class T, class T1>
-	bool _isInTypes(Sign::CaseTag0& tag)
+	inline bool _isInTypes(Sign::CaseTag0& tag)
 	{
 		return isSameType<T, T1>();
 	}
