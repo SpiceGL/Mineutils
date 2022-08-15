@@ -39,6 +39,11 @@ namespace mineutils
 		int word_type = cv::FONT_HERSHEY_SIMPLEX, float word_scale = 1, 
 		int bbox_thickness = 3, int text_thickness = 2);
 
+	void putBoxCV(cv::Mat& img, XYWH xywh, string label = "",
+		cv::Scalar bbox_color = { 0,255,0 }, cv::Scalar text_color = { 255,255,255 },
+		int word_type = cv::FONT_HERSHEY_SIMPLEX, float word_scale = 1, 
+		int bbox_thickness = 3, int text_thickness = 2);
+
 	template<class T>
 	void channelInit(cv::Mat& mat, cv::Point3_<T> channel_value = {0, 0, 0});
 
@@ -187,6 +192,15 @@ namespace mineutils
 				label_pos.y = c1.y + text_size.height;
 			putLabelCV(img, label, label_pos, text_color, word_type, word_scale, text_thickness, true, bbox_color);
 		}
+	}
+
+	inline void putBoxCV(cv::Mat& img, XYWH xywh, string label,
+		cv::Scalar bbox_color, cv::Scalar text_color, int word_type, float word_scale,
+		int bbox_thickness, int text_thickness)
+	{
+		putBoxCV(img, xywh.toLTRB(), label,
+			bbox_color, text_color, word_type, word_scale,
+			bbox_thickness, text_thickness);
 	}
 
 

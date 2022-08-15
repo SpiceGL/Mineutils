@@ -236,6 +236,13 @@ namespace mineutils
 			return pth;
 		}
 
+		static string parent(string pth)
+		{
+			pth = Path::normPath(pth);
+			string parent = pth.substr(0, pth.find_last_of('/'));
+			return parent;
+		}
+
 		static string splitName(string pth, bool suffix = true)  //从路径字符串获取文件名
 		{
 			pth = Path::normPath(pth);

@@ -197,7 +197,7 @@ namespace mineutils
 
 	inline void _print(const string& str)
 	{
-		cout << "\"" << str << "\"";
+		cout << str;
 	}
 
 	inline void _print(const bool& arg)
@@ -208,10 +208,10 @@ namespace mineutils
 	}
 
 	template<class T>
-	inline void _print(const T& arg)  //输出int、string等单数据类型
+	inline void _print(const T& arg)  //输出int、char和自定义类等数据类型
 	{
 		if (isInTypes<T, char, wchar_t>())
-			cout << "\'" << arg << "\'";
+			cout << arg;
 		else cout << arg;
 	}
 
@@ -219,7 +219,7 @@ namespace mineutils
 	inline void _print(const T(&arr)[N])  //输出int[]、char[]等数组类型
 	{
 		if (isInTypes<T, char, wchar_t>())
-			cout << "\"" << arr << "\"";
+			cout << arr;
 		else
 		{
 			cout << "[";
