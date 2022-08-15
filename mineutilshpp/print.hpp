@@ -38,10 +38,10 @@ namespace mineutils
 	void _print(const tuple<Ts...>& tp);
 
 	template<size_t Idx, class... Ts>
-	void _print_tuple(const tuple<Ts...>& tp, const int& size_tp, Sign::CaseTag1& tag);
+	void _print_tuple(const tuple<Ts...>& tp, const int& size_tp, Sign::CaseTag1 tag);
 
 	template<size_t Idx, class... Ts>
-	void _print_tuple(const tuple<Ts...>& tp, const int& size_tp, Sign::CaseTag0& tag);
+	void _print_tuple(const tuple<Ts...>& tp, const int& size_tp, Sign::CaseTag0 tag);
 
 	template<class T1, class T2, class... Ts>
 	void _print(const map<T1, T2, Ts...>& m);
@@ -108,12 +108,12 @@ namespace mineutils
 		if (Idx == 0) 
 			cout << "[";
 		constexpr int type_id = (Idx < size_tp);
-		auto& type_tag = std::get<type_id>(Sign::BOOL_TAGS);
+		auto type_tag = std::get<type_id>(Sign::BOOL_TAGS);
 		_print_tuple<Idx, Ts...>(tp, size_tp, type_tag);
 	}
 
 	template<size_t Idx, class... Ts>
-	inline void _print_tuple(const tuple<Ts...>& tp, const int& size_tp, Sign::CaseTag1& tag)
+	inline void _print_tuple(const tuple<Ts...>& tp, const int& size_tp, Sign::CaseTag1 tag)
 	{
 		if (Idx < size_tp - 1)
 		{
@@ -130,7 +130,7 @@ namespace mineutils
 	}
 
 	template<size_t Idx, class... Ts>
-	inline void _print_tuple(const tuple<Ts...>& tp, const int& size_tp, Sign::CaseTag0& tag)
+	inline void _print_tuple(const tuple<Ts...>& tp, const int& size_tp, Sign::CaseTag0 tag)
 	{
 		cout << "]";
 	}

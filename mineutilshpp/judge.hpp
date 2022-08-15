@@ -17,19 +17,19 @@ namespace mineutils
 	bool isSameType(T1& arg1, T2& arg2, Ts& ...args);
 
 	template<class T1, class T2, class ...Ts>
-	bool _isSameType(Sign::CaseTag1& tag);
+	bool _isSameType(Sign::CaseTag1 tag);
 
 	template<class T1, class T2>
-	bool _isSameType(Sign::CaseTag0& tag);
+	bool _isSameType(Sign::CaseTag0 tag);
 
 	template<class T, class T1, class... Types>
 	bool isInTypes();
 
 	template<class T, class T1, class... Types>
-	bool _isInTypes(Sign::CaseTag1& tag);
+	bool _isInTypes(Sign::CaseTag1 tag);
 
 	template<class T, class T1>
-	bool _isInTypes(Sign::CaseTag0& tag);
+	bool _isInTypes(Sign::CaseTag0 tag);
 
 /*--------------------------------------------定义----------------------------------------------*/
 	template<class T1, class T2, class ...Ts>
@@ -43,7 +43,7 @@ namespace mineutils
 			-本质是常量指针与指针常量判断不同，指针与指针常量判断相同。
 		*/
 		constexpr int type_id = (sizeof...(Ts) > 0);
-		auto& type_tag = std::get<type_id>(Sign::BOOL_TAGS);
+		auto type_tag = std::get<type_id>(Sign::BOOL_TAGS);
 		return _isSameType<T1, T2, Ts...>(type_tag);
 	}
 
@@ -57,13 +57,13 @@ namespace mineutils
 	}
 
 	template<class T1, class T2, class ...Ts>
-	inline bool _isSameType(Sign::CaseTag1& tag)
+	inline bool _isSameType(Sign::CaseTag1 tag)
 	{
 		return is_same<typename decay<T1>::type, typename decay<T2>::type>::value and isSameType<T1, Ts...>();
 	}
 
 	template<class T1, class T2>
-	inline bool _isSameType(Sign::CaseTag0& tag)
+	inline bool _isSameType(Sign::CaseTag0 tag)
 	{
 		return is_same<typename decay<T1>::type, typename decay<T2>::type>::value;
 	}
@@ -76,18 +76,18 @@ namespace mineutils
 		用于判断T是否属于后面的多种类型。
 		*/
 		constexpr int type_id = (sizeof...(Types) > 0);
-		auto& type_tag = std::get<type_id>(Sign::BOOL_TAGS);
+		auto type_tag = std::get<type_id>(Sign::BOOL_TAGS);
 		return _isInTypes<T, T1, Types...>(type_tag);
 	}
 
 	template<class T, class T1, class... Types>
-	inline bool _isInTypes(Sign::CaseTag1& tag)
+	inline bool _isInTypes(Sign::CaseTag1 tag)
 	{
 		return isSameType<T, T1>() or isInTypes<T, Types...>();
 	}
 
 	template<class T, class T1>
-	inline bool _isInTypes(Sign::CaseTag0& tag)
+	inline bool _isInTypes(Sign::CaseTag0 tag)
 	{
 		return isSameType<T, T1>();
 	}

@@ -7,7 +7,6 @@
 #include"ncnn/net.h"
 
 #include"index.hpp"
-#include"sign.hpp"
 #include"str.hpp"
 
 
