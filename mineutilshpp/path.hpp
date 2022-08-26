@@ -136,8 +136,10 @@ namespace mineutils
 			return files;
 		}
 
-		static bool makeDirs(string pth, bool warn = true)  //创建目录
+		static bool makeDirs(string pth)  //创建目录
 		{
+			if (Path::exists(pth))
+				return true;
 			pth = Path::normPath(pth);
 			size_t sep_pos;
 			string pth_tree;
@@ -182,8 +184,10 @@ namespace mineutils
 			return files;
 		}
 
-		static bool makeDirs(string pth, bool warn = true)  //创建目录
+		static bool makeDirs(string pth)  //创建目录
 		{
+			if (Path::exists(pth))
+				return true;
 			pth = Path::normPath(pth);
 			size_t sep_pos = 0;
 			string pth_tree;

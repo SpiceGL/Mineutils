@@ -18,6 +18,13 @@ class Path:
     --整合os、glob、shutil等模块的文件路径相关操作。
     """
     sep = os.path.sep
+
+    @classmethod
+    def abs(cls, path: str):
+        """
+        --获取绝对路径。
+        """
+        return os.path.abspath(path)
     
     @classmethod
     def chWorkingDir(cls, path: str):

@@ -107,6 +107,7 @@ namespace mineutils
 		const int size_tp = std::tuple_size<tuple<Ts...>>::value;
 		if (Idx == 0) 
 			cout << "[";
+
 		constexpr int type_id = (Idx < size_tp);
 		auto type_tag = std::get<type_id>(Sign::BOOL_TAGS);
 		_print_tuple<Idx, Ts...>(tp, size_tp, type_tag);
