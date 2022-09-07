@@ -37,6 +37,13 @@ namespace mineutils
 				++idx;
 			}
 		}
+		BaseBox(const BaseBox<T>& box)
+		{
+			this->data[0] = box.data[0];
+			this->data[1] = box.data[1];
+			this->data[2] = box.data[2];
+			this->data[3] = box.data[3];
+		}
 
 		T& operator[](int idx)
 		{
@@ -49,6 +56,7 @@ namespace mineutils
 			idx = normIdx(idx, 4);
 			return this->data[idx];
 		}
+
 
 		/*在对象是整型的时候四舍五入*/
 		static T roundWhenInt(float x)   
@@ -72,11 +80,23 @@ namespace mineutils
 	{
 	public:
 		LTRBBox(std::initializer_list<T> input_list) :BaseBox<T>(input_list) {}
+		LTRBBox(const LTRBBox<T>& ltrb) :BaseBox<T>(ltrb) {}
+
 
 		T& left = this->data[0];
 		T& top = this->data[1];
 		T& right = this->data[2];
 		T& bottom = this->data[3];
+
+		T& l = left;
+		T& t = top;
+		T& r = right;
+		T& b = bottom;
+
+		LTRBBox<T> operator=(const LTRBBox<T>& ltrb) const
+		{
+			return ltrb;
+		}
 
 		LTRBBox<int> toPixel() const
 		{
@@ -92,11 +112,18 @@ namespace mineutils
 	{
 	public:
 		XYWHBox(std::initializer_list<T> input_list) :BaseBox<T>(input_list) {}
+		XYWHBox(const XYWHBox<T>& xywh) :BaseBox<T>(xywh) {}
+
 
 		T& x = this->data[0];
 		T& y = this->data[1];
 		T& w = this->data[2];
 		T& h = this->data[3];
+
+		XYWHBox<T> operator=(const XYWHBox<T>& xywh) const
+		{
+			return xywh;
+		}
 
 		XYWHBox<int> toPixel() const
 		{

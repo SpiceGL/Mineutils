@@ -24,13 +24,15 @@ class Path:
         """
         --获取绝对路径。
         """
-        return os.path.abspath(path)
+        path = os.path.abspath(path)
+        return cls.normalPath(path)
     
     @classmethod
     def chWorkingDir(cls, path: str):
         """
         --改变当前文件的运行目录。
         """
+        path = cls.normalPath(path)
         os.chdir(path)
         
     @classmethod
@@ -39,7 +41,8 @@ class Path:
         --获取一堆路径组成的列表的最长公共文件夹路径。
         """
         paths = list(paths)
-        return os.path.commonpath(paths)
+        com_path = os.path.commonpath(paths)
+        return cls.normalPath(com_path)
     
     @classmethod
     def copy(cls, wildcard_path: str, new_dir: str):
@@ -47,6 +50,8 @@ class Path:
         --将符合要求的文件/文件夹复制到新文件夹下。
         --wildcard_path是可以用通配符表示的一类文件/文件夹。
         """
+        wildcard_path = cls.normalPath(wildcard_path)
+        new_dir = cls.normalPath(new_dir)
         files_waiting = glob.glob(wildcard_path)   ###得到的是路径
         if not files_waiting:
             print(ColorStr.yellow("Path.copy:"), f"{wildcard_path}不存在，因此未复制任何文件！")
@@ -66,7 +71,7 @@ class Path:
         """
         --返回当前工作目录的绝对路径。
         """
-        return os.getcwd()
+        return cls.normalPath(os.getcwd())
     
     @classmethod
     def exists(cls, path):
@@ -120,19 +125,21 @@ class Path:
         
     @classmethod
     def join(cls, *strs):
-        return os.path.join(*strs)
+        path = os.path.join(*strs)
+        return cls.normalPath(path)
 
     @classmethod
     def listDir(cls, dirpath: str, ignore_names=None, return_path=True) -> list:
         """
         --输入文件夹路径，返回该文件夹下所有一级文件/文件夹的路径。
         """
+        dirpath = cls.normalPath(dirpath)
         names = os.listdir(dirpath)
         if ignore_names:
             names = [name for name in names if name not in ignore_names]
             
         if return_path:
-            paths = [os.path.join(dirpath, name) for name in names]
+            paths = [cls.join(dirpath, name) for name in names]
             return paths
         else:
             return names
@@ -149,7 +156,7 @@ class Path:
                     names.remove(ignore_name)
     
         if return_path:
-            img_paths = [os.path.join(dirpath, name) for name in names if cls.isImage(name)]
+            img_paths = [cls.join(dirpath, name) for name in names if cls.isImage(name)]
             return img_paths
         else:
             img_names = [name for name in names if cls.isImageType(name)]
@@ -187,7 +194,13 @@ class Path:
         """
         --获得输入路径的规范写法。
         """
-        return os.path.normpath(path)
+        path = os.path.normpath(path)
+        str_list = path.split("\\")
+        s = str_list[0]
+        for sl in str_list[1:]:
+            s += "/"
+            s += sl
+        return s
     
     @classmethod
     def parent(cls, path: str, use_abspath=False) -> str:
@@ -195,7 +208,7 @@ class Path:
         --获取给定路径的父目录。
         --系统根目录的父目录是自身。
         """
-        path = os.path.normpath(path)
+        path = cls.normalPath(path)
         abspath = os.path.abspath(path)
         absparent = os.path.dirname(abspath)
         if not use_abspath:
@@ -245,8 +258,7 @@ class Path:
     @classmethod
     def rename(cls, path: str, new_name_path: str):
         """
-        --将符合要求的文件或文件夹移动到新文件夹下。
-        --wildcard_path是可以用通配符表示的一类文件/文件夹。
+        --修改目录或文件名
         """
         if cls.parent(path) != cls.parent(new_name_path):
             print(ColorStr.red("Path.rename:"), f"{path}与目标路径{new_name_path}应在同一目录下！程序已中止！")
