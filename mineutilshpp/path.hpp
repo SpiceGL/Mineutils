@@ -263,7 +263,7 @@ namespace mineutils
 
 			if (not Path::isDir(pth))
 			{
-				cout << fstr("!!!Error!!! Path::{}: ", __func__) << "输入路径不是目录或不存在！" << endl;
+				cout << cs::red(fstr("!!!Error!!! Path::{}: ", __func__)) << "输入路径不是目录或不存在！" << endl;
 				return {};
 			}
 			vector<string> listdir_res = Path::listDir(pth, return_path);
