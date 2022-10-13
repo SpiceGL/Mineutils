@@ -53,7 +53,7 @@ class PixelMarker:
 if __name__ == '__main__':
     cv2.destroyAllWindows()
     title = "NewType"   
-    img_path = "../Datasets/ZTC950V763/ZTC950V763_211022/imgs/img06550.jpg"
+    img_path = "E:/chess.jpg"
     img = cv2.imread(img_path)
     myPixelMarker = PixelMarker(title, img)
     myPixelMarker.start()

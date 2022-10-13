@@ -27,8 +27,8 @@ namespace mineutils
 			normal_idx = idx + len;
 		else
 		{
-			cout << cs::red(__func__, ":") << fstr(" idx={}超出索引范围，程序已中止！", idx) << endl;
-			exit(0);
+			cout << cs::red(fstr("!!!Error!!! {}: ", __func__)) << fstr("idx={}超出索引范围！", idx) << endl;
+			return -1;
 		}
 		return normal_idx;
 	}
@@ -58,8 +58,8 @@ namespace mineutils
 			dst_start = idx + len, dst_end = idx + len + 1;
 		else
 		{
-			cout << cs::red(__func__, ":") << fstr(" idx={}超出索引范围，程序已中止！", idx) << endl;
-			exit(0);
+			cout << cs::red(fstr("!!!Error!!! {}: ", __func__)) << fstr("idx={}超出索引范围！", idx) << endl;
+			return {-1, -1};
 		}
 		return { dst_start, dst_end };
 	}

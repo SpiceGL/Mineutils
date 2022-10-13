@@ -134,11 +134,11 @@ namespace mineutils
 		return s;
 	}
 
-	inline string zfillFlt(float f, int min_len_int = 0, int min_len_flt = 4,
-		size_t flt_precision = 8, char int_padding = ' ', char flt_padding = '0')
+	inline string zfillFlt(float f, int min_len_int = 0, int flt_precision = 4,
+		char int_padding = ' ', char flt_padding = '0')
 	{
 		std::ostringstream buffer;
-		buffer << std::setprecision(min_len_flt) << f;
+		buffer << std::setprecision(flt_precision) << f;
 		string s = buffer.str();
 
 		/*找到输入小数的整数部分和小数部分，分别处理并合并*/
@@ -156,8 +156,8 @@ namespace mineutils
 		}
 		if (int_part.length() < min_len_int)
 			int_part = string(min_len_int - int_part.length(), int_padding) + int_part;
-		if (flt_part.length() < min_len_flt)
-			flt_part = flt_part + string(min_len_flt - flt_part.length(), flt_padding);
+		if (flt_part.length() < flt_precision)
+			flt_part = flt_part + string(flt_precision - flt_part.length(), flt_padding);
 		s = int_part + "." + flt_part;
 		return s;
 	}
@@ -170,8 +170,8 @@ namespace mineutils
 		size_t pos = s.find("{}");
 		if (pos != -1)
 		{
-			cout << cs::red(__func__, ":") << " fstr待替换参数量过少，程序已中止！" << endl;
-			exit(0);
+			cout << cs::red("!!!Error!!! ", __func__, ": ") << "fstr待替换参数量过少！" << endl;
+			return "";
 		}
 		return s;
 	}
@@ -188,8 +188,8 @@ namespace mineutils
 		}
 		else
 		{
-			cout << cs::red(__func__, ":") << "fstr待替换参数量过多，程序已中止！" << endl;
-			exit(0);
+			cout << cs::red("!!!Error!!! ", __func__, ": ") << "fstr待替换参数量过多！" << endl;
+			return "";
 		}
 		return _fstr(s, args...);
 	}

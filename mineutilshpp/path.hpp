@@ -112,8 +112,8 @@ namespace mineutils
 
 			if (not Path::isDir(pth))
 			{
-				cout << cs::red("Path::", __func__, ":") << " 输入路径不是目录或不存在，程序已中止！" << endl;
-				exit(0);
+				cout << cs::red(fstr("!!!Error!!! Path::{}: ", __func__)) << "输入路径不是目录或不存在！" << endl;
+				return {};
 			}
 			if ((hFile = _findfirst(p.append("/*").c_str(), &fileinfo)) != -1) 
 			{
@@ -165,8 +165,8 @@ namespace mineutils
 
 			if (not Path::isDir(pth))
 			{
-				cout << cs::red("Path::", __func__, ":") << " 输入路径不是目录或不存在，程序已中止！" << endl;
-				exit(0);
+				cout << cs::red(fstr("!!!Error!!! Path::{}: ", __func__)) << "输入路径不是目录或不存在！" << endl;
+				return {};
 			}
 			pDir = opendir(pth.c_str());
 			while ((ptr = readdir(pDir)) != nullptr) 
@@ -263,8 +263,8 @@ namespace mineutils
 
 			if (not Path::isDir(pth))
 			{
-				cout << cs::red("Path::", __func__, ":") << " 输入路径不是目录或不存在，程序已中止！" << endl;
-				exit(0);
+				cout << fstr("!!!Error!!! Path::{}: ", __func__) << "输入路径不是目录或不存在！" << endl;
+				return {};
 			}
 			vector<string> listdir_res = Path::listDir(pth, return_path);
 			for (string& f_d : listdir_res)

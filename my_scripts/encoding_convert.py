@@ -1,6 +1,8 @@
 import os
 import chardet
 import codecs
+import sys
+sys.path.append("..")
 
 from mineutils.colorstr import ColorStr as cs
 from mineutils.path import Path as pt
@@ -26,10 +28,10 @@ def convertEncoding(file_path, target_encoding="utf-8"):
         
     
 def batchConvert(file_dir, backup_dir, target_encoding, file_extensions=()):
-    if pt.exists(backup_dir):
-        print(cs.red("batchConvert:"), "备份文件夹已存在，请手动删除避免被误覆盖，程序已中止！")
-        return
-    pt.copy(pt.join(file_dir, "*"), backup_dir)
+    # if pt.exists(backup_dir):
+    #     print(cs.red("batchConvert:"), "备份文件夹已存在，请手动删除避免被误覆盖，程序已中止！")
+    #     return
+    # pt.copy(pt.join(file_dir, "*"), backup_dir)
     file_paths = pt.walk(file_dir)
     for fp in file_paths:
         if pt.extension(fp) in file_extensions:
@@ -38,6 +40,12 @@ def batchConvert(file_dir, backup_dir, target_encoding, file_extensions=()):
 
 def main():
     file_dir = "../mineutilshpp"
+    backup_dir = file_dir + "_backup"
+    target_encoding = "UTF-8-SIG"
+    file_extensions = (".py", ".h", ".hpp", ".c", ".cpp")
+    batchConvert(file_dir, backup_dir, target_encoding, file_extensions)
+
+    file_dir = "../../MineNotes/code"
     backup_dir = file_dir + "_backup"
     target_encoding = "UTF-8-SIG"
     file_extensions = (".py", ".h", ".hpp", ".c", ".cpp")

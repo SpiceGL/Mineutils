@@ -35,9 +35,15 @@ namespace mineutils
 		using cs = ColorStr;
 		//ncnn::Net net;
 		if (net_out.load_param(param_path.c_str()))
-			cout << cs::yellow(__func__, ":") << fstr(" 加载param文件{}失败！", param_path);
+		{
+			cout << cs::red(fstr("!!!Error!!! {}: ", __func__)) << fstr("加载param文件{}失败！ ", param_path);
+			return;
+		}
 		if (net_out.load_model(bin_path.c_str()))
-			cout << cs::yellow(__func__, ":") << fstr(" 加载bin文件{}失败！", bin_path);
+		{
+			cout << cs::red(fstr("!!!Error!!! {}: ", __func__)) << fstr("加载bin文件{}失败！", bin_path);
+			return;
+		}
 	}
 	
 	inline vector<ncnn::Mat> quickRunNcnn(ncnn::Net& net_in, ncnn::Mat& input, string in_name, vector<string> out_names)

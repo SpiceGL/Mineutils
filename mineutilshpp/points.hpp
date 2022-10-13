@@ -23,12 +23,13 @@ namespace mineutils
 		T data[4];
 	public:
 		using cs = ColorStr;
+		BaseBox() {}
+
 		BaseBox(std::initializer_list<T> input_list)
 		{
 			if (input_list.size() != 4)
 			{
-				cout << cs::red("BaseBox::", __func__, ":") << " 输入长度必须为4！" << endl;
-				exit(0);
+				cout << cs::red(fstr("!!!Error!!! BaseBox::{}: ", __func__)) << "输入长度必须为4！" << endl;
 			}
 			int idx = 0;
 			for (int value : input_list)
@@ -79,9 +80,9 @@ namespace mineutils
 	class LTRBBox :public BaseBox<T>
 	{
 	public:
+		LTRBBox() :BaseBox<T>() {}
 		LTRBBox(std::initializer_list<T> input_list) :BaseBox<T>(input_list) {}
 		LTRBBox(const LTRBBox<T>& ltrb) :BaseBox<T>(ltrb) {}
-
 
 		T& left = this->data[0];
 		T& top = this->data[1];
@@ -93,9 +94,13 @@ namespace mineutils
 		T& r = right;
 		T& b = bottom;
 
-		LTRBBox<T> operator=(const LTRBBox<T>& ltrb) const
+		LTRBBox<T>& operator=(const LTRBBox<T>& ltrb)
 		{
-			return ltrb;
+			left = ltrb.left;
+			top = ltrb.top;
+			right = ltrb.right;
+			bottom = ltrb.bottom;
+			return *this;
 		}
 
 		LTRBBox<int> toPixel() const
@@ -111,6 +116,7 @@ namespace mineutils
 	class XYWHBox :public BaseBox<T>
 	{
 	public:
+		XYWHBox() :BaseBox<T>() {}
 		XYWHBox(std::initializer_list<T> input_list) :BaseBox<T>(input_list) {}
 		XYWHBox(const XYWHBox<T>& xywh) :BaseBox<T>(xywh) {}
 
@@ -120,9 +126,13 @@ namespace mineutils
 		T& w = this->data[2];
 		T& h = this->data[3];
 
-		XYWHBox<T> operator=(const XYWHBox<T>& xywh) const
+		XYWHBox<T>& operator=(const XYWHBox<T>& xywh)
 		{
-			return xywh;
+			x = xywh.x;
+			y = xywh.y;
+			w = xywh.w;
+			h = xywh.h;
+			return *this;
 		}
 
 		XYWHBox<int> toPixel() const

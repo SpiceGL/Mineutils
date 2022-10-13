@@ -31,7 +31,7 @@ namespace mineutils
 		pair<int, int> position = { -1, -1 }, int flag = cv::WINDOW_FREERATIO);
 
 	void putLabelCV(cv::Mat& img, string label, cv::Point position, cv::Scalar text_color = { 255,255,255 },
-		int word_type = cv::FONT_HERSHEY_SIMPLEX, int word_scale = 1, int text_thickness = 2,
+		int word_type = cv::FONT_HERSHEY_SIMPLEX, float word_scale = 1, int text_thickness = 2,
 		bool have_bg = true, cv::Scalar bg_color = {255, 0, 0});
 
 	void putBoxCV(cv::Mat& img, LTRB ltrb, string label = "",
@@ -123,7 +123,7 @@ namespace mineutils
 		auto cap = cv::VideoCapture(video_path);
 		if (not cap.isOpened())
 		{
-			cout << cs::yellow(__func__, ":") << " 视频文件打开失败，已跳过播放！" << endl;
+			cout << cs::yellow(fstr("!Warning! {}: ", __func__)) << "视频文件打开失败，已跳过播放！" << endl;
 			return;
 		}
 		setWindowCV(win_name, size, position, flag);
@@ -134,14 +134,14 @@ namespace mineutils
 			if (not ret)
 			{
 				cv::destroyWindow(win_name);
-				cout << cs::green(__func__, ":") << " 视频已播放结束。" << endl;
+				cout << cs::green(fstr("{}: ", __func__)) << "视频已播放结束。" << endl;
 				break;
 			}
 			bool go_on = loopShowCV(win_name, frame, wait);
 			if (not go_on)
 			{
 				cv::destroyWindow(win_name);
-				cout << cs::yellow(__func__, ":") << "收到中止信号，提前结束视频播放！" << endl;
+				cout << cs::yellow(fstr("!Warning! {}: ", __func__)) << "收到中止信号，提前结束视频播放！" << endl;
 				break;
 			}
 		}
@@ -256,7 +256,7 @@ namespace mineutils
 			_printCVMat<cv::Vec3f>(img, xstart, xend, ystart, yend, cstart, cend, false);
 		else if (img.type() == 22)
 			_printCVMat<cv::Vec3d>(img, xstart, xend, ystart, yend, cstart, cend, false);
-		else cout << cs::yellow(__func__, ":") << " 该图像的cv::Mat::type()暂不支持，已跳过输出!" << endl;
+		else cout << cs::yellow(fstr("!Warning! {}: ", __func__)) << "该图像的cv::Mat::type()暂不支持，已跳过输出！" << endl;
 	}
 
 
@@ -281,7 +281,7 @@ namespace mineutils
 				}
 				else
 				{
-					cout << zfillFlt(ptr[x], 3, 4, 4, ' ', '0');
+					cout << zfillFlt(ptr[x], 3, 4, ' ', '0');
 					if (x != xend - 1)
 						cout << " ";
 				}
@@ -317,7 +317,7 @@ namespace mineutils
 					}
 					else
 					{
-						cout << zfillFlt(ptr[x][c], 3, 4, 4, ' ', '0');
+						cout << zfillFlt(ptr[x][c], 3, 4, ' ', '0');
 						if (c != cend - 1)
 							cout << " ";
 					}
