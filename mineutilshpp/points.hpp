@@ -120,7 +120,6 @@ namespace mineutils
 		XYWHBox(std::initializer_list<T> input_list) :BaseBox<T>(input_list) {}
 		XYWHBox(const XYWHBox<T>& xywh) :BaseBox<T>(xywh) {}
 
-
 		T& x = this->data[0];
 		T& y = this->data[1];
 		T& w = this->data[2];

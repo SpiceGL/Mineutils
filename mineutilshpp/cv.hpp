@@ -160,8 +160,8 @@ namespace mineutils
 			cv::Point& c1 = position;
 			if (have_bg)
 			{
-				int* baseline = nullptr;
-				cv::Size text_size = cv::getTextSize(label, word_type, word_scale, text_thickness, baseline);
+				int baseline;
+				cv::Size text_size = cv::getTextSize(label, word_type, word_scale, text_thickness, &baseline);
 				cv::Point c2 = { c1.x + text_size.width, c1.y - (int)(text_size.height*1.2) };
 				cv::rectangle(img, c1, c2, bg_color, -1);
 			}
