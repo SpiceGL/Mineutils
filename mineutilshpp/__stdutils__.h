@@ -1,5 +1,6 @@
 #pragma once
 #include"sign.hpp"   //basic
+#include"litetime.hpp"   //basic
 #include"str.hpp"   //basic
 #include"index.hpp"   //based on str.hpp
 #include"judge.hpp"   //base on sign.hpp
@@ -12,5 +13,5 @@ TOP					   print.hpp
 						cv.hpp
 				 ncnn.hpp    points.hpp
 		  index.hpp    judge.hpp    path.hpp
-BASE		      sign.hpp    str.hpp
+BASE	 sign.hpp    litetime.hpp    str.hpp
 */
