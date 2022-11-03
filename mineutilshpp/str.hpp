@@ -23,93 +23,93 @@ namespace mineutils
 		ColorStr() {}
 	public:
 		template<class ...Strs>
-		static string black(string str, Strs ...strs)
+		static string black(const string& str, const Strs& ...strs)
 		{
 			string color_str;
 			if (ColorStr_enabled)
-				color_str = "\033[30m" + ColorStr::_cat(str, strs...) + "\033[0m";
-			else color_str = ColorStr::_cat(str, strs...);
+				color_str = "\033[30m" + ColorStr::cat(str, strs...) + "\033[0m";
+			else color_str = ColorStr::cat(str, strs...);
 			return color_str;
 		}
 
 		template<class ...Strs>
-		static string blue(string str, Strs ...strs)
+		static string blue(const string& str, const Strs& ...strs)
 		{
 			string color_str;
 			if (ColorStr_enabled)
-				color_str = "\033[34m" + ColorStr::_cat(str, strs...) + "\033[0m";
-			else color_str = ColorStr::_cat(str, strs...);
+				color_str = "\033[34m" + ColorStr::cat(str, strs...) + "\033[0m";
+			else color_str = ColorStr::cat(str, strs...);
 			return color_str;
 		}
 
 		template<class ...Strs>
-		static string cyan(string str, Strs ...strs)
+		static string cyan(const string& str, const Strs& ...strs)
 		{
 			string color_str;
 			if (ColorStr_enabled)
-				color_str = "\033[36m" + ColorStr::_cat(str, strs...) + "\033[0m";
-			else color_str = ColorStr::_cat(str, strs...);
+				color_str = "\033[36m" + ColorStr::cat(str, strs...) + "\033[0m";
+			else color_str = ColorStr::cat(str, strs...);
 			return color_str;
 		}
 
 		template<class ...Strs>
-		static string fuchsia(string str, Strs ...strs)  //
+		static string fuchsia(const string& str, const Strs& ...strs)  //
 		{
 			string color_str;
 			if (ColorStr_enabled)
-				color_str = "\033[35m" + ColorStr::_cat(str, strs...) + "\033[0m";
-			else color_str = ColorStr::_cat(str, strs...);
+				color_str = "\033[35m" + ColorStr::cat(str, strs...) + "\033[0m";
+			else color_str = ColorStr::cat(str, strs...);
 			return color_str;
 		}
 
 		template<class ...Strs>
-		static string green(string str, Strs ...strs)
+		static string green(const string& str, const Strs& ...strs)
 		{
 			string color_str;
 			if (ColorStr_enabled)
-				color_str = "\033[32m" + ColorStr::_cat(str, strs...) + "\033[0m";
-			else color_str = ColorStr::_cat(str, strs...);
+				color_str = "\033[32m" + ColorStr::cat(str, strs...) + "\033[0m";
+			else color_str = ColorStr::cat(str, strs...);
 			return color_str;
 		}
 
 		template<class ...Strs>
-		static string red(string str, Strs ...strs)
+		static string red(const string& str, const Strs& ...strs)
 		{
 			string color_str;
 			if (ColorStr_enabled)
-				color_str = "\033[31m" + ColorStr::_cat(str, strs...) + "\033[0m";
-			else color_str = ColorStr::_cat(str, strs...);
+				color_str = "\033[31m" + ColorStr::cat(str, strs...) + "\033[0m";
+			else color_str = ColorStr::cat(str, strs...);
 			return color_str;
 		}
 
 		template<class ...Strs>
-		static string white(string str, Strs ...strs)
+		static string white(const string& str, const Strs& ...strs)
 		{
 			string color_str;
 			if (ColorStr_enabled)
-				color_str = "\033[37m" + ColorStr::_cat(str, strs...) + "\033[0m";
-			else color_str = ColorStr::_cat(str, strs...);
+				color_str = "\033[37m" + ColorStr::cat(str, strs...) + "\033[0m";
+			else color_str = ColorStr::cat(str, strs...);
 			return color_str;
 		}
 
 		template<class ...Strs>
-		static string yellow(string str, Strs ...strs)
+		static string yellow(const string& str, const Strs& ...strs)
 		{
 			string color_str;
 			if (ColorStr_enabled)
-				color_str = "\033[33m" + ColorStr::_cat(str, strs...) + "\033[0m";
-			else color_str = ColorStr::_cat(str, strs...);
+				color_str = "\033[33m" + ColorStr::cat(str, strs...) + "\033[0m";
+			else color_str = ColorStr::cat(str, strs...);
 			return color_str;
 		}
 
 	private:
 		template<class ...Strs>
-		static string _cat(string str, Strs ...strs)
+		static string cat(const string& str, const Strs& ...strs)
 		{
-			return str + ColorStr::_cat(strs...);
+			return str + ColorStr::cat(strs...);
 		}
 
-		static string _cat(string str)
+		static string cat(const string& str)
 		{
 			return str;
 		}
@@ -177,7 +177,7 @@ namespace mineutils
 	}
 	
 	template<class T, class... Ts>
-	inline string _fstr(string& s, T& arg, Ts&... args)
+	inline string _fstr(string& s, const T& arg, const Ts&... args)
 	{
 		using cs = ColorStr;
 		size_t pos = s.find("{}");
@@ -195,13 +195,13 @@ namespace mineutils
 	}
 
 	template<class... Ts>
-	inline string fstr(string s, Ts... args)   //实现类似于python的f-string功能，将字符串中的{}替换为后面的参数
+	inline string fstr(string s, const Ts& ...args)   //实现类似于python的f-string功能，将字符串中的{}替换为后面的参数
 	{
 		return _fstr(s, args...);	
 	}
 	
 
-	inline vector<string> split(string s, string sep=" ", bool ignore_emptystr=true)
+	inline vector<string> split(string s, const string& sep=" ", bool ignore_emptystr=true)
 	{
 		vector<string> strs;
 		size_t sep_pos;

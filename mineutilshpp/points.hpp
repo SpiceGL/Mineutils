@@ -45,6 +45,7 @@ namespace mineutils
 			this->data[2] = box.data[2];
 			this->data[3] = box.data[3];
 		}
+		virtual ~BaseBox() {}
 
 		T& operator[](int idx)
 		{
@@ -75,7 +76,10 @@ namespace mineutils
 	template<class T>
 	class LTRBBox;
 
-	/*左-上-右-下排列的bbox坐标*/
+	template<class T>
+	class LTWHBox;
+
+	/*左上角-右下角：l、t、r、b排列的bbox坐标*/
 	template<class T>
 	class LTRBBox :public BaseBox<T>
 	{
@@ -109,9 +113,10 @@ namespace mineutils
 		}
 
 		XYWHBox<T> toXYWH() const;
+		LTWHBox<T> toLTWH() const;
 	};
 
-
+	/*中心-宽高：x、y、w、h排列的bbox坐标*/
 	template<class T>
 	class XYWHBox :public BaseBox<T>
 	{
@@ -140,8 +145,45 @@ namespace mineutils
 		}
 
 		LTRBBox<T> toLTRB() const;
+		LTWHBox<T> toLTWH() const;
 	};
 
+	/*左上角-宽高：l、t、w、h排列的bbox坐标*/
+	template<class T>
+	class LTWHBox :public BaseBox<T>
+	{
+	public:
+		LTWHBox() :BaseBox<T>() {}
+		LTWHBox(std::initializer_list<T> input_list) :BaseBox<T>(input_list) {}
+		LTWHBox(const LTWHBox<T>& ltwh) :BaseBox<T>(ltwh) {}
+
+		T& left = this->data[0];
+		T& top = this->data[1];
+		T& w = this->data[2];
+		T& h = this->data[3];
+
+		T& l = left;
+		T& t = top;
+
+		LTWHBox<T>& operator=(const LTWHBox<T>& ltwh)
+		{
+			l = ltwh.l;
+			t = ltwh.t;
+			w = ltwh.w;
+			h = ltwh.h;
+			return *this;
+		}
+
+		LTWHBox<int> toPixel() const
+		{
+			return { (int)round(l), (int)round(t), (int)round(w), (int)round(h) };
+		}
+
+		LTRBBox<T> toLTRB() const;
+		XYWHBox<T> toXYWH() const;
+	};
+
+	/*-----------------------------------------------*/
 	template<class T>
 	XYWHBox<T> LTRBBox<T>::toXYWH() const
 	{
@@ -153,6 +195,15 @@ namespace mineutils
 	}
 
 	template<class T>
+	LTWHBox<T> LTRBBox<T>::toLTWH() const
+	{
+		T w = this->right - this->left;
+		T h = this->bottom - this->top;
+		return { this->l, this->t, w, h };
+	}
+
+	/*-----------------------------------------------*/
+	template<class T>
 	LTRBBox<T> XYWHBox<T>::toLTRB() const
 	{
 		T l = BaseBox<T>::roundWhenInt(this->x - (float)this->w / 2);
@@ -162,6 +213,30 @@ namespace mineutils
 		return { l,t,r,b };
 	}
 
+	template<class T>
+	LTWHBox<T> XYWHBox<T>::toLTWH() const
+	{
+		T l = BaseBox<T>::roundWhenInt(this->x - (float)this->w / 2);
+		T t = BaseBox<T>::roundWhenInt(this->y - (float)this->h / 2);
+		return { l, t, this->w, this->h };
+	}
+
+	/*-----------------------------------------------*/
+	template<class T>
+	LTRBBox<T> LTWHBox<T>::toLTRB() const
+	{
+		T r = this->left + this->w;
+		T b = this->top + this->h;
+		return { this->l, this->t, r, b };
+	}
+
+	template<class T>
+	XYWHBox<T> LTWHBox<T>::toXYWH() const
+	{
+		T x = BaseBox<T>::roundWhenInt(this->left + (float)w / 2);
+		T y = BaseBox<T>::roundWhenInt(this->top + (float)h / 2);
+		return { x, y, this->w, this->h };
+	}
 
 	/*------------------------------------------------------------------------------*/
 	template<class T>
@@ -176,6 +251,8 @@ namespace mineutils
 	using LTRBf = LTRBBox<float>;
 	using XYWH = XYWHBox<int>;
 	using XYWHf = XYWHBox<float>;
+	using LTWH = LTWHBox<int>;
+	using LTWHf = LTWHBox<float>;
 }
 
 //#pragma once

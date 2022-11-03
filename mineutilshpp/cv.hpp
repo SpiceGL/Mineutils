@@ -16,30 +16,43 @@ namespace mineutils
 	using std::pair;
 	using std::string;
 
+	/*
+	#cv2.VideoWriter_fourcc('X', '2', '6', '4'), 该参数是较新的MPEG-4编码,产生的文件较小,文件扩展名应为.mp4
+	#cv2.VideoWriter_fourcc('P', 'I', 'M', 'I'), 该参数是较旧的MPEG-1编码,文件名后缀为.avi
+	#cv2.VideoWriter_fourcc('M', 'P', '4', '2'), 该参数是MPEG-2编码,产生的文件不会特别大,文件名后缀为.avi
+	#cv2.VideoWriter_fourcc('D', 'I', 'V', '3'), 该参数是MPEG-3编码,产生的文件不会特别大,文件名后缀为.avi
+	#cv2.VideoWriter_fourcc('D', 'I', 'V', 'X'), 该参数是MPEG-4编码,产生的文件不会特别大,文件名后缀为.avi
+	#cv2.VideoWriter_fourcc('X', 'V', 'I', 'D'), 该参数是较旧的MPEG-4编码,产生的文件不会特别大,文件名后缀为.avi
+	#cv2.VideoWriter_fourcc('M', 'P', '4', 'V'), 该参数也是较旧的MPEG-4编码,产生的文件不会特别大,文件扩展名应为.m4v
+	#cv2.VideoWriter_fourcc('T', 'H', 'E', 'O'), 该参数是Ogg Vorbis,产生的文件相对较大,文件名后缀为.ogv
+	#cv2.VideoWriter_fourcc('F', 'L', 'V', '1'), 该参数是Flash视频,产生的文件相对较大,文件名后缀为.flv
+	#cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 该参数是motion-jpeg编码,产生的文件较大,文件名后缀为.avi
+	#cv2.VideoWriter_fourcc('I', '4', '2', '0'),该参数是未压缩的YUV编码,4:2:0色度子采样,这种编码广泛兼容,但会产生特别大的文件,文件扩展名应为.avi ```
+	*/
 	/*------------------------------------声明-------------------------------------*/
-	string setWindowCV(string win_name, cv::Size size = { -1, -1 },
+	string setWindowCV(const string& win_name, cv::Size size = { -1, -1 },
 		pair<int, int> position = { -1, -1 }, int flag = cv::WINDOW_FREERATIO);
 
-	bool loopShowCV(string win_name, cv::Mat& img, float wait = 1);
+	bool loopShowCV(const string& win_name, cv::Mat& img, float wait = 1);
 
-	void quickShowCV(string win_name, cv::Mat& img,
+	void quickShowCV(const string& win_name, cv::Mat& img,
 		float wait = 1, bool close = false, cv::Size size = { -1, -1 },
 		pair<int, int> position = { -1, -1 }, int flag = cv::WINDOW_FREERATIO);
 
-	void quickPlayCV(string win_name, string video_path,
+	void quickPlayCV(const string& win_name, const string& video_path,
 		float wait = 30, cv::Size size = { -1, -1 },
 		pair<int, int> position = { -1, -1 }, int flag = cv::WINDOW_FREERATIO);
 
-	void putLabelCV(cv::Mat& img, string label, cv::Point position, cv::Scalar text_color = { 255,255,255 },
+	void putLabelCV(cv::Mat& img, const string& label, cv::Point position, cv::Scalar text_color = { 255,255,255 },
 		int word_type = cv::FONT_HERSHEY_SIMPLEX, float word_scale = 1, int text_thickness = 2,
 		bool have_bg = true, cv::Scalar bg_color = {255, 0, 0});
 
-	void putBoxCV(cv::Mat& img, LTRB ltrb, string label = "",
+	void putBoxCV(cv::Mat& img, const LTRB& ltrb, const string& label = "",
 		cv::Scalar bbox_color = { 0,255,0 }, cv::Scalar text_color = { 255,255,255 },
 		int word_type = cv::FONT_HERSHEY_SIMPLEX, float word_scale = 1, 
 		int bbox_thickness = 3, int text_thickness = 2);
 
-	void putBoxCV(cv::Mat& img, XYWH xywh, string label = "",
+	void putBoxCV(cv::Mat& img, XYWH xywh, const string& label = "",
 		cv::Scalar bbox_color = { 0,255,0 }, cv::Scalar text_color = { 255,255,255 },
 		int word_type = cv::FONT_HERSHEY_SIMPLEX, float word_scale = 1, 
 		int bbox_thickness = 3, int text_thickness = 2);
@@ -76,7 +89,7 @@ namespace mineutils
 	
 	
 	/*快速设置窗口属性*/
-	inline string setWindowCV(string win_name, cv::Size size, pair<int, int> position, int flag)
+	inline string setWindowCV(const string& win_name, cv::Size size, pair<int, int> position, int flag)
 	{
 		cv::namedWindow(win_name, flag);
 		if (size.width != -1)
@@ -87,7 +100,7 @@ namespace mineutils
 	}
 
 	/*快速显示图像，窗口属性在函数外设置，推荐用于循环体中，若收到中止信号，则返回false*/
-	inline bool loopShowCV(string win_name, cv::Mat& img, float wait)
+	inline bool loopShowCV(const string& win_name, cv::Mat& img, float wait)
 	{
 		cv::imshow(win_name, img);
 		int k = cv::waitKey(wait) & 0xff;
@@ -100,7 +113,7 @@ namespace mineutils
 
 
 	/*快速显示图像，一步到位设置窗口和显示属性*/
-	inline void quickShowCV(string win_name, cv::Mat& img, float wait, bool close,
+	inline void quickShowCV(const string& win_name, cv::Mat& img, float wait, bool close,
 		cv::Size size, pair<int, int> position, int flag)
 	{
 		using cs = ColorStr;
@@ -116,7 +129,7 @@ namespace mineutils
 	}
 
 	/*快速显示视频*/
-	inline void quickPlayCV(string win_name, string video_path, float wait,
+	inline void quickPlayCV(const string& win_name, const string& video_path, float wait,
 		cv::Size size, pair<int, int> position, int flag)
 	{
 		using cs = ColorStr;
@@ -151,7 +164,7 @@ namespace mineutils
 
 	/*---------------------------------------------------------------------------------*/
 	/*为图像添加文字*/
-	inline void putLabelCV(cv::Mat& img, string label, cv::Point position, cv::Scalar text_color,
+	inline void putLabelCV(cv::Mat& img, const string& label, cv::Point position, cv::Scalar text_color,
 		int word_type, float word_scale, int text_thickness, bool have_bg, cv::Scalar bg_color)
 	{
 		/*	position：文字左下角位置 */
@@ -170,7 +183,7 @@ namespace mineutils
 	}
 
 	/*为图像添加检测框及标签*/
-	inline void putBoxCV(cv::Mat& img, LTRB ltrb, string label,
+	inline void putBoxCV(cv::Mat& img, const LTRB& ltrb, const string& label,
 		cv::Scalar bbox_color, cv::Scalar text_color, int word_type, float word_scale, 
 		int bbox_thickness, int text_thickness)
 	{
@@ -194,7 +207,7 @@ namespace mineutils
 		}
 	}
 
-	inline void putBoxCV(cv::Mat& img, XYWH xywh, string label,
+	inline void putBoxCV(cv::Mat& img, XYWH xywh, const string& label,
 		cv::Scalar bbox_color, cv::Scalar text_color, int word_type, float word_scale,
 		int bbox_thickness, int text_thickness)
 	{

@@ -1,9 +1,14 @@
 #pragma once
+//#pragma warning (disable: 4996)
 #include<chrono>
+#include<ctime>
+#include<iomanip>
+#include<sstream>
+#include<string>
 #include<thread>
 
 
-/*基于<chrono>库的简易时间函数封装*/
+/*基于<chrono>库的简易计时函数封装*/
 namespace ltime
 {
 	/*当前时间(纳秒)*/
@@ -11,6 +16,16 @@ namespace ltime
 	{
 		return std::chrono::high_resolution_clock::now();
 	}
+
+	//inline std::string getDateTime()
+	//{
+	//	std::chrono::system_clock::time_point tp = std::chrono::system_clock().now();
+	//	time_t t = std::chrono::system_clock::to_time_t(tp);
+	//	std::ostringstream st;
+	//	st << std::put_time(std::localtime(&t), "%Y-%m-%d %H:%M:%S");
+	//	std::string dt = st.str();
+	//	return dt;
+	//}
 
 	/*封装“时间段(秒)”类*/
 	inline std::chrono::seconds s(const int& t)
