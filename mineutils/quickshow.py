@@ -58,10 +58,11 @@ def loopShowCV(window_name: str,
     """
     cv2.imshow(window_name, img)
     k = cv2.waitKey(wait) & 0xff
-    if k == 27 or k == ord('q'):
-        return False
-    else:
-        return True
+    return k
+    # if k == 27 or k == ord('q'):
+    #     return False
+    # else:
+    #     return True
 
 
 if __name__ == "__main__":

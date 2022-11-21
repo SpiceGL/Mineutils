@@ -198,8 +198,9 @@ class Path:
         str_list = path.split("\\")
         s = str_list[0]
         for sl in str_list[1:]:
-            s += "/"
-            s += sl
+            if len(sl) > 0:
+                s += "/"
+                s += sl
         return s
     
     @classmethod
@@ -209,12 +210,12 @@ class Path:
         --系统根目录的父目录是自身。
         """
         path = cls.normalPath(path)
-        abspath = os.path.abspath(path)
-        absparent = os.path.dirname(abspath)
+        abspath = cls.normalPath(os.path.abspath(path))
+        absparent = cls.normalPath(os.path.dirname(abspath))
         if not use_abspath:
-            work_path = os.getcwd()
-            level_work = len(work_path.split(os.sep))   ###从根目录到工作目录的级数
-            level_absparent = len(absparent.split(os.sep))
+            work_path = cls.normalPath(os.getcwd())
+            level_work = len(work_path.split("/"))   ###从根目录到工作目录的级数
+            level_absparent = len(absparent.split("/"))
             if level_work > level_absparent:
                 pp_list = [".."] * (level_work-level_absparent)
                 parent_path = os.path.join(*pp_list)   ###父目录超出工作目录后，相对路径的父目录写法

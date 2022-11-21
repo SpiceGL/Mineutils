@@ -21,7 +21,7 @@ def distribute(data_dir, rule_od):
 
 
 def main():
-    data_dir = "E:/Project/distributing/normal_0509"
+    data_dir = "E:/saved_photos_remaped1109"
     data_name = Path.splitName(data_dir)
     key_name_dict = OrderedDict({"most": "normal",
                                  "n": "normal",
@@ -47,7 +47,7 @@ def main():
     file_names = Path.listImg(data_dir, return_path=False)
     setWindowCV("show", size=(720, 480))
     idx = start_idx
-    stop = False
+    stop = True
     while idx < len(file_names):
         if idx < 0:
             idx = 0
@@ -127,5 +127,5 @@ def main():
             
 
 if __name__ == '__main__':
-    # main()
+    main()
     print(sys.path)

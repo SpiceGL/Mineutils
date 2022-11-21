@@ -112,7 +112,7 @@ namespace mineutils
 
 			if (not Path::isDir(pth))
 			{
-				cout << cs::red(fstr("!!!Error!!! Path::{}: ", __func__)) << "输入路径不是目录或不存在！" << endl;
+				cout << cs::yellow(fstr("!Warning! Path::{}: ", __func__)) << "输入路径不是目录或不存在，已返回空结果！" << endl;
 				return {};
 			}
 			if ((hFile = _findfirst(p.append("/*").c_str(), &fileinfo)) != -1) 
@@ -165,7 +165,7 @@ namespace mineutils
 
 			if (not Path::isDir(pth))
 			{
-				cout << cs::red(fstr("!!!Error!!! Path::{}: ", __func__)) << "输入路径不是目录或不存在！" << endl;
+				cout << cs::yellow(fstr("!Warning! Path::{}: ", __func__)) << "输入路径不是目录或不存在，已返回空结果！" << endl;
 				return {};
 			}
 			pDir = opendir(pth.c_str());

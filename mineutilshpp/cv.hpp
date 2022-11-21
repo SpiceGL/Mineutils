@@ -33,7 +33,7 @@ namespace mineutils
 	string setWindowCV(const string& win_name, cv::Size size = { -1, -1 },
 		pair<int, int> position = { -1, -1 }, int flag = cv::WINDOW_FREERATIO);
 
-	bool loopShowCV(const string& win_name, cv::Mat& img, float wait = 1);
+	int loopShowCV(const string& win_name, cv::Mat& img, float wait = 1);
 
 	void quickShowCV(const string& win_name, cv::Mat& img,
 		float wait = 1, bool close = false, cv::Size size = { -1, -1 },
@@ -99,16 +99,16 @@ namespace mineutils
 		return win_name;
 	}
 
-	/*快速显示图像，窗口属性在函数外设置，推荐用于循环体中，若收到中止信号，则返回false*/
-	inline bool loopShowCV(const string& win_name, cv::Mat& img, float wait)
+	/*快速显示图像，窗口属性在函数外设置，推荐用于循环体中，返回键入的key值*/
+	inline int loopShowCV(const string& win_name, cv::Mat& img, float wait)
 	{
 		cv::imshow(win_name, img);
 		int k = cv::waitKey(wait) & 0xff;
-		bool go_on;
-		if (k == 27 or k == int('q'))
-			go_on = false;
-		else go_on = true;
-		return go_on;
+		//bool go_on;
+		//if (k == 27 or k == int('q'))
+		//	go_on = false;
+		//else go_on = true;
+		return k;
 	}
 
 
