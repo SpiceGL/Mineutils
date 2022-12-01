@@ -4,7 +4,8 @@
 #include<string>
 #include<vector>
 
-#if defined(WIN32) or defined(_WIN32) or defined(__WIN32) and !defined(__CYGWIN__)
+#if defined(_MSC_VER)
+//#if defined(WIN32) or defined(_WIN32) or defined(__WIN32) and !defined(__CYGWIN__)
 #include<direct.h>
 #include<io.h>
 #else
@@ -101,7 +102,8 @@ namespace mineutils
 			return pth;
 		}
 
-#if defined(WIN32) or defined(_WIN32) or defined(__WIN32) and !defined(__CYGWIN__)
+#if defined(_MSC_VER)
+//#if defined(WIN32) or defined(_WIN32) or defined(__WIN32) and !defined(__CYGWIN__)
 		static vector<string> listDir(string pth, bool return_path = true, set<string> ignore_names = {})  //获取目录下的一级文件和目录
 		{
 			pth = Path::normPath(pth);

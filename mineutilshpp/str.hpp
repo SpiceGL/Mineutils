@@ -17,7 +17,7 @@ namespace mineutils
 	/*---------------------------------定义-------------------------------------*/
 	static bool ColorStr_enabled = false;   //在main函数cpp中更改，就可以影响全局，否则不影响
 
-	class ColorStr
+	class ColorStr   //似乎只在Windows和Linux桌面端生效
 	{
 	private:
 		ColorStr() {}
