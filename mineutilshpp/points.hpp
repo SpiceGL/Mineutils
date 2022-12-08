@@ -1,42 +1,42 @@
 #pragma once
 #include<cmath>
-#include<initializer_list>
 #include<iostream>
 #include<string>
 #include<stdlib.h>
 
-#include"index.hpp"
-#include"judge.hpp"
 #include"str.hpp"
+#include"exception.hpp"
+#include"judge.hpp"
+#include"index.hpp"
 
 
 namespace mineutils
 {
-	using std::cout;
-	using std::endl;
-
-
 	template<class T>
 	class BaseBox
 	{
 	protected:
 		T data[4];
 	public:
-		using cs = ColorStr;
 		BaseBox() {}
 
-		BaseBox(std::initializer_list<T> input_list)
+		BaseBox(const T& v0, const T& v1, const T& v2, const T& v3)
 		{
-			if (input_list.size() != 4)
-			{
-				cout << cs::red(fstr("!!!Error!!! BaseBox::{}: ", __func__)) << "输入长度必须为4！" << endl;
-			}
-			int idx = 0;
-			for (int value : input_list)
-			{
-				this->data[idx] = value;
-				++idx;
-			}
+			//if (input_list.size() != 4)
+			//{
+			//	std::cout << makeMessageE("BaseBox", __func__, "输入长度必须为4！") << std::endl;
+			//	exit(0)
+			//}
+			//int idx = 0;
+			//for (int value : input_list)
+			//{
+			//	this->data[idx] = value;
+			//	++idx;
+			//}
+			data[0] = v0;
+			data[1] = v1;
+			data[2] = v2;
+			data[3] = v3;
 		}
 		BaseBox(const BaseBox<T>& box)
 		{
@@ -85,7 +85,7 @@ namespace mineutils
 	{
 	public:
 		LTRBBox() :BaseBox<T>() {}
-		LTRBBox(std::initializer_list<T> input_list) :BaseBox<T>(input_list) {}
+		LTRBBox(const T& v0, const T& v1, const T& v2, const T& v3) :BaseBox<T>(v0, v1, v2, v3) {}
 		LTRBBox(const LTRBBox<T>& ltrb) :BaseBox<T>(ltrb) {}
 
 		T& left = this->data[0];
@@ -122,7 +122,7 @@ namespace mineutils
 	{
 	public:
 		XYWHBox() :BaseBox<T>() {}
-		XYWHBox(std::initializer_list<T> input_list) :BaseBox<T>(input_list) {}
+		XYWHBox(const T& v0, const T& v1, const T& v2, const T& v3) :BaseBox<T>(v0, v1, v2, v3) {}
 		XYWHBox(const XYWHBox<T>& xywh) :BaseBox<T>(xywh) {}
 
 		T& x = this->data[0];
@@ -154,7 +154,7 @@ namespace mineutils
 	{
 	public:
 		LTWHBox() :BaseBox<T>() {}
-		LTWHBox(std::initializer_list<T> input_list) :BaseBox<T>(input_list) {}
+		LTWHBox(const T& v0, const T& v1, const T& v2, const T& v3) :BaseBox<T>(v0, v1, v2, v3) {}
 		LTWHBox(const LTWHBox<T>& ltwh) :BaseBox<T>(ltwh) {}
 
 		T& left = this->data[0];
@@ -240,11 +240,11 @@ namespace mineutils
 
 	/*------------------------------------------------------------------------------*/
 	template<class T>
-	inline std::ostream& operator<<(std::ostream& cout, const BaseBox<T>& bbox)   //添加对print的支持，bbox要么const &要么不引用
+	inline std::ostream& operator<<(std::ostream& _cout, const BaseBox<T>& bbox)   //添加对print的支持，bbox要么const &要么不引用
 	{
-		cout << "[" << bbox[0] << " " << bbox[1] << " "
+		std::cout << "[" << bbox[0] << " " << bbox[1] << " "
 			<< bbox[2] << " " << bbox[3] << "]";
-		return cout;
+		return std::cout;
 	}
 
 	using LTRB = LTRBBox<int>;
@@ -269,8 +269,8 @@ namespace mineutils
 //
 //namespace mineutils
 //{
-//	using std::cout;
-//	using std::endl;
+//	using std::std::cout;
+//	using std::std::endl;
 //
 //
 //	template<class T>
@@ -279,12 +279,12 @@ namespace mineutils
 //	protected:
 //		T data[4];
 //	public:
-//		using cs = ColorStr;
+//		using cstr = ColorStr;
 //		BaseBox(std::initializer_list<T> input_list)
 //		{
 //			if (input_list.size() != 4)
 //			{
-//				cout << cs::red("BaseBox::", __func__, ":") << " 输入长度必须为4！" << endl;
+//				std::cout << cstr::red("BaseBox::", __func__, ":") << " 输入长度必须为4！" << std::endl;
 //				exit(0);
 //			}
 //			int idx = 0;
@@ -379,11 +379,11 @@ namespace mineutils
 //
 //	/*------------------------------------------------------------------------------*/
 //	template<class T>
-//	std::ostream& operator<<(std::ostream& cout, const BaseBox<T>& bbox)   //添加对print的支持，bbox要么const &要么不引用
+//	std::ostream& operator<<(std::ostream& std::cout, const BaseBox<T>& bbox)   //添加对print的支持，bbox要么const &要么不引用
 //	{
-//		cout << "[" << bbox[0] << " " << bbox[1] << " "
+//		std::cout << "[" << bbox[0] << " " << bbox[1] << " "
 //			<< bbox[2] << " " << bbox[3] << "]";
-//		return cout;
+//		return std::cout;
 //	}
 //
 //	using LTRB = LTRBBox<int>; 

@@ -1,61 +1,58 @@
 #pragma once
 #include<iostream>
 #include<string>
+#include<vector>
 #include<limits.h>
 #include<stdlib.h>
 
 #include"ncnn/net.h"
 
-#include"index.hpp"
 #include"str.hpp"
+#include"exception.hpp"
+#include"index.hpp"
 
 
 namespace mineutils
 {
-	using std::cout;
-	using std::endl;
-	using std::pair;
-	using std::string;
-	using std::vector;
 	/*----------------------------------声明--------------------------------------*/
-	void loadNcnn(ncnn::Net& net_out, const string& param_path, const string& bin_path);
+	bool loadNcnn(ncnn::Net& net_out, const std::string& param_path, const std::string& bin_path);
 	
-	vector<ncnn::Mat> quickRunNcnn(ncnn::Net& net_in, ncnn::Mat& input, const string& in_name, const vector<string>& out_names);
+	std::vector<ncnn::Mat> quickRunNcnn(ncnn::Net& net_in, ncnn::Mat& input, const std::string& in_name, const std::vector<std::string>& out_names);
 
-	vector<ncnn::Mat> quickRunNcnn(const string& param_path, const string& model_path, ncnn::Mat& input, const string& in_name, const vector<string>& out_names);
+	std::vector<ncnn::Mat> quickRunNcnn(const std::string& param_path, const std::string& model_path, ncnn::Mat& input, const std::string& in_name, const std::vector<std::string>& out_names);
 
-	template<class Tx = pair<int, int>, class Ty = pair<int, int>, class Tc = pair<int, int>>
+	template<class Tx = std::pair<int, int>, class Ty = std::pair<int, int>, class Tc = std::pair<int, int>>
 	void printMat(const ncnn::Mat& m, Tx x_range = { 0, INT_MAX }, Ty y_range = { 0, INT_MAX }, Tc c_range = { 0, INT_MAX });
 
 
 
 	/*----------------------------------定义--------------------------------------*/
-	inline void loadNcnn(ncnn::Net& net_out, const string& param_path, const string& bin_path)
+	inline bool loadNcnn(ncnn::Net& net_out, const std::string& param_path, const std::string& bin_path)
 	{
-		using cs = ColorStr;
 		//ncnn::Net net;
 		if (net_out.load_param(param_path.c_str()))
 		{
-			cout << cs::red(fstr("!!!Error!!! {}: ", __func__)) << fstr("加载param文件{}失败！ ", param_path);
-			return;
+			std::cout << makeMessageW(__func__, fstr("加载param文件{}失败！ ", param_path)) << std::endl;
+			return false;
 		}
 		if (net_out.load_model(bin_path.c_str()))
 		{
-			cout << cs::red(fstr("!!!Error!!! {}: ", __func__)) << fstr("加载bin文件{}失败！", bin_path);
-			return;
+			std::cout << makeMessageW(__func__, fstr("加载bin文件{}失败！ ", bin_path)) << std::endl;
+			return false;
 		}
+		return true;
 	}
 	
-	inline vector<ncnn::Mat> quickRunNcnn(ncnn::Net& net_in, ncnn::Mat& input, const string& in_name, 
-		const vector<string>& out_names)
+	inline std::vector<ncnn::Mat> quickRunNcnn(ncnn::Net& net_in, ncnn::Mat& input, const std::string& in_name, 
+		const std::vector<std::string>& out_names)
 	{
 		
 		ncnn::Extractor extractor = net_in.create_extractor();
 		extractor.input(in_name.c_str(), input);
 
-		vector<ncnn::Mat> outs;
+		std::vector<ncnn::Mat> outs;
 		ncnn::Mat out;
-		for (const string& out_id : out_names)
+		for (const std::string& out_id : out_names)
 		{
 			extractor.extract(out_id.c_str(), out);
 			outs.push_back(out);
@@ -63,7 +60,7 @@ namespace mineutils
 		return outs;
 	}
 
-	inline vector<ncnn::Mat> quickRunNcnn(const string& param_path, const string& model_path, ncnn::Mat& input, const string& in_name, const vector<string>& out_names)
+	inline std::vector<ncnn::Mat> quickRunNcnn(const std::string& param_path, const std::string& model_path, ncnn::Mat& input, const std::string& in_name, const std::vector<std::string>& out_names)
 	{
 		ncnn::Net net;
 		net.load_param(param_path.c_str());
@@ -75,7 +72,7 @@ namespace mineutils
 	template<class Tx, class Ty, class Tc>
 	inline void printMat(const ncnn::Mat& m, Tx x_range, Ty y_range, Tc c_range)   //输出ncnn的Mat，只支持三维图像Mat
 	{
-		using Range = pair<int, int>;
+		using Range = std::pair<int, int>;
 		Range x_norm_range = normRange(x_range, m.w);
 		Range y_norm_range = normRange(y_range, m.h);
 		Range c_norm_range = normRange(c_range, m.c);
@@ -85,46 +82,46 @@ namespace mineutils
 
 		const float* ptr = nullptr;
 		int bias = ystart * m.w;
-		cout << "ncnn::Mat{";
+		std::cout << "ncnn::Mat{";
 		for (int y = ystart; y < yend; y++)
 		{
 			if (y == ystart)
-				cout << "[";
-			else cout << string(10, ' ') << "[";
+				std::cout << "[";
+			else std::cout << std::string(10, ' ') << "[";
 			for (int x = xstart; x < xend; x++)
 			{
-				cout << "(";
+				std::cout << "(";
 				for (int c = cstart; c < cend; c++)
 				{
 					ptr = m.channel(c);
 					if (c != cend - 1)
-						cout <<  ptr[x + bias] << " ";
-					else cout <<  ptr[x + bias];
+						std::cout <<  ptr[x + bias] << " ";
+					else std::cout <<  ptr[x + bias];
 				}
 				if (x != xend - 1)
-					cout << ") ";
-				else cout << ")";
+					std::cout << ") ";
+				else std::cout << ")";
 			}
 			bias += m.w;
 			if (y != yend - 1)
-				cout << "]" << endl;
-			else cout << "]";
+				std::cout << "]" << std::endl;
+			else std::cout << "]";
 		}
-		cout << "}" << endl;
+		std::cout << "}" << std::endl;
 	}
 
-	//std::ostream& operator<<(std::ostream& cout, ncnn::Mat& mat)
+	//std::ostream& operator<<(std::ostream& std::cout, ncnn::Mat& mat)
 	//{
 	//	printMat(mat);
-	//	return cout;
+	//	return std::cout;
 	//}
 
-	inline void printMats(const vector<ncnn::Mat>& mats)
+	inline void printMats(const std::vector<ncnn::Mat>& mats)
 	{
-		cout << "Mats{" << endl;
+		std::cout << "Mats{" << std::endl;
 		for (auto mat : mats)
 			printMat(mat);
-		cout << "}" << endl;
+		std::cout << "}" << std::endl;
 	}
 
 	inline void _print(const ncnn::Mat& m)
@@ -132,7 +129,7 @@ namespace mineutils
 		printMat(m);
 	}
 
-	inline void _print(const vector<ncnn::Mat>& mats)
+	inline void _print(const std::vector<ncnn::Mat>& mats)
 	{
 		printMats(mats);
 	}

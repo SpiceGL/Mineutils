@@ -2,13 +2,11 @@
 #include<limits.h>
 #include<stdlib.h>
 #include"str.hpp"
+#include"exception.hpp"
 
 
 namespace mineutils
 {
-	using std::cout;
-	using std::endl;
-	using std::pair;
     /*------------------------------------ÉùÃ÷-------------------------------------*/
 
 
@@ -27,13 +25,13 @@ namespace mineutils
 			normal_idx = idx + len;
 		else
 		{
-			cout << cs::red(fstr("!!!Error!!! {}: ", __func__)) << fstr("idx={}³¬³öË÷Òý·¶Î§£¡", idx) << endl;
+			std::cout << makeMessageW(__func__, fstr("idx={}³¬³öË÷Òý·¶Î§£¡", idx)) << std::endl;
 			return -1;
 		}
 		return normal_idx;
 	}
 
-	inline pair<int, int> normRange(pair<int, int> range, int len)
+	inline std::pair<int, int> normRange(std::pair<int, int> range, int len)
 	{
 		int dst_start, dst_end;
 		int x1 = range.first, x2 = range.second;
@@ -48,7 +46,7 @@ namespace mineutils
 		return { dst_start, dst_end };
 	}
 
-	inline pair<int, int> normRange(int idx, int len)
+	inline std::pair<int, int> normRange(int idx, int len)
 	{
 		using cs = ColorStr;
 		int dst_start, dst_end;
@@ -58,7 +56,7 @@ namespace mineutils
 			dst_start = idx + len, dst_end = idx + len + 1;
 		else
 		{
-			cout << cs::red(fstr("!!!Error!!! {}: ", __func__)) << fstr("idx={}³¬³öË÷Òý·¶Î§£¡", idx) << endl;
+			std::cout << makeMessageW(__func__, fstr("idx={}³¬³öË÷Òý·¶Î§£¡", idx)) << std::endl;
 			return {-1, -1};
 		}
 		return { dst_start, dst_end };

@@ -8,10 +8,6 @@
 
 namespace mineutils
 {
-	using std::cout;
-	using std::endl;
-	using std::string;
-	using std::vector;
 	/*---------------------------------声明-------------------------------------*/
 
 	/*---------------------------------定义-------------------------------------*/
@@ -23,9 +19,9 @@ namespace mineutils
 		ColorStr() {}
 	public:
 		template<class ...Strs>
-		static string black(const string& str, const Strs& ...strs)
+		static std::string black(const std::string& str, const Strs& ...strs)
 		{
-			string color_str;
+			std::string color_str;
 			if (ColorStr_enabled)
 				color_str = "\033[30m" + ColorStr::cat(str, strs...) + "\033[0m";
 			else color_str = ColorStr::cat(str, strs...);
@@ -33,9 +29,9 @@ namespace mineutils
 		}
 
 		template<class ...Strs>
-		static string blue(const string& str, const Strs& ...strs)
+		static std::string blue(const std::string& str, const Strs& ...strs)
 		{
-			string color_str;
+			std::string color_str;
 			if (ColorStr_enabled)
 				color_str = "\033[34m" + ColorStr::cat(str, strs...) + "\033[0m";
 			else color_str = ColorStr::cat(str, strs...);
@@ -43,9 +39,9 @@ namespace mineutils
 		}
 
 		template<class ...Strs>
-		static string cyan(const string& str, const Strs& ...strs)
+		static std::string cyan(const std::string& str, const Strs& ...strs)
 		{
-			string color_str;
+			std::string color_str;
 			if (ColorStr_enabled)
 				color_str = "\033[36m" + ColorStr::cat(str, strs...) + "\033[0m";
 			else color_str = ColorStr::cat(str, strs...);
@@ -53,9 +49,9 @@ namespace mineutils
 		}
 
 		template<class ...Strs>
-		static string fuchsia(const string& str, const Strs& ...strs)  //
+		static std::string fuchsia(const std::string& str, const Strs& ...strs)  //
 		{
-			string color_str;
+			std::string color_str;
 			if (ColorStr_enabled)
 				color_str = "\033[35m" + ColorStr::cat(str, strs...) + "\033[0m";
 			else color_str = ColorStr::cat(str, strs...);
@@ -63,9 +59,9 @@ namespace mineutils
 		}
 
 		template<class ...Strs>
-		static string green(const string& str, const Strs& ...strs)
+		static std::string green(const std::string& str, const Strs& ...strs)
 		{
-			string color_str;
+			std::string color_str;
 			if (ColorStr_enabled)
 				color_str = "\033[32m" + ColorStr::cat(str, strs...) + "\033[0m";
 			else color_str = ColorStr::cat(str, strs...);
@@ -73,9 +69,9 @@ namespace mineutils
 		}
 
 		template<class ...Strs>
-		static string red(const string& str, const Strs& ...strs)
+		static std::string red(const std::string& str, const Strs& ...strs)
 		{
-			string color_str;
+			std::string color_str;
 			if (ColorStr_enabled)
 				color_str = "\033[31m" + ColorStr::cat(str, strs...) + "\033[0m";
 			else color_str = ColorStr::cat(str, strs...);
@@ -83,9 +79,9 @@ namespace mineutils
 		}
 
 		template<class ...Strs>
-		static string white(const string& str, const Strs& ...strs)
+		static std::string white(const std::string& str, const Strs& ...strs)
 		{
-			string color_str;
+			std::string color_str;
 			if (ColorStr_enabled)
 				color_str = "\033[37m" + ColorStr::cat(str, strs...) + "\033[0m";
 			else color_str = ColorStr::cat(str, strs...);
@@ -93,9 +89,9 @@ namespace mineutils
 		}
 
 		template<class ...Strs>
-		static string yellow(const string& str, const Strs& ...strs)
+		static std::string yellow(const std::string& str, const Strs& ...strs)
 		{
-			string color_str;
+			std::string color_str;
 			if (ColorStr_enabled)
 				color_str = "\033[33m" + ColorStr::cat(str, strs...) + "\033[0m";
 			else color_str = ColorStr::cat(str, strs...);
@@ -104,45 +100,47 @@ namespace mineutils
 
 	private:
 		template<class ...Strs>
-		static string cat(const string& str, const Strs& ...strs)
+		static std::string cat(const std::string& str, const Strs& ...strs)
 		{
 			return str + ColorStr::cat(strs...);
 		}
 
-		static string cat(const string& str)
+		static std::string cat(const std::string& str)
 		{
 			return str;
 		}
 	};
 
+	using cstr = ColorStr;
+
 
 	template<class T>
-	inline string toStr(const T& arg)
+	inline std::string toStr(const T& arg)
 	{
 		std::ostringstream buffer;
 		buffer << arg;
 		return buffer.str();
 	}
 	
-	inline string zfillInt(int n, int min_len = 0, char padding = '0')   //输入int值，返回len长度的字符串
+	inline std::string zfillInt(int n, int min_len = 0, char padding = '0')   //输入int值，返回len长度的字符串
 	{
-		string s = std::to_string(n);
+		std::string s = std::to_string(n);
 		if (s.length() < min_len)
 		{
-			s = string(min_len - s.length(), padding) + s;
+			s = std::string(min_len - s.length(), padding) + s;
 		}
 		return s;
 	}
 
-	inline string zfillFlt(float f, int min_len_int = 0, int flt_precision = 4,
+	inline std::string zfillFlt(float f, int min_len_int = 0, int flt_precision = 4,
 		char int_padding = ' ', char flt_padding = '0')
 	{
 		std::ostringstream buffer;
 		buffer << std::setprecision(flt_precision) << f;
-		string s = buffer.str();
+		std::string s = buffer.str();
 
 		/*找到输入小数的整数部分和小数部分，分别处理并合并*/
-		string int_part, flt_part;
+		std::string int_part, flt_part;
 		size_t point_pos = s.find(".");
 		if (point_pos != -1)
 		{
@@ -155,57 +153,57 @@ namespace mineutils
 			flt_part = "";
 		}
 		if (int_part.length() < min_len_int)
-			int_part = string(min_len_int - int_part.length(), int_padding) + int_part;
+			int_part = std::string(min_len_int - int_part.length(), int_padding) + int_part;
 		if (flt_part.length() < flt_precision)
-			flt_part = flt_part + string(flt_precision - flt_part.length(), flt_padding);
+			flt_part = flt_part + std::string(flt_precision - flt_part.length(), flt_padding);
 		s = int_part + "." + flt_part;
 		return s;
 	}
 
 	/*--------------------------------------------------------------------------*/
 
-	inline string _fstr(string& s)
+	inline std::string _fstr(std::string& s)
 	{
 		using cs = ColorStr;
 		size_t pos = s.find("{}");
 		if (pos != -1)
 		{
-			cout << cs::red("!!!Error!!! ", __func__, ": ") << "fstr待替换参数量过少！" << endl;
+			std::cout << cs::red("!!!Error!!! ", __func__, ": ") << "fstr待替换参数量过少！" << std::endl;
 			return "";
 		}
 		return s;
 	}
 	
 	template<class T, class... Ts>
-	inline string _fstr(string& s, const T& arg, const Ts&... args)
+	inline std::string _fstr(std::string& s, const T& arg, const Ts&... args)
 	{
 		using cs = ColorStr;
 		size_t pos = s.find("{}");
 		if (pos != -1)
 		{
-			string arg_s = toStr(arg);
+			std::string arg_s = toStr(arg);
 			s.replace(pos, 2, arg_s);
 		}
 		else
 		{
-			cout << cs::red("!!!Error!!! ", __func__, ": ") << "fstr待替换参数量过多！" << endl;
+			std::cout << cs::red("!!!Error!!! ", __func__, ": ") << "fstr待替换参数量过多！" << std::endl;
 			return "";
 		}
 		return _fstr(s, args...);
 	}
 
 	template<class... Ts>
-	inline string fstr(string s, const Ts& ...args)   //实现类似于python的f-string功能，将字符串中的{}替换为后面的参数
+	inline std::string fstr(std::string s, const Ts& ...args)   //实现类似于python的f-std::string功能，将字符串中的{}替换为后面的参数
 	{
 		return _fstr(s, args...);	
 	}
 	
 
-	inline vector<string> split(string s, const string& sep=" ", bool ignore_emptystr=true)
+	inline std::vector<std::string> split(std::string s, const std::string& sep=" ", bool ignore_emptystr=true)
 	{
-		vector<string> strs;
+		std::vector<std::string> strs;
 		size_t sep_pos;
-		string s_in;   //s_in存放已处理的字段，s存放待处理的字段
+		std::string s_in;   //s_in存放已处理的字段，s存放待处理的字段
 		while ((sep_pos = s.find(sep)) != -1)
 		{
 			s_in = s.substr(0, sep_pos);
@@ -221,27 +219,27 @@ namespace mineutils
 
 	/*-----------------------------------废弃代码----------------------------------*/
 	/*
-	string toStr(const char* s)
+	std::string toStr(const char* s)
 	{
 		return s;
 	}
 
-	string toStr(const char& c)
+	std::string toStr(const char& c)
 	{
-		string s;
+		std::string s;
 		s.push_back(c);
 		return s;
 	}
 
-	string toStr(const string& s)
+	std::string toStr(const std::string& s)
 	{
 		return s;
 	}
 
 	template<class T>
-	string toStr(const T& arg)
+	std::string toStr(const T& arg)
 	{
-		string s = std::to_string(arg);
+		std::string s = std::to_string(arg);
 		//去掉小数末尾的0
 		size_t point_pos = s.find(".");
 		if (point_pos != -1)

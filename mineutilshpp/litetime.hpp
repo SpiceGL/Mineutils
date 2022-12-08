@@ -1,18 +1,17 @@
 #pragma once
 //#pragma warning (disable: 4996)
 #include<chrono>
-#include<ctime>
-#include<iomanip>
-#include<sstream>
-#include<string>
 #include<thread>
 
 
 /*基于<chrono>库的简易计时函数封装*/
-namespace ltime
+namespace litetime
 {
-	/*当前时间(纳秒)*/
-	inline std::chrono::high_resolution_clock::time_point now()
+	using time_point = std::chrono::high_resolution_clock::time_point;
+	using duration = decltype(time_point() - time_point());
+
+	/*当前时间点(litetime::time_point)*/
+	inline time_point now()
 	{
 		return std::chrono::high_resolution_clock::now();
 	}
@@ -27,50 +26,26 @@ namespace ltime
 	//	return dt;
 	//}
 
-	/*封装“时间段(秒)”类*/
-	inline std::chrono::seconds s(const int& t)
-	{
-		return std::chrono::seconds(t);
-	}
-
-	/*封装“时间段(毫秒)”类*/
-	inline std::chrono::milliseconds ms(const int& t)
-	{
-		return std::chrono::milliseconds(t);
-	}
-
-	/*封装“时间段(微秒)”类*/
-	inline std::chrono::microseconds us(const int& t)
-	{
-		return std::chrono::microseconds(t);
-	}
-
-	/*封装“时间段(纳秒)”类*/
-	inline std::chrono::nanoseconds ns(const int& t)
-	{
-		return std::chrono::nanoseconds(t);
-	}
-
-	/*将“时间段(纳秒)”类型转化为以秒为单位的数字*/
-	inline long long count(const std::chrono::nanoseconds& t)
+	/*将“时间段(litetime::duration)”类型转化为以秒为单位的数字*/
+	inline long long s(const duration& t)
 	{
 		return std::chrono::duration_cast<std::chrono::seconds>(t).count();
 	}
 	
-	/*将“时间段(纳秒)”类型转化为以毫秒为单位的数字*/
-	inline long long mcount(const std::chrono::nanoseconds& t)
+	/*将“时间段(litetime::duration)”类型转化为以毫秒为单位的数字*/
+	inline long long ms(const duration& t)
 	{
 		return std::chrono::duration_cast<std::chrono::milliseconds>(t).count();
 	}
 
-	/*将“时间段(纳秒)”类型转化为以微秒为单位的数字*/
-	inline long long ucount(const std::chrono::nanoseconds& t)
+	/*将“时间段(litetime::duration)”类型转化为以微秒为单位的数字*/
+	inline long long us(const duration& t)
 	{
 		return std::chrono::duration_cast<std::chrono::microseconds>(t).count();
 	}
 
-	/*将“时间段(纳秒)”类型转化为以纳秒为单位的数字*/
-	inline long long ncount(const std::chrono::nanoseconds& t)
+	/*将“时间段(litetime::duration)”类型转化为以纳秒为单位的数字*/
+	inline long long ns(const duration& t)
 	{
 		return std::chrono::duration_cast<std::chrono::nanoseconds>(t).count();
 	}
@@ -99,3 +74,5 @@ namespace ltime
 		std::this_thread::sleep_for(std::chrono::nanoseconds(t));
 	}
 };
+
+namespace ltime = litetime;

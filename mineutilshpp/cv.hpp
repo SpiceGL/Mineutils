@@ -1,21 +1,18 @@
 #pragma once
 #include<string>
-
+#include<vector>
 #include<opencv2/opencv.hpp>
 #include<limits.h>
 #include<stdlib.h>
 
-#include"points.hpp"
 #include"str.hpp"
+#include"exception.hpp"
+#include"points.hpp"
+
 
 
 namespace mineutils
 {
-	using std::cout;
-	using std::endl;
-	using std::pair;
-	using std::string;
-
 	/*
 	#cv2.VideoWriter_fourcc('X', '2', '6', '4'), 该参数是较新的MPEG-4编码,产生的文件较小,文件扩展名应为.mp4
 	#cv2.VideoWriter_fourcc('P', 'I', 'M', 'I'), 该参数是较旧的MPEG-1编码,文件名后缀为.avi
@@ -30,29 +27,30 @@ namespace mineutils
 	#cv2.VideoWriter_fourcc('I', '4', '2', '0'),该参数是未压缩的YUV编码,4:2:0色度子采样,这种编码广泛兼容,但会产生特别大的文件,文件扩展名应为.avi ```
 	*/
 	/*------------------------------------声明-------------------------------------*/
-	string setWindowCV(const string& win_name, cv::Size size = { -1, -1 },
-		pair<int, int> position = { -1, -1 }, int flag = cv::WINDOW_FREERATIO);
 
-	int loopShowCV(const string& win_name, cv::Mat& img, float wait = 1);
+	std::string setWindowCV(const std::string& win_name, cv::Size size = { -1, -1 },
+		std::pair<int, int> position = { -1, -1 }, int flag = cv::WINDOW_FREERATIO);
 
-	void quickShowCV(const string& win_name, cv::Mat& img,
+	int loopShowCV(const std::string& win_name, cv::Mat& img, float wait = 1);
+
+	void quickShowCV(const std::string& win_name, cv::Mat& img,
 		float wait = 1, bool close = false, cv::Size size = { -1, -1 },
-		pair<int, int> position = { -1, -1 }, int flag = cv::WINDOW_FREERATIO);
+		std::pair<int, int> position = { -1, -1 }, int flag = cv::WINDOW_FREERATIO);
 
-	void quickPlayCV(const string& win_name, const string& video_path,
+	void quickPlayCV(const std::string& win_name, const std::string& video_path,
 		float wait = 30, cv::Size size = { -1, -1 },
-		pair<int, int> position = { -1, -1 }, int flag = cv::WINDOW_FREERATIO);
+		std::pair<int, int> position = { -1, -1 }, int flag = cv::WINDOW_FREERATIO);
 
-	void putLabelCV(cv::Mat& img, const string& label, cv::Point position, cv::Scalar text_color = { 255,255,255 },
+	void putLabelCV(cv::Mat& img, const std::string& label, cv::Point position, cv::Scalar text_color = { 255,255,255 },
 		int word_type = cv::FONT_HERSHEY_SIMPLEX, float word_scale = 1, int text_thickness = 2,
 		bool have_bg = true, cv::Scalar bg_color = {255, 0, 0});
 
-	void putBoxCV(cv::Mat& img, const LTRB& ltrb, const string& label = "",
+	void putBoxCV(cv::Mat& img, const LTRB& ltrb, const std::string& label = "",
 		cv::Scalar bbox_color = { 0,255,0 }, cv::Scalar text_color = { 255,255,255 },
 		int word_type = cv::FONT_HERSHEY_SIMPLEX, float word_scale = 1, 
 		int bbox_thickness = 3, int text_thickness = 2);
 
-	void putBoxCV(cv::Mat& img, XYWH xywh, const string& label = "",
+	void putBoxCV(cv::Mat& img, XYWH xywh, const std::string& label = "",
 		cv::Scalar bbox_color = { 0,255,0 }, cv::Scalar text_color = { 255,255,255 },
 		int word_type = cv::FONT_HERSHEY_SIMPLEX, float word_scale = 1, 
 		int bbox_thickness = 3, int text_thickness = 2);
@@ -60,7 +58,7 @@ namespace mineutils
 	template<class T>
 	void channelInit(cv::Mat& mat, cv::Point3_<T> channel_value = {0, 0, 0});
 
-	template<class Tx = pair<int, int>, class Ty = pair<int, int>, class Tc = pair<int, int>>
+	template<class Tx = std::pair<int, int>, class Ty = std::pair<int, int>, class Tc = std::pair<int, int>>
 	void printMat(const cv::Mat& img, Tx x_range = { 0, INT_MAX }, Ty y_range = { 0, INT_MAX }, Tc c_range = { 0, INT_MAX });
 
 	template<class MatT>
@@ -88,8 +86,8 @@ namespace mineutils
 	/*------------------------------------定义-------------------------------------*/
 	
 	
-	/*快速设置窗口属性*/
-	inline string setWindowCV(const string& win_name, cv::Size size, pair<int, int> position, int flag)
+	//快速设置窗口属性
+	inline std::string setWindowCV(const std::string& win_name, cv::Size size, std::pair<int, int> position, int flag)
 	{
 		cv::namedWindow(win_name, flag);
 		if (size.width != -1)
@@ -99,8 +97,8 @@ namespace mineutils
 		return win_name;
 	}
 
-	/*快速显示图像，窗口属性在函数外设置，推荐用于循环体中，返回键入的key值*/
-	inline int loopShowCV(const string& win_name, cv::Mat& img, float wait)
+	//快速显示图像，窗口属性在函数外设置，推荐用于循环体中，返回键入的key值
+	inline int loopShowCV(const std::string& win_name, cv::Mat& img, float wait)
 	{
 		cv::imshow(win_name, img);
 		int k = cv::waitKey(wait) & 0xff;
@@ -112,9 +110,9 @@ namespace mineutils
 	}
 
 
-	/*快速显示图像，一步到位设置窗口和显示属性*/
-	inline void quickShowCV(const string& win_name, cv::Mat& img, float wait, bool close,
-		cv::Size size, pair<int, int> position, int flag)
+	//快速显示图像，一步到位设置窗口和显示属性
+	inline void quickShowCV(const std::string& win_name, cv::Mat& img, float wait, bool close,
+		cv::Size size, std::pair<int, int> position, int flag)
 	{
 		using cs = ColorStr;
 		cv::namedWindow(win_name, flag);
@@ -128,15 +126,15 @@ namespace mineutils
 			cv::destroyWindow(win_name);
 	}
 
-	/*快速显示视频*/
-	inline void quickPlayCV(const string& win_name, const string& video_path, float wait,
-		cv::Size size, pair<int, int> position, int flag)
+	//快速显示视频
+	inline void quickPlayCV(const std::string& win_name, const std::string& video_path, float wait,
+		cv::Size size, std::pair<int, int> position, int flag)
 	{
 		using cs = ColorStr;
 		auto cap = cv::VideoCapture(video_path);
 		if (not cap.isOpened())
 		{
-			cout << cs::yellow(fstr("!Warning! {}: ", __func__)) << "视频文件打开失败，已跳过播放！" << endl;
+			std::cout << makeMessageE(__func__, "视频文件打开失败，已跳过播放！") << std::endl;
 			return;
 		}
 		setWindowCV(win_name, size, position, flag);
@@ -147,14 +145,14 @@ namespace mineutils
 			if (not ret)
 			{
 				cv::destroyWindow(win_name);
-				cout << cs::green(fstr("{}: ", __func__)) << "视频已播放结束。" << endl;
+				std::cout << makeMessageN(__func__, "视频已播放结束。") << std::endl;
 				break;
 			}
 			bool go_on = loopShowCV(win_name, frame, wait);
 			if (not go_on)
 			{
 				cv::destroyWindow(win_name);
-				cout << cs::yellow(fstr("!Warning! {}: ", __func__)) << "收到中止信号，提前结束视频播放！" << endl;
+				std::cout << makeMessageN(__func__, "收到中止信号，提前结束视频播放！")  << std::endl;
 				break;
 			}
 		}
@@ -163,8 +161,8 @@ namespace mineutils
 
 
 	/*---------------------------------------------------------------------------------*/
-	/*为图像添加文字*/
-	inline void putLabelCV(cv::Mat& img, const string& label, cv::Point position, cv::Scalar text_color,
+	//为图像添加文字
+	inline void putLabelCV(cv::Mat& img, const std::string& label, cv::Point position, cv::Scalar text_color,
 		int word_type, float word_scale, int text_thickness, bool have_bg, cv::Scalar bg_color)
 	{
 		/*	position：文字左下角位置 */
@@ -182,8 +180,8 @@ namespace mineutils
 		}
 	}
 
-	/*为图像添加检测框及标签*/
-	inline void putBoxCV(cv::Mat& img, const LTRB& ltrb, const string& label,
+	//为图像添加检测框及标签
+	inline void putBoxCV(cv::Mat& img, const LTRB& ltrb, const std::string& label,
 		cv::Scalar bbox_color, cv::Scalar text_color, int word_type, float word_scale, 
 		int bbox_thickness, int text_thickness)
 	{
@@ -207,7 +205,7 @@ namespace mineutils
 		}
 	}
 
-	inline void putBoxCV(cv::Mat& img, XYWH xywh, const string& label,
+	inline void putBoxCV(cv::Mat& img, XYWH xywh, const std::string& label,
 		cv::Scalar bbox_color, cv::Scalar text_color, int word_type, float word_scale,
 		int bbox_thickness, int text_thickness)
 	{
@@ -216,14 +214,13 @@ namespace mineutils
 			bbox_thickness, text_thickness);
 	}
 
-
-
 	/*---------------------------------------------------------------------------------*/
-	/*自定义3个通道的值*/
+
+	//自定义3个通道的值
 	template<class T>
 	inline void channelInit(cv::Mat& mat, cv::Point3_<T> channel_value)
 	{
-		vector<cv::Mat> ma_mb_mc;
+		std::vector<cv::Mat> ma_mb_mc;
 		cv::split(mat, ma_mb_mc);
 		ma_mb_mc[0] = channel_value.x;
 		ma_mb_mc[1] = channel_value.y;
@@ -232,7 +229,7 @@ namespace mineutils
 	}
 
 
-	/*显示cv::Mat的值*/
+	//显示cv::Mat的值
 	template<class Tx, class Ty, class Tc>
 	inline void printMat(const cv::Mat& img, Tx x_range, Ty y_range, Tc c_range)
 	{
@@ -245,7 +242,7 @@ namespace mineutils
 		CV_32F	5	13	21	29       float
 		CV_64F	6	14	22	30       double */
 		using cs = ColorStr;
-		using pt = pair<int, int>;
+		using pt = std::pair<int, int>;
 
 		pt x_norm_range = normRange(x_range, img.cols);
 		pt y_norm_range = normRange(y_range, img.rows);
@@ -269,7 +266,7 @@ namespace mineutils
 			_printCVMat<cv::Vec3f>(img, xstart, xend, ystart, yend, cstart, cend, false);
 		else if (img.type() == 22)
 			_printCVMat<cv::Vec3d>(img, xstart, xend, ystart, yend, cstart, cend, false);
-		else cout << cs::yellow(fstr("!Warning! {}: ", __func__)) << "该图像的cv::Mat::type()暂不支持，已跳过输出！" << endl;
+		else std::cout << makeMessageW(__func__, "该图像的cv::Mat::type()暂不支持，已跳过输出！")  << std::endl;
 	}
 
 
@@ -277,79 +274,79 @@ namespace mineutils
 	inline void _printCVMat(const cv::Mat& img, int xstart, int xend, int ystart, int yend, bool isInt)
 	{
 		using cs = ColorStr;
-		cout << "cv::Mat{";
+		std::cout << "cv::Mat{";
 		for (int y = ystart; y < yend; y++)
 		{
 			if (y == ystart)
-				cout << "[";
-			else cout << string(8, ' ') << "[";
+				std::cout << "[";
+			else std::cout << std::string(8, ' ') << "[";
 			auto* ptr = img.ptr<MatT>(y);
 			for (int x = xstart; x < xend; x++)
 			{
 				if (isInt)
 				{
-					cout << zfillInt(ptr[x], 3, ' ');
+					std::cout << zfillInt(ptr[x], 3, ' ');
 					if (x != xend - 1)
-						cout << " ";
+						std::cout << " ";
 				}
 				else
 				{
-					cout << zfillFlt(ptr[x], 3, 4, ' ', '0');
+					std::cout << zfillFlt(ptr[x], 3, 4, ' ', '0');
 					if (x != xend - 1)
-						cout << " ";
+						std::cout << " ";
 				}
 			}
 			if (y != yend - 1)
-				cout << "]" << endl;
-			else cout << "]";
+				std::cout << "]" << std::endl;
+			else std::cout << "]";
 		}
-		cout << "}";
+		std::cout << "}";
 	}
 
 	template<class cvVec>
 	inline void _printCVMat(const cv::Mat& img, int xstart, int xend, int ystart, int yend, int cstart, int cend, bool isInt)
 	{
 		using cs = ColorStr;
-		cout << "cv::Mat{";
+		std::cout << "cv::Mat{";
 		for (int y = ystart; y < yend; y++)
 		{
 			if (y == ystart)
-				cout << "[";
-			else cout << string(8, ' ') << "[";
+				std::cout << "[";
+			else std::cout << std::string(8, ' ') << "[";
 			auto* ptr = img.ptr<cvVec>(y);
 			for (int x = xstart; x < xend; x++)
 			{
-				cout << "(";
+				std::cout << "(";
 				for (int c = cstart; c < cend; c++)
 				{
 					if (isInt)
 					{
-						cout << zfillInt(ptr[x][c], 5, ' ');
+						std::cout << zfillInt(ptr[x][c], 5, ' ');
 						if (c != cend - 1)
-							cout << " ";
+							std::cout << " ";
 					}
 					else
 					{
-						cout << zfillFlt(ptr[x][c], 3, 4, ' ', '0');
+						std::cout << zfillFlt(ptr[x][c], 3, 4, ' ', '0');
 						if (c != cend - 1)
-							cout << " ";
+							std::cout << " ";
 					}
 				}
 				if (x != xend - 1)
-					cout << ") ";
-				else cout << ")";
+					std::cout << ") ";
+				else std::cout << ")";
 			}
 			if (y != yend - 1)
-				cout << "]" << endl;
-			else cout << "]";
+				std::cout << "]" << std::endl;
+			else std::cout << "]";
 		}
-		cout << "}";
+		std::cout << "}";
 	}
 
-
-	inline void _print(const cv::Mat& img)  //可能是opencv源码using了cv::print导致print(cv::Mat)被劫持
+	//可能是opencv源码using了cv::print导致print(cv::Mat)被劫持
+	inline void _print(const cv::Mat& img)  
 	{
-		cout << endl;
+		std::cout << std::endl;
 		printMat(img);
 	}
 
@@ -357,30 +354,30 @@ namespace mineutils
 	template<class T>
 	inline void _print(const cv::Point_<T>& pt)
 	{
-		cout << "(" << pt.x << ", " << pt.y << ")";
+		std::cout << "(" << pt.x << ", " << pt.y << ")";
 	}
 
 	template<class T>
 	inline void _print(const cv::Point3_<T>& pt)
 	{
-		cout << "(" << pt.x << ", " << pt.y << ", " << pt.z << ")";
+		std::cout << "(" << pt.x << ", " << pt.y << ", " << pt.z << ")";
 	}
 
 	template<class T>
 	inline void _print(const cv::Size_<T>& sz)
 	{
-		cout << "(" << sz.width << ", " << sz.height << ")";
+		std::cout << "(" << sz.width << ", " << sz.height << ")";
 	}
 
 	inline void _print(const cv::MatSize& sz)
 	{
-		cout << "(" << sz << ")";
+		std::cout << "(" << sz << ")";
 	}
 
 	template<class T>
 	inline void _print(const cv::Rect_<T>& rect)
 	{
-		cout << "(" << rect.x << " "
+		std::cout << "(" << rect.x << " "
 			<< rect.y << " "
 			<< rect.width << " "
 			<< rect.height << ")";
