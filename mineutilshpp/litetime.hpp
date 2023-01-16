@@ -7,11 +7,11 @@
 /*基于<chrono>库的简易计时函数封装*/
 namespace litetime
 {
-	using time_point = std::chrono::high_resolution_clock::time_point;
-	using duration = decltype(time_point() - time_point());
+	using TimePoint = std::chrono::high_resolution_clock::time_point;
+	using Duration = decltype(TimePoint() - TimePoint());
 
 	/*当前时间点(litetime::time_point)*/
-	inline time_point now()
+	inline TimePoint now()
 	{
 		return std::chrono::high_resolution_clock::now();
 	}
@@ -27,25 +27,25 @@ namespace litetime
 	//}
 
 	/*将“时间段(litetime::duration)”类型转化为以秒为单位的数字*/
-	inline long long s(const duration& t)
+	inline long long s(const Duration& t)
 	{
 		return std::chrono::duration_cast<std::chrono::seconds>(t).count();
 	}
 	
 	/*将“时间段(litetime::duration)”类型转化为以毫秒为单位的数字*/
-	inline long long ms(const duration& t)
+	inline long long ms(const Duration& t)
 	{
 		return std::chrono::duration_cast<std::chrono::milliseconds>(t).count();
 	}
 
 	/*将“时间段(litetime::duration)”类型转化为以微秒为单位的数字*/
-	inline long long us(const duration& t)
+	inline long long us(const Duration& t)
 	{
 		return std::chrono::duration_cast<std::chrono::microseconds>(t).count();
 	}
 
 	/*将“时间段(litetime::duration)”类型转化为以纳秒为单位的数字*/
-	inline long long ns(const duration& t)
+	inline long long ns(const Duration& t)
 	{
 		return std::chrono::duration_cast<std::chrono::nanoseconds>(t).count();
 	}

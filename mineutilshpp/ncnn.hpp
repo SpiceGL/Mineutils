@@ -107,7 +107,7 @@ namespace mineutils
 				std::cout << "]" << std::endl;
 			else std::cout << "]";
 		}
-		std::cout << "}" << std::endl;
+		std::cout << "}\n";
 	}
 
 	//std::ostream& operator<<(std::ostream& std::cout, ncnn::Mat& mat)
@@ -121,7 +121,7 @@ namespace mineutils
 		std::cout << "Mats{" << std::endl;
 		for (auto mat : mats)
 			printMat(mat);
-		std::cout << "}" << std::endl;
+		std::cout << "}\n";
 	}
 
 	inline void _print(const ncnn::Mat& m)

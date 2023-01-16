@@ -300,7 +300,7 @@ namespace mineutils
 				std::cout << "]" << std::endl;
 			else std::cout << "]";
 		}
-		std::cout << "}";
+		std::cout << "}\n";
 	}
 
 	template<class cvVec>
@@ -340,7 +340,7 @@ namespace mineutils
 				std::cout << "]" << std::endl;
 			else std::cout << "]";
 		}
-		std::cout << "}";
+		std::cout << "}\n";
 	}
 
 	//可能是opencv源码using了cv::print导致print(cv::Mat)被劫持
