@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include<exception>
 #include<iostream>
 #include<list>
@@ -15,7 +15,7 @@
 
 namespace mineutils
 {
-	/*-------------------------------------ÉùÃ÷--------------------------------------*/
+	/*-------------------------------------å£°æ˜--------------------------------------*/
 	template<class T, class... Args>
 	void print(const T& arg, const Args&... args);
 
@@ -58,15 +58,15 @@ namespace mineutils
 	template<class T, int N>
 	void _print(const T(&arr)[N]);
 
-	/*-------------------------------------¶¨Òå--------------------------------------*/
+	/*-------------------------------------å®šä¹‰--------------------------------------*/
 
 	/*
-		ÊµÏÖÀàËÆpythonµÄprintÊä³ö¡£
-		-Ö§³Öint¡¢float¡¢char¡¢std::stringµÈ»ù±¾ÀàĞÍÊı¾İµÄÊä³ö£»
-		-Ö§³Öint[]¡¢float[]µÈ»ù±¾¶àÎ¬Êı×éÀàĞÍÊı¾İµÄÊä³ö£»
-		-Ö§³Östd::vector¡¢std::tupleµÈ³£ÓÃSTLÈİÆ÷ÄÚÈİµÄÊä³ö£»
-		-Ö§³ÖÍâ²¿À©Õ¹¶ÔµÚÈı·½ÀàĞÍµÄÖ§³Ö£¨ÖØÔØ<<²Ù×÷»ò_print£©£»
-		-Warning£º´æÔÚÊäÈë·ÇÖ§³ÖÀàĞÍÊı¾İµÃµ½´íÎó½á¹ûµ«²»²úÉúÒì³£µÄ¿ÉÄÜ¡£
+		å®ç°ç±»ä¼¼pythonçš„printè¾“å‡ºã€‚
+		-æ”¯æŒintã€floatã€charã€std::stringç­‰åŸºæœ¬ç±»å‹æ•°æ®çš„è¾“å‡ºï¼›
+		-æ”¯æŒint[]ã€float[]ç­‰åŸºæœ¬å¤šç»´æ•°ç»„ç±»å‹æ•°æ®çš„è¾“å‡ºï¼›
+		-æ”¯æŒstd::vectorã€std::tupleç­‰å¸¸ç”¨STLå®¹å™¨å†…å®¹çš„è¾“å‡ºï¼›
+		-æ”¯æŒå¤–éƒ¨æ‰©å±•å¯¹ç¬¬ä¸‰æ–¹ç±»å‹çš„æ”¯æŒï¼ˆé‡è½½<<æ“ä½œæˆ–_printï¼‰ï¼›
+		-Warningï¼šå­˜åœ¨è¾“å…¥éæ”¯æŒç±»å‹æ•°æ®å¾—åˆ°é”™è¯¯ç»“æœä½†ä¸äº§ç”Ÿå¼‚å¸¸çš„å¯èƒ½ã€‚
 	*/
 	template<class T, class... Args>
 	inline void print(const T& arg, const Args&... args)
@@ -74,7 +74,7 @@ namespace mineutils
 		_print(arg);
 		std::cout << " ";
 		mineutils::print(args...);
-		//int _a[] = { (_print(args), std::cout << " ", 0)... };   //ÁíÒ»ÖÖĞ´·¨£¬µ«¿É¶ÁĞÔ²îÒ»Ğ©
+		//int _a[] = { (_print(args), std::cout << " ", 0)... };   //å¦ä¸€ç§å†™æ³•ï¼Œä½†å¯è¯»æ€§å·®ä¸€äº›
 	}
 
 	inline void print()
@@ -83,7 +83,7 @@ namespace mineutils
 	}
 
 	template<class T1, class T2>
-	inline void _print(const std::pair<T1, T2>& pa)  //Êä³östd::pairÀàĞÍ
+	inline void _print(const std::pair<T1, T2>& pa)  //è¾“å‡ºstd::pairç±»å‹
 	{
 		std::cout << "[";
 		_print(pa.first);
@@ -93,7 +93,7 @@ namespace mineutils
 	}
 
 	template<size_t Idx, class... Ts>
-	inline void _print(const std::tuple<Ts...>& tp)  //Êä³östd::tupleÀà
+	inline void _print(const std::tuple<Ts...>& tp)  //è¾“å‡ºstd::tupleç±»
 	{
 		const int size_tp = std::tuple_size<std::tuple<Ts...>>::value;
 		if (Idx == 0) 
@@ -128,7 +128,7 @@ namespace mineutils
 	}
 
 	template<class T1, class T2, class... Ts>
-	inline void _print(const std::map<T1, T2, Ts...>& m)  //Êä³östd::mapÀà
+	inline void _print(const std::map<T1, T2, Ts...>& m)  //è¾“å‡ºstd::mapç±»
 	{
 		std::cout << "{";
 		int size = m.size();
@@ -200,7 +200,7 @@ namespace mineutils
 	}
 
 	template<class T>
-	inline void _print(const T& arg)  //Êä³öint¡¢charºÍ×Ô¶¨ÒåÀàµÈÊı¾İÀàĞÍ
+	inline void _print(const T& arg)  //è¾“å‡ºintã€charå’Œè‡ªå®šä¹‰ç±»ç­‰æ•°æ®ç±»å‹
 	{
 		if (isInTypes<T, char, wchar_t>())
 			std::cout << arg;
@@ -208,7 +208,7 @@ namespace mineutils
 	}
 
 	template<class T, int N>
-	inline void _print(const T(&arr)[N])  //Êä³öint[]¡¢char[]µÈÊı×éÀàĞÍ
+	inline void _print(const T(&arr)[N])  //è¾“å‡ºint[]ã€char[]ç­‰æ•°ç»„ç±»å‹
 	{
 		if (isInTypes<T, char, wchar_t>())
 			std::cout << arr;

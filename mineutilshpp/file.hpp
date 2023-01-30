@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include<fstream>
 #include<iostream>
 #include<string>
@@ -7,14 +7,14 @@
 
 namespace mineutils
 {
-	/*	ios::app£º¡¡¡¡¡¡ //ÒÔ×·¼ÓµÄ·½Ê½´ò¿ªÎÄ¼ş
-		ios::ate£º¡¡¡¡¡¡ //ÎÄ¼ş´ò¿ªºó¶¨Î»µ½ÎÄ¼şÎ²£¬ios:app¾Í°üº¬ÓĞ´ËÊôĞÔ
-		ios::binary£º¡¡ //ÒÔ¶ş½øÖÆ·½Ê½´ò¿ªÎÄ¼ş£¬È±Ê¡µÄ·½Ê½ÊÇÎÄ±¾·½Ê½¡£Á½ÖÖ·½Ê½µÄÇø±ğ¼ûÇ°ÎÄ
-		ios::in£º¡¡¡¡¡¡  //ÎÄ¼şÒÔÊäÈë·½Ê½´ò¿ª£¨ÎÄ¼şÊı¾İÊäÈëµ½ÄÚ´æ£©
-		ios::out£º¡¡¡¡¡¡ //ÎÄ¼şÒÔÊä³ö·½Ê½´ò¿ª£¨ÄÚ´æÊı¾İÊä³öµ½ÎÄ¼ş£©
-		ios::nocreate£º //²»½¨Á¢ÎÄ¼ş£¬ËùÒÔÎÄ¼ş²»´æÔÚÊ±´ò¿ªÊ§°Ü
-		ios::noreplace£º//²»¸²¸ÇÎÄ¼ş£¬ËùÒÔ´ò¿ªÎÄ¼şÊ±Èç¹ûÎÄ¼ş´æÔÚÊ§°Ü
-		ios::trunc£º¡¡  //Èç¹ûÎÄ¼ş´æÔÚ£¬°ÑÎÄ¼ş³¤¶ÈÉèÎª0
+	/*	ios::appï¼šã€€ã€€ã€€ //ä»¥è¿½åŠ çš„æ–¹å¼æ‰“å¼€æ–‡ä»¶
+		ios::ateï¼šã€€ã€€ã€€ //æ–‡ä»¶æ‰“å¼€åå®šä½åˆ°æ–‡ä»¶å°¾ï¼Œios:appå°±åŒ…å«æœ‰æ­¤å±æ€§
+		ios::binaryï¼šã€€ //ä»¥äºŒè¿›åˆ¶æ–¹å¼æ‰“å¼€æ–‡ä»¶ï¼Œç¼ºçœçš„æ–¹å¼æ˜¯æ–‡æœ¬æ–¹å¼ã€‚ä¸¤ç§æ–¹å¼çš„åŒºåˆ«è§å‰æ–‡
+		ios::inï¼šã€€ã€€ã€€  //æ–‡ä»¶ä»¥è¾“å…¥æ–¹å¼æ‰“å¼€ï¼ˆæ–‡ä»¶æ•°æ®è¾“å…¥åˆ°å†…å­˜ï¼‰
+		ios::outï¼šã€€ã€€ã€€ //æ–‡ä»¶ä»¥è¾“å‡ºæ–¹å¼æ‰“å¼€ï¼ˆå†…å­˜æ•°æ®è¾“å‡ºåˆ°æ–‡ä»¶ï¼‰
+		ios::nocreateï¼š //ä¸å»ºç«‹æ–‡ä»¶ï¼Œæ‰€ä»¥æ–‡ä»¶ä¸å­˜åœ¨æ—¶æ‰“å¼€å¤±è´¥
+		ios::noreplaceï¼š//ä¸è¦†ç›–æ–‡ä»¶ï¼Œæ‰€ä»¥æ‰“å¼€æ–‡ä»¶æ—¶å¦‚æœæ–‡ä»¶å­˜åœ¨å¤±è´¥
+		ios::truncï¼šã€€  //å¦‚æœæ–‡ä»¶å­˜åœ¨ï¼ŒæŠŠæ–‡ä»¶é•¿åº¦è®¾ä¸º0
 	*/
 	class IniFile
 	{
@@ -31,25 +31,25 @@ namespace mineutils
 		IniFile(const IniFile& file) = delete;
 		IniFile& operator=(const IniFile& file) = delete;
 
-		//´ò¿ªiniÎÄ¼ş
+		//æ‰“å¼€iniæ–‡ä»¶
 		bool open()   
 		{
 			if (file.is_open())
 			{
-				printf("IniFile: ÎÄ¼şÒÑ±»´ò¿ª");
+				printf("IniFile: æ–‡ä»¶å·²è¢«æ‰“å¼€");
 				file.close();
 			}
 			file.open(file_path, std::ios::binary | std::ios::in);
 			if (!file.is_open())
 			{
-				std::cout << makeMessageW("IniFile", __func__, "ÎÄ¼ş´ò¿ªÊ§°Ü£¬Çë¼ì²éÎÄ¼şÊÇ·ñ±»Õ¼ÓÃ»òÂ·¾¶ÊÇ·ñ´æÔÚ£¡\n");
+				std::cout << makeMessageW("IniFile", __func__, "æ–‡ä»¶æ‰“å¼€å¤±è´¥ï¼Œè¯·æ£€æŸ¥æ–‡ä»¶æ˜¯å¦è¢«å ç”¨æˆ–è·¯å¾„æ˜¯å¦å­˜åœ¨ï¼\n");
 				return false;
 			}
 			else
 			{
 				std::string line;
 				content.clear();
-				while (file.good())   //°´ĞĞ¶ÁÈ¡ÄÚÈİ£¬²¢È¥µô\rºÍ\n·ûºÅ
+				while (file.good())   //æŒ‰è¡Œè¯»å–å†…å®¹ï¼Œå¹¶å»æ‰\rå’Œ\nç¬¦å·
 				{
 					line.clear();
 					std::getline(file, line);
@@ -64,7 +64,7 @@ namespace mineutils
 			}
 		}
 
-		//¹Ø±Õ²¢±£´æ
+		//å…³é—­å¹¶ä¿å­˜
 		void close()
 		{
 			if (rwstatus == 'w')
@@ -90,12 +90,12 @@ namespace mineutils
 				}
 				else
 				{
-					std::cout << makeMessageW("IniFile", __func__, "key=" + key + "²»´æÔÚ£¡\n");
+					std::cout << makeMessageW("IniFile", __func__, "key=" + key + "ä¸å­˜åœ¨ï¼\n");
 				}
 			}
 			else
 			{
-				std::cout << makeMessageW("IniFile", __func__, "section=" + section + "²»´æÔÚ£¡\n");
+				std::cout << makeMessageW("IniFile", __func__, "section=" + section + "ä¸å­˜åœ¨ï¼\n");
 			}
 			file.seekg(0);
 			return value;
@@ -133,7 +133,7 @@ namespace mineutils
 		std::vector<std::string> content;
 		const std::vector<std::string> note_signs = {";", "#", "//"};
 
-		/*²éÕÒsectionËùÔÚÎ»ÖÃ£¬Î´ÕÒµ½Ôò·µ»Ø-1*/
+		/*æŸ¥æ‰¾sectionæ‰€åœ¨ä½ç½®ï¼Œæœªæ‰¾åˆ°åˆ™è¿”å›-1*/
 		int findSection(const std::string& section) const
 		{
 			for (int i = 0; i < content.size(); ++i)
@@ -144,7 +144,7 @@ namespace mineutils
 			return -1;
 		}
 
-		/*²éÕÒkeyËùÔÚÎ»ÖÃ£¬Î´ÕÒµ½Ôò·µ»Ø-1*/
+		/*æŸ¥æ‰¾keyæ‰€åœ¨ä½ç½®ï¼Œæœªæ‰¾åˆ°åˆ™è¿”å›-1*/
 		int findKey(int& section_start, const std::string& key) const
 		{
 			if (section_start >= 0)
@@ -163,7 +163,7 @@ namespace mineutils
 			return -1;
 		}
 
-		///*²éÕÒkeyËùÔÚÎ»ÖÃ£¬Î´ÕÒµ½Ôò·µ»Ø-1*/
+		///*æŸ¥æ‰¾keyæ‰€åœ¨ä½ç½®ï¼Œæœªæ‰¾åˆ°åˆ™è¿”å›-1*/
 		//int findKey(const std::string& section, const std::string& key) const
 		//{
 		//	int section_start = findSection(section);
@@ -172,7 +172,7 @@ namespace mineutils
 		//	else return -1;
 		//}
 
-		/*²éÕÒSectionµÄ×îºóÒ»ĞĞµÄÏÂÒ»ĞĞËùÔÚÎ»ÖÃ£¬Î´ÕÒµ½Ôò·µ»Ø-1*/
+		/*æŸ¥æ‰¾Sectionçš„æœ€åä¸€è¡Œçš„ä¸‹ä¸€è¡Œæ‰€åœ¨ä½ç½®ï¼Œæœªæ‰¾åˆ°åˆ™è¿”å›-1*/
 		int findSectionEnd(const int& section_start) const
 		{
 			for (int i = section_start + 1; i < content.size(); ++i)
@@ -194,7 +194,7 @@ namespace mineutils
 			return -1;
 		}
 
-		/*²éÕÒSectionµÄ×îºóÒ»ĞĞµÄÏÂÒ»ĞĞËùÔÚÎ»ÖÃ£¬Î´ÕÒµ½Ôò·µ»Ø-1*/
+		/*æŸ¥æ‰¾Sectionçš„æœ€åä¸€è¡Œçš„ä¸‹ä¸€è¡Œæ‰€åœ¨ä½ç½®ï¼Œæœªæ‰¾åˆ°åˆ™è¿”å›-1*/
 		int findSectionEnd(const std::string& section) const
 		{
 			int section_start = findSection(section);

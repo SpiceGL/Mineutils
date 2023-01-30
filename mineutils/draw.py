@@ -121,6 +121,7 @@ class PixelMarker:
             cv2.putText(img_drawn, str(xy), (text_x, text_y), cv2.FONT_HERSHEY_DUPLEX, 0.5, (255, 255, 255),
                         thickness=1)
         cv2.imshow(self.title, img_drawn)
+
         
     def _setTextPosition(self, point):
         x, y = point

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include<limits.h>
 #include<stdlib.h>
 #include"str.hpp"
@@ -7,10 +7,10 @@
 
 namespace mineutils
 {
-    /*------------------------------------ÉùÃ÷-------------------------------------*/
+    /*------------------------------------å£°æ˜Ž-------------------------------------*/
 
 
-	/*------------------------------------¶¨Òå-------------------------------------*/
+	/*------------------------------------å®šä¹‰-------------------------------------*/
 #define ALLIDX { 0, INT_MAX }
 	
 	
@@ -25,7 +25,7 @@ namespace mineutils
 			normal_idx = idx + len;
 		else
 		{
-			std::cout << makeMessageW(__func__, fstr("idx={}³¬³öË÷Òý·¶Î§£¡", idx)) << std::endl;
+			std::cout << makeMessageW(__func__, fstr("idx={}è¶…å‡ºç´¢å¼•èŒƒå›´ï¼", idx)) << std::endl;
 			return -1;
 		}
 		return normal_idx;
@@ -56,7 +56,7 @@ namespace mineutils
 			dst_start = idx + len, dst_end = idx + len + 1;
 		else
 		{
-			std::cout << makeMessageW(__func__, fstr("idx={}³¬³öË÷Òý·¶Î§£¡", idx)) << std::endl;
+			std::cout << makeMessageW(__func__, fstr("idx={}è¶…å‡ºç´¢å¼•èŒƒå›´ï¼", idx)) << std::endl;
 			return {-1, -1};
 		}
 		return { dst_start, dst_end };

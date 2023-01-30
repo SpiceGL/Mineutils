@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include<tuple>
 
 namespace Sign
@@ -17,7 +17,7 @@ namespace Sign
 	static std::tuple<CaseTag0, CaseTag1> BOOL_TAGS = _creat_BOOL_TAGS();
 
 
-//·ÏÆú´úÂë
+//Â·ÃÃ†ÃºÂ´ÃºÃ‚Ã«
 /*	class CaseTag0;
 	class CaseTag1;
 

@@ -1,16 +1,16 @@
-#pragma once
+ï»¿#pragma once
 //#pragma warning (disable: 4996)
 #include<chrono>
 #include<thread>
 
 
-/*»ùÓÚ<chrono>¿âµÄ¼òÒ×¼ÆÊ±º¯Êı·â×°*/
+/*åŸºäº<chrono>åº“çš„ç®€æ˜“è®¡æ—¶å‡½æ•°å°è£…*/
 namespace litetime
 {
 	using TimePoint = std::chrono::high_resolution_clock::time_point;
 	using Duration = decltype(TimePoint() - TimePoint());
 
-	/*µ±Ç°Ê±¼äµã(litetime::time_point)*/
+	/*å½“å‰æ—¶é—´ç‚¹(litetime::time_point)*/
 	inline TimePoint now()
 	{
 		return std::chrono::high_resolution_clock::now();
@@ -26,49 +26,49 @@ namespace litetime
 	//	return dt;
 	//}
 
-	/*½«¡°Ê±¼ä¶Î(litetime::duration)¡±ÀàĞÍ×ª»¯ÎªÒÔÃëÎªµ¥Î»µÄÊı×Ö*/
+	/*å°†â€œæ—¶é—´æ®µ(litetime::duration)â€ç±»å‹è½¬åŒ–ä¸ºä»¥ç§’ä¸ºå•ä½çš„æ•°å­—*/
 	inline long long s(const Duration& t)
 	{
 		return std::chrono::duration_cast<std::chrono::seconds>(t).count();
 	}
 	
-	/*½«¡°Ê±¼ä¶Î(litetime::duration)¡±ÀàĞÍ×ª»¯ÎªÒÔºÁÃëÎªµ¥Î»µÄÊı×Ö*/
+	/*å°†â€œæ—¶é—´æ®µ(litetime::duration)â€ç±»å‹è½¬åŒ–ä¸ºä»¥æ¯«ç§’ä¸ºå•ä½çš„æ•°å­—*/
 	inline long long ms(const Duration& t)
 	{
 		return std::chrono::duration_cast<std::chrono::milliseconds>(t).count();
 	}
 
-	/*½«¡°Ê±¼ä¶Î(litetime::duration)¡±ÀàĞÍ×ª»¯ÎªÒÔÎ¢ÃëÎªµ¥Î»µÄÊı×Ö*/
+	/*å°†â€œæ—¶é—´æ®µ(litetime::duration)â€ç±»å‹è½¬åŒ–ä¸ºä»¥å¾®ç§’ä¸ºå•ä½çš„æ•°å­—*/
 	inline long long us(const Duration& t)
 	{
 		return std::chrono::duration_cast<std::chrono::microseconds>(t).count();
 	}
 
-	/*½«¡°Ê±¼ä¶Î(litetime::duration)¡±ÀàĞÍ×ª»¯ÎªÒÔÄÉÃëÎªµ¥Î»µÄÊı×Ö*/
+	/*å°†â€œæ—¶é—´æ®µ(litetime::duration)â€ç±»å‹è½¬åŒ–ä¸ºä»¥çº³ç§’ä¸ºå•ä½çš„æ•°å­—*/
 	inline long long ns(const Duration& t)
 	{
 		return std::chrono::duration_cast<std::chrono::nanoseconds>(t).count();
 	}
 
-	/*½ø³ÌĞİÃß(Ãë)*/
+	/*è¿›ç¨‹ä¼‘çœ (ç§’)*/
 	inline void sleep(const int& t)
 	{
 		std::this_thread::sleep_for(std::chrono::seconds(t));
 	}
 
-	/*½ø³ÌĞİÃß(ºÁÃë)*/
+	/*è¿›ç¨‹ä¼‘çœ (æ¯«ç§’)*/
 	inline void msleep(const int& t)
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(t));
 	}
 
-	/*½ø³ÌĞİÃß(Î¢Ãë)*/
+	/*è¿›ç¨‹ä¼‘çœ (å¾®ç§’)*/
 	inline void usleep(const int& t)
 	{
 		std::this_thread::sleep_for(std::chrono::microseconds(t));
 	}
 
-	/*½ø³ÌĞİÃß(ÄÉÃë)*/
+	/*è¿›ç¨‹ä¼‘çœ (çº³ç§’)*/
 	inline void nsleep(const int& t)
 	{
 		std::this_thread::sleep_for(std::chrono::nanoseconds(t));

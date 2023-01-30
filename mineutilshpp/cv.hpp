@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include<string>
 #include<vector>
 #include<opencv2/opencv.hpp>
@@ -14,19 +14,19 @@
 namespace mineutils
 {
 	/*
-	#cv2.VideoWriter_fourcc('X', '2', '6', '4'), ¸Ã²ÎÊıÊÇ½ÏĞÂµÄMPEG-4±àÂë,²úÉúµÄÎÄ¼ş½ÏĞ¡,ÎÄ¼şÀ©Õ¹ÃûÓ¦Îª.mp4
-	#cv2.VideoWriter_fourcc('P', 'I', 'M', 'I'), ¸Ã²ÎÊıÊÇ½Ï¾ÉµÄMPEG-1±àÂë,ÎÄ¼şÃûºó×ºÎª.avi
-	#cv2.VideoWriter_fourcc('M', 'P', '4', '2'), ¸Ã²ÎÊıÊÇMPEG-2±àÂë,²úÉúµÄÎÄ¼ş²»»áÌØ±ğ´ó,ÎÄ¼şÃûºó×ºÎª.avi
-	#cv2.VideoWriter_fourcc('D', 'I', 'V', '3'), ¸Ã²ÎÊıÊÇMPEG-3±àÂë,²úÉúµÄÎÄ¼ş²»»áÌØ±ğ´ó,ÎÄ¼şÃûºó×ºÎª.avi
-	#cv2.VideoWriter_fourcc('D', 'I', 'V', 'X'), ¸Ã²ÎÊıÊÇMPEG-4±àÂë,²úÉúµÄÎÄ¼ş²»»áÌØ±ğ´ó,ÎÄ¼şÃûºó×ºÎª.avi
-	#cv2.VideoWriter_fourcc('X', 'V', 'I', 'D'), ¸Ã²ÎÊıÊÇ½Ï¾ÉµÄMPEG-4±àÂë,²úÉúµÄÎÄ¼ş²»»áÌØ±ğ´ó,ÎÄ¼şÃûºó×ºÎª.avi
-	#cv2.VideoWriter_fourcc('M', 'P', '4', 'V'), ¸Ã²ÎÊıÒ²ÊÇ½Ï¾ÉµÄMPEG-4±àÂë,²úÉúµÄÎÄ¼ş²»»áÌØ±ğ´ó,ÎÄ¼şÀ©Õ¹ÃûÓ¦Îª.m4v
-	#cv2.VideoWriter_fourcc('T', 'H', 'E', 'O'), ¸Ã²ÎÊıÊÇOgg Vorbis,²úÉúµÄÎÄ¼şÏà¶Ô½Ï´ó,ÎÄ¼şÃûºó×ºÎª.ogv
-	#cv2.VideoWriter_fourcc('F', 'L', 'V', '1'), ¸Ã²ÎÊıÊÇFlashÊÓÆµ,²úÉúµÄÎÄ¼şÏà¶Ô½Ï´ó,ÎÄ¼şÃûºó×ºÎª.flv
-	#cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), ¸Ã²ÎÊıÊÇmotion-jpeg±àÂë,²úÉúµÄÎÄ¼ş½Ï´ó,ÎÄ¼şÃûºó×ºÎª.avi
-	#cv2.VideoWriter_fourcc('I', '4', '2', '0'),¸Ã²ÎÊıÊÇÎ´Ñ¹ËõµÄYUV±àÂë,4:2:0É«¶È×Ó²ÉÑù,ÕâÖÖ±àÂë¹ã·º¼æÈİ,µ«»á²úÉúÌØ±ğ´óµÄÎÄ¼ş,ÎÄ¼şÀ©Õ¹ÃûÓ¦Îª.avi ```
+	#cv2.VideoWriter_fourcc('X', '2', '6', '4'), è¯¥å‚æ•°æ˜¯è¾ƒæ–°çš„MPEG-4ç¼–ç ,äº§ç”Ÿçš„æ–‡ä»¶è¾ƒå°,æ–‡ä»¶æ‰©å±•ååº”ä¸º.mp4
+	#cv2.VideoWriter_fourcc('P', 'I', 'M', 'I'), è¯¥å‚æ•°æ˜¯è¾ƒæ—§çš„MPEG-1ç¼–ç ,æ–‡ä»¶ååç¼€ä¸º.avi
+	#cv2.VideoWriter_fourcc('M', 'P', '4', '2'), è¯¥å‚æ•°æ˜¯MPEG-2ç¼–ç ,äº§ç”Ÿçš„æ–‡ä»¶ä¸ä¼šç‰¹åˆ«å¤§,æ–‡ä»¶ååç¼€ä¸º.avi
+	#cv2.VideoWriter_fourcc('D', 'I', 'V', '3'), è¯¥å‚æ•°æ˜¯MPEG-3ç¼–ç ,äº§ç”Ÿçš„æ–‡ä»¶ä¸ä¼šç‰¹åˆ«å¤§,æ–‡ä»¶ååç¼€ä¸º.avi
+	#cv2.VideoWriter_fourcc('D', 'I', 'V', 'X'), è¯¥å‚æ•°æ˜¯MPEG-4ç¼–ç ,äº§ç”Ÿçš„æ–‡ä»¶ä¸ä¼šç‰¹åˆ«å¤§,æ–‡ä»¶ååç¼€ä¸º.avi
+	#cv2.VideoWriter_fourcc('X', 'V', 'I', 'D'), è¯¥å‚æ•°æ˜¯è¾ƒæ—§çš„MPEG-4ç¼–ç ,äº§ç”Ÿçš„æ–‡ä»¶ä¸ä¼šç‰¹åˆ«å¤§,æ–‡ä»¶ååç¼€ä¸º.avi
+	#cv2.VideoWriter_fourcc('M', 'P', '4', 'V'), è¯¥å‚æ•°ä¹Ÿæ˜¯è¾ƒæ—§çš„MPEG-4ç¼–ç ,äº§ç”Ÿçš„æ–‡ä»¶ä¸ä¼šç‰¹åˆ«å¤§,æ–‡ä»¶æ‰©å±•ååº”ä¸º.m4v
+	#cv2.VideoWriter_fourcc('T', 'H', 'E', 'O'), è¯¥å‚æ•°æ˜¯Ogg Vorbis,äº§ç”Ÿçš„æ–‡ä»¶ç›¸å¯¹è¾ƒå¤§,æ–‡ä»¶ååç¼€ä¸º.ogv
+	#cv2.VideoWriter_fourcc('F', 'L', 'V', '1'), è¯¥å‚æ•°æ˜¯Flashè§†é¢‘,äº§ç”Ÿçš„æ–‡ä»¶ç›¸å¯¹è¾ƒå¤§,æ–‡ä»¶ååç¼€ä¸º.flv
+	#cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), è¯¥å‚æ•°æ˜¯motion-jpegç¼–ç ,äº§ç”Ÿçš„æ–‡ä»¶è¾ƒå¤§,æ–‡ä»¶ååç¼€ä¸º.avi
+	#cv2.VideoWriter_fourcc('I', '4', '2', '0'),è¯¥å‚æ•°æ˜¯æœªå‹ç¼©çš„YUVç¼–ç ,4:2:0è‰²åº¦å­é‡‡æ ·,è¿™ç§ç¼–ç å¹¿æ³›å…¼å®¹,ä½†ä¼šäº§ç”Ÿç‰¹åˆ«å¤§çš„æ–‡ä»¶,æ–‡ä»¶æ‰©å±•ååº”ä¸º.avi ```
 	*/
-	/*------------------------------------ÉùÃ÷-------------------------------------*/
+	/*------------------------------------å£°æ˜-------------------------------------*/
 
 	std::string setWindowCV(const std::string& win_name, cv::Size size = { -1, -1 },
 		std::pair<int, int> position = { -1, -1 }, int flag = cv::WINDOW_FREERATIO);
@@ -83,10 +83,10 @@ namespace mineutils
 	template<class T>
 	void _print(const cv::Rect_<T>& rect);
 
-	/*------------------------------------¶¨Òå-------------------------------------*/
+	/*------------------------------------å®šä¹‰-------------------------------------*/
 	
 	
-	//¿ìËÙÉèÖÃ´°¿ÚÊôĞÔ
+	//å¿«é€Ÿè®¾ç½®çª—å£å±æ€§
 	inline std::string setWindowCV(const std::string& win_name, cv::Size size, std::pair<int, int> position, int flag)
 	{
 		cv::namedWindow(win_name, flag);
@@ -97,7 +97,7 @@ namespace mineutils
 		return win_name;
 	}
 
-	//¿ìËÙÏÔÊ¾Í¼Ïñ£¬´°¿ÚÊôĞÔÔÚº¯ÊıÍâÉèÖÃ£¬ÍÆ¼öÓÃÓÚÑ­»·ÌåÖĞ£¬·µ»Ø¼üÈëµÄkeyÖµ
+	//å¿«é€Ÿæ˜¾ç¤ºå›¾åƒï¼Œçª—å£å±æ€§åœ¨å‡½æ•°å¤–è®¾ç½®ï¼Œæ¨èç”¨äºå¾ªç¯ä½“ä¸­ï¼Œè¿”å›é”®å…¥çš„keyå€¼
 	inline int loopShowCV(const std::string& win_name, cv::Mat& img, float wait)
 	{
 		cv::imshow(win_name, img);
@@ -110,7 +110,7 @@ namespace mineutils
 	}
 
 
-	//¿ìËÙÏÔÊ¾Í¼Ïñ£¬Ò»²½µ½Î»ÉèÖÃ´°¿ÚºÍÏÔÊ¾ÊôĞÔ
+	//å¿«é€Ÿæ˜¾ç¤ºå›¾åƒï¼Œä¸€æ­¥åˆ°ä½è®¾ç½®çª—å£å’Œæ˜¾ç¤ºå±æ€§
 	inline void quickShowCV(const std::string& win_name, cv::Mat& img, float wait, bool close,
 		cv::Size size, std::pair<int, int> position, int flag)
 	{
@@ -126,7 +126,7 @@ namespace mineutils
 			cv::destroyWindow(win_name);
 	}
 
-	//¿ìËÙÏÔÊ¾ÊÓÆµ
+	//å¿«é€Ÿæ˜¾ç¤ºè§†é¢‘
 	inline void quickPlayCV(const std::string& win_name, const std::string& video_path, float wait,
 		cv::Size size, std::pair<int, int> position, int flag)
 	{
@@ -134,7 +134,7 @@ namespace mineutils
 		auto cap = cv::VideoCapture(video_path);
 		if (not cap.isOpened())
 		{
-			std::cout << makeMessageE(__func__, "ÊÓÆµÎÄ¼ş´ò¿ªÊ§°Ü£¬ÒÑÌø¹ı²¥·Å£¡") << std::endl;
+			std::cout << makeMessageE(__func__, "è§†é¢‘æ–‡ä»¶æ‰“å¼€å¤±è´¥ï¼Œå·²è·³è¿‡æ’­æ”¾ï¼") << std::endl;
 			return;
 		}
 		setWindowCV(win_name, size, position, flag);
@@ -145,14 +145,14 @@ namespace mineutils
 			if (not ret)
 			{
 				cv::destroyWindow(win_name);
-				std::cout << makeMessageN(__func__, "ÊÓÆµÒÑ²¥·Å½áÊø¡£") << std::endl;
+				std::cout << makeMessageN(__func__, "è§†é¢‘å·²æ’­æ”¾ç»“æŸã€‚") << std::endl;
 				break;
 			}
 			bool go_on = loopShowCV(win_name, frame, wait);
 			if (not go_on)
 			{
 				cv::destroyWindow(win_name);
-				std::cout << makeMessageN(__func__, "ÊÕµ½ÖĞÖ¹ĞÅºÅ£¬ÌáÇ°½áÊøÊÓÆµ²¥·Å£¡")  << std::endl;
+				std::cout << makeMessageN(__func__, "æ”¶åˆ°ä¸­æ­¢ä¿¡å·ï¼Œæå‰ç»“æŸè§†é¢‘æ’­æ”¾ï¼")  << std::endl;
 				break;
 			}
 		}
@@ -161,11 +161,11 @@ namespace mineutils
 
 
 	/*---------------------------------------------------------------------------------*/
-	//ÎªÍ¼ÏñÌí¼ÓÎÄ×Ö
+	//ä¸ºå›¾åƒæ·»åŠ æ–‡å­—
 	inline void putLabelCV(cv::Mat& img, const std::string& label, cv::Point position, cv::Scalar text_color,
 		int word_type, float word_scale, int text_thickness, bool have_bg, cv::Scalar bg_color)
 	{
-		/*	position£ºÎÄ×Ö×óÏÂ½ÇÎ»ÖÃ */
+		/*	positionï¼šæ–‡å­—å·¦ä¸‹è§’ä½ç½® */
 		if (label.size() != 0)
 		{
 			cv::Point& c1 = position;
@@ -180,7 +180,7 @@ namespace mineutils
 		}
 	}
 
-	//ÎªÍ¼ÏñÌí¼Ó¼ì²â¿ò¼°±êÇ©
+	//ä¸ºå›¾åƒæ·»åŠ æ£€æµ‹æ¡†åŠæ ‡ç­¾
 	inline void putBoxCV(cv::Mat& img, const LTRB& ltrb, const std::string& label,
 		cv::Scalar bbox_color, cv::Scalar text_color, int word_type, float word_scale, 
 		int bbox_thickness, int text_thickness)
@@ -216,7 +216,7 @@ namespace mineutils
 
 	/*---------------------------------------------------------------------------------*/
 
-	//×Ô¶¨Òå3¸öÍ¨µÀµÄÖµ
+	//è‡ªå®šä¹‰3ä¸ªé€šé“çš„å€¼
 	template<class T>
 	inline void channelInit(cv::Mat& mat, cv::Point3_<T> channel_value)
 	{
@@ -229,7 +229,7 @@ namespace mineutils
 	}
 
 
-	//ÏÔÊ¾cv::MatµÄÖµ
+	//æ˜¾ç¤ºcv::Matçš„å€¼
 	template<class Tx, class Ty, class Tc>
 	inline void printMat(const cv::Mat& img, Tx x_range, Ty y_range, Tc c_range)
 	{
@@ -266,7 +266,7 @@ namespace mineutils
 			_printCVMat<cv::Vec3f>(img, xstart, xend, ystart, yend, cstart, cend, false);
 		else if (img.type() == 22)
 			_printCVMat<cv::Vec3d>(img, xstart, xend, ystart, yend, cstart, cend, false);
-		else std::cout << makeMessageW(__func__, "¸ÃÍ¼ÏñµÄcv::Mat::type()Ôİ²»Ö§³Ö£¬ÒÑÌø¹ıÊä³ö£¡")  << std::endl;
+		else std::cout << makeMessageW(__func__, "è¯¥å›¾åƒçš„cv::Mat::type()æš‚ä¸æ”¯æŒï¼Œå·²è·³è¿‡è¾“å‡ºï¼")  << std::endl;
 	}
 
 
@@ -343,7 +343,7 @@ namespace mineutils
 		std::cout << "}\n";
 	}
 
-	//¿ÉÄÜÊÇopencvÔ´ÂëusingÁËcv::printµ¼ÖÂprint(cv::Mat)±»½Ù³Ö
+	//å¯èƒ½æ˜¯opencvæºç usingäº†cv::printå¯¼è‡´print(cv::Mat)è¢«åŠ«æŒ
 	inline void _print(const cv::Mat& img)  
 	{
 		std::cout << std::endl;

@@ -1,4 +1,4 @@
-//base
+ï»¿//base
 #pragma once
 #include<type_traits>
 
@@ -7,7 +7,7 @@
 
 namespace mineutils
 {
-/*--------------------------------------------ÉùÃ÷----------------------------------------------*/
+/*--------------------------------------------å£°æ˜----------------------------------------------*/
 	template<class T1, class T2, class ...Ts>
 	bool isSameType();
 
@@ -29,15 +29,15 @@ namespace mineutils
 	template<class T, class T1>
 	bool _isInTypes(Sign::CaseTag0 tag);
 
-/*--------------------------------------------¶¨Òå----------------------------------------------*/
+/*--------------------------------------------å®šä¹‰----------------------------------------------*/
 
 	
 	/*
-		ÓÃÓÚÅĞ¶ÏÀàĞÍÊÇ²»ÊÇÏàÍ¬ÀàĞÍ¡£
-		-¸¸ÀàºÍ×ÓÀà²»ÊÇÏàÍ¬ÀàĞÍ;
-		-±È½ÏÀàĞÍÊ±ºöÂÔconstºÍ&ĞŞÊÎ£¬ºöÂÔÍ¬ÀàĞÍÊı×éµÄ³¤¶È²»Í¬£»
-			-intºÍconst intÅĞ¶ÏÏàÍ¬£¬µ«int[]ºÍconst int[]ÅĞ¶Ï²»Í¬£»
-			-Éæ¼°Ö¸ÕëµÄÊ±ºòºöÂÔ²»ÁËconst¡£
+		ç”¨äºåˆ¤æ–­ç±»å‹æ˜¯ä¸æ˜¯ç›¸åŒç±»å‹ã€‚
+		-çˆ¶ç±»å’Œå­ç±»ä¸æ˜¯ç›¸åŒç±»å‹;
+		-æ¯”è¾ƒç±»å‹æ—¶å¿½ç•¥constå’Œ&ä¿®é¥°ï¼Œå¿½ç•¥åŒç±»å‹æ•°ç»„çš„é•¿åº¦ä¸åŒï¼›
+			-intå’Œconst intåˆ¤æ–­ç›¸åŒï¼Œä½†int[]å’Œconst int[]åˆ¤æ–­ä¸åŒï¼›
+			-æ¶‰åŠæŒ‡é’ˆçš„æ—¶å€™å¿½ç•¥ä¸äº†constã€‚
 	*/
 	template<class T1, class T2, class ...Ts>
 	inline bool isSameType()
@@ -47,7 +47,7 @@ namespace mineutils
 		return _isSameType<T1, T2, Ts...>(type_tag);
 	}
 
-	//ÓÃÓÚÅĞ¶ÏÊäÈë²ÎÊıÊÇ²»ÊÇÏàÍ¬ÀàĞÍ¡£
+	//ç”¨äºåˆ¤æ–­è¾“å…¥å‚æ•°æ˜¯ä¸æ˜¯ç›¸åŒç±»å‹ã€‚
 	template<class T1, class T2, class ...Ts>
 	inline bool isSameType(T1& arg1, T2& arg2, Ts& ...args)
 	{
@@ -66,7 +66,7 @@ namespace mineutils
 		return std::is_same<typename std::decay<T1>::type, typename std::decay<T2>::type>::value;
 	}
 
-	//ÓÃÓÚÅĞ¶ÏTÊÇ·ñÊôÓÚºóÃæµÄ¶àÖÖÀàĞÍ¡£
+	//ç”¨äºåˆ¤æ–­Tæ˜¯å¦å±äºåé¢çš„å¤šç§ç±»å‹ã€‚
 	template<class T, class T1, class... Types>
 	inline bool isInTypes()
 	{

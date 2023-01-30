@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include<algorithm>
 #include<iomanip>
 #include<sstream>
@@ -8,12 +8,12 @@
 
 namespace mineutils
 {
-	/*---------------------------------ÉùÃ÷-------------------------------------*/
+	/*---------------------------------å£°æ˜-------------------------------------*/
 
-	/*---------------------------------¶¨Òå-------------------------------------*/
-	static bool ColorStr_enabled = false;   //ÔÚmainº¯ÊıcppÖĞ¸ü¸Ä£¬¾Í¿ÉÒÔÓ°ÏìÈ«¾Ö£¬·ñÔò²»Ó°Ïì
+	/*---------------------------------å®šä¹‰-------------------------------------*/
+	static bool ColorStr_enabled = false;   //åœ¨mainå‡½æ•°cppä¸­æ›´æ”¹ï¼Œå°±å¯ä»¥å½±å“å…¨å±€ï¼Œå¦åˆ™ä¸å½±å“
 
-	class ColorStr   //ËÆºõÖ»ÔÚWindowsºÍLinux×ÀÃæ¶ËÉúĞ§
+	class ColorStr   //ä¼¼ä¹åªåœ¨Windowså’ŒLinuxæ¡Œé¢ç«¯ç”Ÿæ•ˆ
 	{
 	private:
 		ColorStr() {}
@@ -122,7 +122,7 @@ namespace mineutils
 		return buffer.str();
 	}
 	
-	inline std::string zfillInt(int n, int min_len = 0, char padding = '0')   //ÊäÈëintÖµ£¬·µ»Ølen³¤¶ÈµÄ×Ö·û´®
+	inline std::string zfillInt(int n, int min_len = 0, char padding = '0')   //è¾“å…¥intå€¼ï¼Œè¿”å›lené•¿åº¦çš„å­—ç¬¦ä¸²
 	{
 		std::string s = std::to_string(n);
 		if (s.length() < min_len)
@@ -139,7 +139,7 @@ namespace mineutils
 		buffer << std::setprecision(flt_precision) << f;
 		std::string s = buffer.str();
 
-		/*ÕÒµ½ÊäÈëĞ¡ÊıµÄÕûÊı²¿·ÖºÍĞ¡Êı²¿·Ö£¬·Ö±ğ´¦Àí²¢ºÏ²¢*/
+		/*æ‰¾åˆ°è¾“å…¥å°æ•°çš„æ•´æ•°éƒ¨åˆ†å’Œå°æ•°éƒ¨åˆ†ï¼Œåˆ†åˆ«å¤„ç†å¹¶åˆå¹¶*/
 		std::string int_part, flt_part;
 		size_t point_pos = s.find(".");
 		if (point_pos != -1)
@@ -168,7 +168,7 @@ namespace mineutils
 		size_t pos = s.find("{}");
 		if (pos != -1)
 		{
-			std::cout << cs::red("!!!Error!!! ", __func__, ": ") << "fstr´ıÌæ»»²ÎÊıÁ¿¹ıÉÙ£¡" << std::endl;
+			std::cout << cs::red("!!!Error!!! ", __func__, ": ") << "fstrå¾…æ›¿æ¢å‚æ•°é‡è¿‡å°‘ï¼" << std::endl;
 			return "";
 		}
 		return s;
@@ -186,14 +186,14 @@ namespace mineutils
 		}
 		else
 		{
-			std::cout << cs::red("!!!Error!!! ", __func__, ": ") << "fstr´ıÌæ»»²ÎÊıÁ¿¹ı¶à£¡" << std::endl;
+			std::cout << cs::red("!!!Error!!! ", __func__, ": ") << "fstrå¾…æ›¿æ¢å‚æ•°é‡è¿‡å¤šï¼" << std::endl;
 			return "";
 		}
 		return _fstr(s, args...);
 	}
 
 	template<class... Ts>
-	inline std::string fstr(std::string s, const Ts& ...args)   //ÊµÏÖÀàËÆÓÚpythonµÄf-std::string¹¦ÄÜ£¬½«×Ö·û´®ÖĞµÄ{}Ìæ»»ÎªºóÃæµÄ²ÎÊı
+	inline std::string fstr(std::string s, const Ts& ...args)   //å®ç°ç±»ä¼¼äºpythonçš„f-std::stringåŠŸèƒ½ï¼Œå°†å­—ç¬¦ä¸²ä¸­çš„{}æ›¿æ¢ä¸ºåé¢çš„å‚æ•°
 	{
 		return _fstr(s, args...);	
 	}
@@ -203,7 +203,7 @@ namespace mineutils
 	{
 		std::vector<std::string> strs;
 		size_t sep_pos;
-		std::string s_in;   //s_in´æ·ÅÒÑ´¦ÀíµÄ×Ö¶Î£¬s´æ·Å´ı´¦ÀíµÄ×Ö¶Î
+		std::string s_in;   //s_inå­˜æ”¾å·²å¤„ç†çš„å­—æ®µï¼Œså­˜æ”¾å¾…å¤„ç†çš„å­—æ®µ
 		while ((sep_pos = s.find(sep)) != -1)
 		{
 			s_in = s.substr(0, sep_pos);
@@ -217,7 +217,7 @@ namespace mineutils
 	}
 
 
-	/*-----------------------------------·ÏÆú´úÂë----------------------------------*/
+	/*-----------------------------------åºŸå¼ƒä»£ç ----------------------------------*/
 	/*
 	std::string toStr(const char* s)
 	{
@@ -240,7 +240,7 @@ namespace mineutils
 	std::string toStr(const T& arg)
 	{
 		std::string s = std::to_string(arg);
-		//È¥µôĞ¡ÊıÄ©Î²µÄ0
+		//å»æ‰å°æ•°æœ«å°¾çš„0
 		size_t point_pos = s.find(".");
 		if (point_pos != -1)
 		{

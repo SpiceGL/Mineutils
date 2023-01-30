@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include<iostream>
 #include<set>
 #include<string>
@@ -23,11 +23,11 @@ namespace mineutils
 	struct Path
 	{
 		/*
-			·â×°Ò»Ğ©³£ÓÃµÄÂ·¾¶Ïà¹Ø²Ù×÷¡£
-			-ÒÔ'/'µÈ·Ö¸ô·û½áÎ²µÄÂ·¾¶»áºöÂÔÄ©Î²'/'ºÅ
+			å°è£…ä¸€äº›å¸¸ç”¨çš„è·¯å¾„ç›¸å…³æ“ä½œã€‚
+			-ä»¥'/'ç­‰åˆ†éš”ç¬¦ç»“å°¾çš„è·¯å¾„ä¼šå¿½ç•¥æœ«å°¾'/'å·
 		*/
 
-		//ÅĞ¶ÏÂ·¾¶ÊÇ·ñ´æÔÚ
+		//åˆ¤æ–­è·¯å¾„æ˜¯å¦å­˜åœ¨
 		static bool exists(std::string pth)   
 		{
 			pth = Path::normPath(pth);
@@ -35,7 +35,7 @@ namespace mineutils
 			return stat(pth.c_str(), &buffer) == 0;
 		}
 
-		//»ñÈ¡ÊäÈëµÄºó×ºÃû
+		//è·å–è¾“å…¥çš„åç¼€å
 		static std::string extension(std::string pth)   
 		{
 			std::string name = Path::splitName(pth);
@@ -44,7 +44,7 @@ namespace mineutils
 			else return name.substr(name.find_last_of('.') + 1);
 		}
 
-		//ÅĞ¶ÏÂ·¾¶ÊÇ·ñÎª¾ø¶ÔÂ·¾¶
+		//åˆ¤æ–­è·¯å¾„æ˜¯å¦ä¸ºç»å¯¹è·¯å¾„
 		static bool isAbs(std::string pth)  
 		{
 			pth = Path::normPath(pth);
@@ -53,7 +53,7 @@ namespace mineutils
 			else return pth.substr(0, 1) == "/";
 		}
 
-		//ÅĞ¶ÏÂ·¾¶ÊÇ·ñÎªÄ¿Â¼
+		//åˆ¤æ–­è·¯å¾„æ˜¯å¦ä¸ºç›®å½•
 		static bool isDir(std::string pth)  
 		{
 			pth = Path::normPath(pth);
@@ -66,7 +66,7 @@ namespace mineutils
 			return false;
 		}
 
-		//ÅĞ¶ÏÂ·¾¶ÊÇ·ñÎªÎÄ¼ş
+		//åˆ¤æ–­è·¯å¾„æ˜¯å¦ä¸ºæ–‡ä»¶
 		static bool isFile(std::string pth)  
 		{
 			pth = Path::normPath(pth);
@@ -79,7 +79,7 @@ namespace mineutils
 			return false;
 		}
 
-		//ÊµÏÖÀàËÆpythonµÄos.path.join¹¦ÄÜ
+		//å®ç°ç±»ä¼¼pythonçš„os.path.joinåŠŸèƒ½
 		template<class... Strs>
 		static std::string join(std::string pth1, std::string pth2, Strs... pths)  
 		{
@@ -102,7 +102,7 @@ namespace mineutils
 
 #if defined(_MSC_VER)
 //#if defined(WIN32) or defined(_WIN32) or defined(__WIN32) and !defined(__CYGWIN__)
-		static std::vector<std::string> listDir(std::string pth, bool return_path = true, std::set<std::string> ignore_names = {})  //»ñÈ¡Ä¿Â¼ÏÂµÄÒ»¼¶ÎÄ¼şºÍÄ¿Â¼
+		static std::vector<std::string> listDir(std::string pth, bool return_path = true, std::set<std::string> ignore_names = {})  //è·å–ç›®å½•ä¸‹çš„ä¸€çº§æ–‡ä»¶å’Œç›®å½•
 		{
 			pth = Path::normPath(pth);
 			intptr_t hFile = 0;
@@ -112,7 +112,7 @@ namespace mineutils
 
 			if (not Path::isDir(pth))
 			{
-				std::cout << makeMessageW("Path", __func__, "ÊäÈëÂ·¾¶²»ÊÇÄ¿Â¼»ò²»´æÔÚ£¬ÒÑ·µ»Ø¿Õ½á¹û£¡") << std::endl;
+				std::cout << makeMessageW("Path", __func__, "è¾“å…¥è·¯å¾„ä¸æ˜¯ç›®å½•æˆ–ä¸å­˜åœ¨ï¼Œå·²è¿”å›ç©ºç»“æœï¼") << std::endl;
 				return {};
 			}
 			if ((hFile = _findfirst(p.append("/*").c_str(), &fileinfo)) != -1) 
@@ -124,19 +124,19 @@ namespace mineutils
 
 					if (!ignore and fname != "." and fname != "..")
 					{
-						// ±£´æÎÄ¼şµÄÈ«Â·¾¶
+						// ä¿å­˜æ–‡ä»¶çš„å…¨è·¯å¾„
 
 						if (return_path)
 							files.push_back(Path::join(pth, fname));
 						else files.push_back(fname);
 					}
-				} while (_findnext(hFile, &fileinfo) == 0);  //Ñ°ÕÒÏÂÒ»¸ö£¬³É¹¦·µ»Ø0£¬·ñÔò-1
+				} while (_findnext(hFile, &fileinfo) == 0);  //å¯»æ‰¾ä¸‹ä¸€ä¸ªï¼ŒæˆåŠŸè¿”å›0ï¼Œå¦åˆ™-1
 				_findclose(hFile);
 			}
 			return files;
 		}
 
-		static bool makeDirs(std::string pth)  //´´½¨Ä¿Â¼
+		static bool makeDirs(std::string pth)  //åˆ›å»ºç›®å½•
 		{
 			if (Path::exists(pth))
 				return true;
@@ -165,7 +165,7 @@ namespace mineutils
 
 			if (not Path::isDir(pth))
 			{
-				std::cout << makeMessageW("Path", __func__, "ÊäÈëÂ·¾¶²»ÊÇÄ¿Â¼»ò²»´æÔÚ£¬ÒÑ·µ»Ø¿Õ½á¹û£¡") << std::endl;
+				std::cout << makeMessageW("Path", __func__, "è¾“å…¥è·¯å¾„ä¸æ˜¯ç›®å½•æˆ–ä¸å­˜åœ¨ï¼Œå·²è¿”å›ç©ºç»“æœï¼") << std::endl;
 				return {};
 			}
 			pDir = opendir(pth.c_str());
@@ -184,7 +184,7 @@ namespace mineutils
 			return files;
 		}
 
-		static bool makeDirs(std::string pth)  //´´½¨Ä¿Â¼
+		static bool makeDirs(std::string pth)  //åˆ›å»ºç›®å½•
 		{
 			if (Path::exists(pth))
 				return true;
@@ -202,9 +202,9 @@ namespace mineutils
 		}
 #endif
 
-		static std::string normPath(std::string pth)   //½«windowsÂ·¾¶ÖĞµÄ\\±äÎª±ê×¼µÄ/·Ö¸ô·û
+		static std::string normPath(std::string pth)   //å°†windowsè·¯å¾„ä¸­çš„\\å˜ä¸ºæ ‡å‡†çš„/åˆ†éš”ç¬¦
 		{
-			//std::string::findÖ»ÓĞÍêÈ«Æ¥Åä²Å·µ»ØÕıÈ·idx£¬std::string::find_first_ofÔÚÓĞÒ»¸ö×Ö·ûÆ¥ÅäÊ±¾Í·µ»ØÕıÈ·idx
+			//std::string::findåªæœ‰å®Œå…¨åŒ¹é…æ‰è¿”å›æ­£ç¡®idxï¼Œstd::string::find_first_ofåœ¨æœ‰ä¸€ä¸ªå­—ç¬¦åŒ¹é…æ—¶å°±è¿”å›æ­£ç¡®idx
 			size_t pos;
 			while (pth.find("\\") != -1)
 			{
@@ -247,7 +247,7 @@ namespace mineutils
 			return parent;
 		}
 
-		static std::string splitName(std::string pth, bool suffix = true)  //´ÓÂ·¾¶×Ö·û´®»ñÈ¡ÎÄ¼şÃû
+		static std::string splitName(std::string pth, bool suffix = true)  //ä»è·¯å¾„å­—ç¬¦ä¸²è·å–æ–‡ä»¶å
 		{
 			pth = Path::normPath(pth);
 			std::string name = pth.substr(pth.find_last_of('/') + 1);  
@@ -256,14 +256,14 @@ namespace mineutils
 			return name;
 		}
 
-		static std::vector<std::string> walk(std::string pth, bool return_path = true)  //±éÀúÄ¿Â¼ÏÂµÄËùÓĞÎÄ¼ş
+		static std::vector<std::string> walk(std::string pth, bool return_path = true)  //éå†ç›®å½•ä¸‹çš„æ‰€æœ‰æ–‡ä»¶
 		{
 			std::vector<std::string> filenames;
 			std::string filename;
 
 			if (not Path::isDir(pth))
 			{
-				std::cout << makeMessageW("Path", __func__, "ÊäÈëÂ·¾¶²»ÊÇÄ¿Â¼»ò²»´æÔÚ£¬ÒÑ·µ»Ø¿Õ½á¹û£¡") << std::endl;
+				std::cout << makeMessageW("Path", __func__, "è¾“å…¥è·¯å¾„ä¸æ˜¯ç›®å½•æˆ–ä¸å­˜åœ¨ï¼Œå·²è¿”å›ç©ºç»“æœï¼") << std::endl;
 				return {};
 			}
 			std::vector<std::string> listdir_res = Path::listDir(pth, return_path);

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include"sign.hpp"   //basic
 #include"litetime.hpp"   //basic
 #include"str.hpp"   //basic

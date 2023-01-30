@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include<cmath>
 #include<iostream>
 #include<string>
@@ -24,7 +24,7 @@ namespace mineutils
 		{
 			//if (input_list.size() != 4)
 			//{
-			//	std::cout << makeMessageE("BaseBox", __func__, "ÊäÈë³¤¶È±ØĞëÎª4£¡") << std::endl;
+			//	std::cout << makeMessageE("BaseBox", __func__, "è¾“å…¥é•¿åº¦å¿…é¡»ä¸º4ï¼") << std::endl;
 			//	exit(0)
 			//}
 			//int idx = 0;
@@ -60,7 +60,7 @@ namespace mineutils
 		}
 
 
-		/*ÔÚ¶ÔÏóÊÇÕûĞÍµÄÊ±ºòËÄÉáÎåÈë*/
+		/*åœ¨å¯¹è±¡æ˜¯æ•´å‹çš„æ—¶å€™å››èˆäº”å…¥*/
 		static T roundWhenInt(float x)   
 		{
 			if (isInTypes<T, char, unsigned char, short, unsigned short,
@@ -79,7 +79,7 @@ namespace mineutils
 	template<class T>
 	class LTWHBox;
 
-	/*×óÉÏ½Ç-ÓÒÏÂ½Ç£ºl¡¢t¡¢r¡¢bÅÅÁĞµÄbbox×ø±ê*/
+	/*å·¦ä¸Šè§’-å³ä¸‹è§’ï¼šlã€tã€rã€bæ’åˆ—çš„bboxåæ ‡*/
 	template<class T>
 	class LTRBBox :public BaseBox<T>
 	{
@@ -116,7 +116,7 @@ namespace mineutils
 		LTWHBox<T> toLTWH() const;
 	};
 
-	/*ÖĞĞÄ-¿í¸ß£ºx¡¢y¡¢w¡¢hÅÅÁĞµÄbbox×ø±ê*/
+	/*ä¸­å¿ƒ-å®½é«˜ï¼šxã€yã€wã€hæ’åˆ—çš„bboxåæ ‡*/
 	template<class T>
 	class XYWHBox :public BaseBox<T>
 	{
@@ -148,7 +148,7 @@ namespace mineutils
 		LTWHBox<T> toLTWH() const;
 	};
 
-	/*×óÉÏ½Ç-¿í¸ß£ºl¡¢t¡¢w¡¢hÅÅÁĞµÄbbox×ø±ê*/
+	/*å·¦ä¸Šè§’-å®½é«˜ï¼šlã€tã€wã€hæ’åˆ—çš„bboxåæ ‡*/
 	template<class T>
 	class LTWHBox :public BaseBox<T>
 	{
@@ -240,7 +240,7 @@ namespace mineutils
 
 	/*------------------------------------------------------------------------------*/
 	template<class T>
-	inline std::ostream& operator<<(std::ostream& _cout, const BaseBox<T>& bbox)   //Ìí¼Ó¶ÔprintµÄÖ§³Ö£¬bboxÒªÃ´const &ÒªÃ´²»ÒıÓÃ
+	inline std::ostream& operator<<(std::ostream& _cout, const BaseBox<T>& bbox)   //æ·»åŠ å¯¹printçš„æ”¯æŒï¼Œbboxè¦ä¹ˆconst &è¦ä¹ˆä¸å¼•ç”¨
 	{
 		std::cout << "[" << bbox[0] << " " << bbox[1] << " "
 			<< bbox[2] << " " << bbox[3] << "]";
@@ -284,7 +284,7 @@ namespace mineutils
 //		{
 //			if (input_list.size() != 4)
 //			{
-//				std::cout << cstr::red("BaseBox::", __func__, ":") << " ÊäÈë³¤¶È±ØĞëÎª4£¡" << std::endl;
+//				std::cout << cstr::red("BaseBox::", __func__, ":") << " è¾“å…¥é•¿åº¦å¿…é¡»ä¸º4ï¼" << std::endl;
 //				exit(0);
 //			}
 //			int idx = 0;
@@ -317,7 +317,7 @@ namespace mineutils
 //	};
 //
 //
-//	/*×ó-ÉÏ-ÓÒ-ÏÂÅÅÁĞµÄbbox×ø±ê*/
+//	/*å·¦-ä¸Š-å³-ä¸‹æ’åˆ—çš„bboxåæ ‡*/
 //	template<class T>
 //	class LTRBBox :public BaseBox<T>
 //	{
@@ -379,7 +379,7 @@ namespace mineutils
 //
 //	/*------------------------------------------------------------------------------*/
 //	template<class T>
-//	std::ostream& operator<<(std::ostream& std::cout, const BaseBox<T>& bbox)   //Ìí¼Ó¶ÔprintµÄÖ§³Ö£¬bboxÒªÃ´const &ÒªÃ´²»ÒıÓÃ
+//	std::ostream& operator<<(std::ostream& std::cout, const BaseBox<T>& bbox)   //æ·»åŠ å¯¹printçš„æ”¯æŒï¼Œbboxè¦ä¹ˆconst &è¦ä¹ˆä¸å¼•ç”¨
 //	{
 //		std::cout << "[" << bbox[0] << " " << bbox[1] << " "
 //			<< bbox[2] << " " << bbox[3] << "]";

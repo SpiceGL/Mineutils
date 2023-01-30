@@ -1,11 +1,11 @@
-#pragma once
+ï»¿#pragma once
 #include<string>
 #include"str.hpp"
 
 
 namespace mineutils
 {
-	//Éú³É¾¯¸æĞÅÏ¢
+	//ç”Ÿæˆè­¦å‘Šä¿¡æ¯
 	inline std::string makeMessageW(const std::string& class_name, const std::string& func_name, const std::string& content)
 	{
 		std::string color_msg;
@@ -16,13 +16,13 @@ namespace mineutils
 		return cstr::yellow(color_msg) + content;
 	}
 
-	//Éú³É¾¯¸æĞÅÏ¢
+	//ç”Ÿæˆè­¦å‘Šä¿¡æ¯
 	inline std::string makeMessageW(const std::string& func_name, const std::string& content)
 	{
 		return makeMessageW("", func_name, content);
 	}
 
-	//Éú³É´íÎóĞÅÏ¢
+	//ç”Ÿæˆé”™è¯¯ä¿¡æ¯
 	inline std::string makeMessageE(const std::string& class_name, const std::string& func_name, const std::string& content)
 	{
 		std::string color_msg;
@@ -33,13 +33,13 @@ namespace mineutils
 		return cstr::red(color_msg) + content;
 	}
 
-	//Éú³É´íÎóĞÅÏ¢
+	//ç”Ÿæˆé”™è¯¯ä¿¡æ¯
 	inline std::string makeMessageE(const std::string& func_name, const std::string& content)
 	{
 		return makeMessageE("", func_name, content);
 	}
 
-	//Éú³ÉÕı³£ÌáÊ¾ĞÅÏ¢£¬ÔÚColorStr_enable==trueÊ±¿ÉÒÔÑ¡ÔñÑÕÉ«
+	//ç”Ÿæˆæ­£å¸¸æç¤ºä¿¡æ¯ï¼Œåœ¨ColorStr_enable==trueæ—¶å¯ä»¥é€‰æ‹©é¢œè‰²
 	inline std::string makeMessageN(const std::string& class_name, const std::string& func_name, const std::string& content, const std::string& color = "cyan")
 	{
 		std::string color_msg;
@@ -66,7 +66,7 @@ namespace mineutils
 			return cstr::yellow(color_msg) + content;
 	}
 
-	//Éú³ÉÕı³£ÌáÊ¾ĞÅÏ¢£¬ÔÚColorStr_enable==trueÊ±¿ÉÒÔÑ¡ÔñÑÕÉ«
+	//ç”Ÿæˆæ­£å¸¸æç¤ºä¿¡æ¯ï¼Œåœ¨ColorStr_enable==trueæ—¶å¯ä»¥é€‰æ‹©é¢œè‰²
 	inline std::string makeMessageN(const std::string& func_name, const std::string& content, const std::string& color = "cyan")
 	{
 		return makeMessageN("", func_name, content, color);

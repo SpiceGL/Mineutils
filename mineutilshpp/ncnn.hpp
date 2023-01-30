@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include<iostream>
 #include<string>
 #include<vector>
@@ -14,7 +14,7 @@
 
 namespace mineutils
 {
-	/*----------------------------------ÉùÃ÷--------------------------------------*/
+	/*----------------------------------å£°æ˜--------------------------------------*/
 	bool loadNcnn(ncnn::Net& net_out, const std::string& param_path, const std::string& bin_path);
 	
 	std::vector<ncnn::Mat> quickRunNcnn(ncnn::Net& net_in, ncnn::Mat& input, const std::string& in_name, const std::vector<std::string>& out_names);
@@ -26,18 +26,18 @@ namespace mineutils
 
 
 
-	/*----------------------------------¶¨Òå--------------------------------------*/
+	/*----------------------------------å®šä¹‰--------------------------------------*/
 	inline bool loadNcnn(ncnn::Net& net_out, const std::string& param_path, const std::string& bin_path)
 	{
 		//ncnn::Net net;
 		if (net_out.load_param(param_path.c_str()))
 		{
-			std::cout << makeMessageW(__func__, fstr("¼ÓÔØparamÎÄ¼ş{}Ê§°Ü£¡ ", param_path)) << std::endl;
+			std::cout << makeMessageW(__func__, fstr("åŠ è½½paramæ–‡ä»¶{}å¤±è´¥ï¼ ", param_path)) << std::endl;
 			return false;
 		}
 		if (net_out.load_model(bin_path.c_str()))
 		{
-			std::cout << makeMessageW(__func__, fstr("¼ÓÔØbinÎÄ¼ş{}Ê§°Ü£¡ ", bin_path)) << std::endl;
+			std::cout << makeMessageW(__func__, fstr("åŠ è½½binæ–‡ä»¶{}å¤±è´¥ï¼ ", bin_path)) << std::endl;
 			return false;
 		}
 		return true;
@@ -70,7 +70,7 @@ namespace mineutils
 
 
 	template<class Tx, class Ty, class Tc>
-	inline void printMat(const ncnn::Mat& m, Tx x_range, Ty y_range, Tc c_range)   //Êä³öncnnµÄMat£¬Ö»Ö§³ÖÈıÎ¬Í¼ÏñMat
+	inline void printMat(const ncnn::Mat& m, Tx x_range, Ty y_range, Tc c_range)   //è¾“å‡ºncnnçš„Matï¼Œåªæ”¯æŒä¸‰ç»´å›¾åƒMat
 	{
 		using Range = std::pair<int, int>;
 		Range x_norm_range = normRange(x_range, m.w);
