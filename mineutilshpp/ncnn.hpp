@@ -48,6 +48,7 @@ namespace mineutils
 	{
 		
 		ncnn::Extractor extractor = net_in.create_extractor();
+		extractor.set_light_mode(true);
 		extractor.input(in_name.c_str(), input);
 
 		std::vector<ncnn::Mat> outs;
