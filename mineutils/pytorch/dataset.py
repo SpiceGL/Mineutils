@@ -15,22 +15,22 @@ class MultiDataset(Dataset):
             1.2 ……
     """
     def __init__(self, root_path: str, data_names: list, img_dirname="imgs", label_dirname="labels", ignore_imgs=[], ignore_labels=[], shuffle=True):
-        super().
+        super().__init__()
         self.root_path = root_path
         self.data_paths = [os.path.join(root_path, data_name) for data_name in data_names]
-        self.img_paths, self.labels_paths = self._get_all_datapath(self.data_paths, img_dirname, label_dirname, ignore_imgs, ignore_labels, shuffle)
+        self.img_paths, self.labels_paths = self._getAllDatapath(self.data_paths, img_dirname, label_dirname, ignore_imgs, ignore_labels, shuffle)
         
         
-    def _get_all_datapath(self, data_paths: list, img_dirname: str, label_dirname: str,
+    def _getAllDatapath(self, data_paths: list, img_dirname: str, label_dirname: str,
                           ignore_imgs: list, ignore_labels: list, shuffle: bool) -> list:
         
         img_paths = []
         lable_paths = []
         for data_path in data_paths:
             img_dirpath = os.path.join(data_path, img_dirname)
-            img_paths.extend(Path.listdir(img_dirpath, ignore_names=ignore_imgs))
+            img_paths.extend(Path.listDir(img_dirpath, ignore_names=ignore_imgs))
             label_dirpath = os.path.join(data_path, label_dirname)
-            lable_paths.extend(Path.listdir(label_dirpath, ignore_names=ignore_labels))
+            lable_paths.extend(Path.listDir(label_dirpath, ignore_names=ignore_labels))
         if shuffle:
             state = np.random.get_state()
             np.random.shuffle(img_paths)

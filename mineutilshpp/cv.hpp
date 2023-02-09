@@ -55,7 +55,7 @@ namespace mineutils
 		int word_type = cv::FONT_HERSHEY_SIMPLEX, float word_scale = 1, 
 		int bbox_thickness = 3, int text_thickness = 2);
 
-	template<class T>
+	template<class T=int>
 	void channelInit(cv::Mat& mat, cv::Point3_<T> channel_value = {0, 0, 0});
 
 	template<class Tx = std::pair<int, int>, class Ty = std::pair<int, int>, class Tc = std::pair<int, int>>
