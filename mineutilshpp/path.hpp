@@ -79,6 +79,32 @@ namespace mineutils
 			return false;
 		}
 
+		//判断路径是否为真实的图像文件
+		static bool isImage(std::string pth)
+		{
+			pth = Path::normPath(pth);
+			if (!isFile(pth))
+				return false;
+			std::set<std::string> img_extensions = { "png", "PNG", "jpg", "JPG", "jpeg", "JPEG" };
+			std::string extension = Path::extension(pth);
+			if (img_extensions.find(extension) == img_extensions.end())
+				return false;
+			else return true;
+		}
+
+		//判断路径是否为真实的视频文件
+		static bool isVideo(std::string pth)
+		{
+			pth = Path::normPath(pth);
+			if (!isFile(pth))
+				return false;
+			std::set<std::string> img_extensions = { "avi", "AVI", "mp4", "MP4", "flv", "FLV" };
+			std::string extension = Path::extension(pth);
+			if (img_extensions.find(extension) == img_extensions.end())
+				return false;
+			else return true;
+		}
+
 		//实现类似python的os.path.join功能
 		template<class... Strs>
 		static std::string join(std::string pth1, std::string pth2, Strs... pths)  
