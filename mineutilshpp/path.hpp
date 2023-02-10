@@ -266,15 +266,15 @@ namespace mineutils
 				std::cout << makeMessageW("Path", __func__, "输入路径不是目录或不存在，已返回空结果！") << std::endl;
 				return {};
 			}
-			std::vector<std::string> listdir_res = Path::listDir(pth, return_path);
-			for (std::string& f_d : listdir_res)
+			std::vector<std::string> listdir_res = Path::listDir(pth, true);
+			for (std::string& f_d_path : listdir_res)
 			{
-				if (Path::isDir(f_d))
+				if (Path::isDir(f_d_path))
 				{
-					std::vector<std::string> sub_filenames = Path::walk(f_d, return_path);
+					std::vector<std::string> sub_filenames = Path::walk(f_d_path, return_path);
 					filenames.insert(filenames.end(), sub_filenames.begin(), sub_filenames.end());
 				}
-				else return_path ? filenames.push_back(f_d) : filenames.push_back(f_d);
+				else return_path ? filenames.push_back(f_d_path) : filenames.push_back(Path::splitName(f_d_path));
 			}
 			return filenames;
 		}	
