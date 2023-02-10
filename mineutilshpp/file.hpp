@@ -16,6 +16,11 @@ namespace mineutils
 		ios::noreplace：//不覆盖文件，所以打开文件时如果文件存在失败
 		ios::trunc：　  //如果文件存在，把文件长度设为0
 	*/
+
+	/*	@file file.hpp
+	 *	@brief 读写ini文件。
+	 *	ini文件规范：#或//或;表示注释；正文应包含section-key-value的结构，且同一key的value不应有多个
+	*/
 	class IniFile
 	{
 	public:
@@ -153,7 +158,7 @@ namespace mineutils
 				{
 					if (content[i].size() > 0)
 					{
-						if (content[i][0] == '[')
+						if (isSection(content[i]))
 							break;
 						else if (split(content[i], "=")[0] == key)
 							return i;
@@ -161,6 +166,13 @@ namespace mineutils
 				}
 			}
 			return -1;
+		}
+
+		bool isSection(const std::string& str) const
+		{
+			if (str[0] == '[')
+				return true;
+			else return false;
 		}
 
 		///*查找key所在位置，未找到则返回-1*/
