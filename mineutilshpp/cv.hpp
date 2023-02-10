@@ -31,9 +31,7 @@ namespace mineutils
 	std::string setWindowCV(const std::string& win_name, cv::Size size = { -1, -1 },
 		std::pair<int, int> position = { -1, -1 }, int flag = cv::WINDOW_FREERATIO);
 
-	int loopShowCV(const std::string& win_name, cv::Mat& img, float wait = 1);
-
-	void quickShowCV(const std::string& win_name, cv::Mat& img,
+	int quickShowCV(const std::string& win_name, cv::Mat& img,
 		float wait = 1, bool close = false, cv::Size size = { -1, -1 },
 		std::pair<int, int> position = { -1, -1 }, int flag = cv::WINDOW_FREERATIO);
 
@@ -86,7 +84,7 @@ namespace mineutils
 	/*------------------------------------定义-------------------------------------*/
 	
 	
-	//快速设置窗口属性
+	//快速设置窗口属性，返回为窗口的名字
 	inline std::string setWindowCV(const std::string& win_name, cv::Size size, std::pair<int, int> position, int flag)
 	{
 		cv::namedWindow(win_name, flag);
@@ -97,21 +95,10 @@ namespace mineutils
 		return win_name;
 	}
 
-	//快速显示图像，窗口属性在函数外设置，推荐用于循环体中，返回键入的key值
-	inline int loopShowCV(const std::string& win_name, cv::Mat& img, float wait)
-	{
-		cv::imshow(win_name, img);
-		int k = cv::waitKey(wait) & 0xff;
-		//bool go_on;
-		//if (k == 27 or k == int('q'))
-		//	go_on = false;
-		//else go_on = true;
-		return k;
-	}
 
-
-	//快速显示图像，一步到位设置窗口和显示属性
-	inline void quickShowCV(const std::string& win_name, cv::Mat& img, float wait, bool close,
+	/*	@brief 快速显示图像，一步到位设置窗口和显示属性
+	*/
+	inline int quickShowCV(const std::string& win_name, cv::Mat& img, float wait, bool close,
 		cv::Size size, std::pair<int, int> position, int flag)
 	{
 		using cs = ColorStr;
@@ -121,9 +108,10 @@ namespace mineutils
 		if (position.first != -1)
 			cv::moveWindow(win_name, position.first, position.second);
 		cv::imshow(win_name, img);
-		cv::waitKey(wait);
+		int k = cv::waitKey(wait) & 0xff;
 		if (close)
 			cv::destroyWindow(win_name);
+		return k;
 	}
 
 	//快速显示视频
@@ -148,8 +136,9 @@ namespace mineutils
 				std::cout << makeMessageN(__func__, "视频已播放结束。") << std::endl;
 				break;
 			}
-			bool go_on = loopShowCV(win_name, frame, wait);
-			if (not go_on)
+			cv::imshow(win_name, frame);
+			int k = cv::waitKey(wait) & 0xff;
+			if (k == 27)
 			{
 				cv::destroyWindow(win_name);
 				std::cout << makeMessageN(__func__, "收到中止信号，提前结束视频播放！")  << std::endl;
