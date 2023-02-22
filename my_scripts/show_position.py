@@ -134,7 +134,7 @@ def markPixel():
 def markRect():
     cv2.destroyAllWindows()
     title = "NewType"
-    source_path = r"E:\Datasets\Z106\Z106_2022_4_19-20\Normal\normal3.avi"   #img or video
+    source_path = r"E:\Datasets\Z106\test_video\normal\normal4_Trim1.mp4"   #img or video
     w, h = 720, 480
     cap = None
     if Path.isImage(source_path):
