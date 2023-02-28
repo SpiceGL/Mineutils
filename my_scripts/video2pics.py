@@ -227,6 +227,8 @@ def windingVideoCut2Img(video_path_or_dir, save_dir, save_interval=0, show_saved
                 cv2.imwrite(save_path, saved_img)
         cap.release()
         cv2.destroyAllWindows()
+        
+        
 
 
 if __name__ == '__main__':
