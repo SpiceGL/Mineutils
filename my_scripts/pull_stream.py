@@ -6,7 +6,7 @@ from mineutils.path import Path
 
 
 def pullStream():
-    rtsp_url = 'rtmp://192.168.0.111:1935/live/home'
+    rtsp_url = 'rtmp://169.254.152.111:1935/live/home'
     ###ffmpeg -re -stream_loop -1 -i .\Normal_Fri_Aug_13_14_14_37_2021_Slomo.mp4 -f rtsp rtsp://192.168.74.1:8554/video
     cap = cv2.VideoCapture(rtsp_url)
 
@@ -55,4 +55,4 @@ def pullStreamSave():
 
 
 if __name__ == "__main__":
-    pullStreamSave()
+    pullStream()
