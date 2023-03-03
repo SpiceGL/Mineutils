@@ -13,6 +13,7 @@ namespace mineutils
 
 	/*---------------------------------定义-------------------------------------*/
 	static bool ColorStr_enabled = false;   //在main函数cpp中更改，就可以影响全局，否则不影响
+	
 
 	class ColorStr   //似乎只在Windows和Linux桌面端生效
 	{
@@ -114,13 +115,16 @@ namespace mineutils
 
 	using cstr = ColorStr;
 
+	
 
 	template<class T>
 	inline std::string toStr(const T& arg)
 	{
-		std::ostringstream buffer;
-		buffer << arg;
-		return buffer.str();
+		static std::ostringstream str_buf;   //给toStr函数使用的字符串流
+		str_buf.clear();
+		str_buf.str("");
+		str_buf << arg;
+		return str_buf.str();
 	}
 	
 	inline std::string zfillInt(int n, int min_len = 0, char padding = '0')   //输入int值，返回len长度的字符串
@@ -199,21 +203,61 @@ namespace mineutils
 		return _fstr(s, args...);	
 	}
 	
+	////实现对字符串的分割功能，默认会保留空字符串，以vector形式返回，至少会返回包含原字符串的vector
+	//inline std::vector<std::string> split(std::string s, const std::string& sep=" ", bool ignore_emptystr=false)
+	//{
+	//	std::vector<std::string> strs;
+	//	size_t sep_pos;
+	//	std::string s_in;   //s_in存放已处理的字段，s存放待处理的字段
 
-	inline std::vector<std::string> split(std::string s, const std::string& sep=" ", bool ignore_emptystr=true)
+	//	if ((sep_pos = s.find(sep)) != -1)
+	//	{
+	//		while ((sep_pos = s.find(sep)) != -1)
+	//		{
+	//			s_in = s.substr(0, sep_pos);
+	//			s = s.substr(sep_pos + sep.length());
+	//			if ((ignore_emptystr and s_in.length() != 0) or !ignore_emptystr)
+	//				strs.push_back(s_in);
+	// 			s_in.clear();
+	//		}
+	//		if ((ignore_emptystr and s.length() != 0) or !ignore_emptystr)
+	//			strs.push_back(s);
+	//	}
+	//	else strs.push_back(s);
+	//	return strs;
+	//}
+
+	//实现对字符串的分割功能，以vector形式返回
+	inline std::vector<std::string> split(std::string s, const std::string& sep)
 	{
 		std::vector<std::string> strs;
 		size_t sep_pos;
 		std::string s_in;   //s_in存放已处理的字段，s存放待处理的字段
+
 		while ((sep_pos = s.find(sep)) != -1)
 		{
 			s_in = s.substr(0, sep_pos);
 			s = s.substr(sep_pos + sep.length());
-			if ((ignore_emptystr and s_in.length() != 0) or !ignore_emptystr)
-				strs.push_back(s_in);
+			strs.push_back(s_in);
+			s_in.clear();
 		}
-		if ((ignore_emptystr and s.length() != 0) or !ignore_emptystr)
-			strs.push_back(s);
+		strs.push_back(s);
+		return strs;
+	}
+
+	//按字符串中的空格分割字符串，至少返回包含一个空字符串的vector
+	inline std::vector<std::string> split(std::string s)
+	{
+		std::vector<std::string> strs;
+		std::stringstream ss;
+		ss << s;
+		std::string s_in;
+		ss >> s_in;
+		do
+		{
+			strs.push_back(s_in);
+			s_in.clear();
+		} while (ss >> s_in);
 		return strs;
 	}
 

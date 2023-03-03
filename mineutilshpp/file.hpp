@@ -18,27 +18,26 @@ namespace mineutils
 	*/
 
 	/*	@file file.hpp
-	 *	@brief 读写ini文件。
-	 *	ini文件规范：#或//或;表示注释；正文应包含section-key-value的结构，且同一key的value不应有多个
+	 *	@brief 读写ini文件。ini文件规范：#或//表示注释；内容为section-key-value的结构或key-value结构；section不可重复不可分段，同一section的key不可重复。
 	*/
 	class IniFile
 	{
 	public:
-		IniFile(const std::string& path) :file_path(path)
+		IniFile()
 		{
 
 		}
 		~IniFile()
 		{
-			file.close();
-			content.clear();
+			this->close();
 		}
 		IniFile(const IniFile& file) = delete;
 		IniFile& operator=(const IniFile& file) = delete;
 
 		//打开ini文件
-		bool open()   
+		bool open(const std::string& path)
 		{
+			file_path = path;
 			if (file.is_open())
 			{
 				printf("IniFile: 文件已被打开");
@@ -60,8 +59,8 @@ namespace mineutils
 					std::getline(file, line);
 					if (line.size() > 0)
 					{
-						line = split(line, "\n", false)[0];
-						line = split(line, "\r", false)[0];
+						line = split(line, "\n")[0];
+						line = split(line, "\r")[0];
 					}
 					content.push_back(line);
 				}
@@ -77,19 +76,24 @@ namespace mineutils
 			content.clear();
 			file.close();
 			rwstatus = 'r';
+			file.clear();
 		}
 
+		//根据section和key获取值
 		std::string getValue(const std::string& section, const std::string& key)
 		{
 			std::string value;
-			int section_start = findSection(section);
+			int section_start;
+			if (section.size() > 0)
+				section_start = findSection(section);
+			else section_start = 0;
 			if (section_start >= 0)
 			{
 				int key_idx = findKey(section_start, key);
 				if (key_idx >= 0)
 				{
 					value = split(content[key_idx], "=")[1];
-					value = split(value, " ")[0];
+					value = split(value)[0];
 					for (const std::string& sign : note_signs)
 						value = split(value, sign)[0];
 				}
@@ -106,29 +110,56 @@ namespace mineutils
 			return value;
 		}
 
-		void setValue(const std::string& section, const std::string& key, const std::string& value)
+		//根据key获得值，没有section时使用
+		std::string getValue(const std::string& key)
 		{
+			return getValue("", key);
+		}
+
+
+		/*	@brief 根据section和key设置值
+		*	@param value: int、float等数字类型或char、string等字符类型
+		*/
+		template<class T>
+		void setValue(const std::string& section, const std::string& key, const T& value)
+		{
+			std::string s_value = toStr(value);
 			rwstatus = 'w';
-			int section_start = findSection(section);
+			int section_start;
+			if (section.size() > 0)
+				section_start = findSection(section);
+			else section_start = 0;
 			if (section_start >= 0)
 			{
 				int key_idx = findKey(section_start, key);
 				if (key_idx >= 0)
 				{
 					//std::string note = split(content[key_idx], ";")[1];
-					content[key_idx] = key + "=" + value;// +"   " + note;
+					content[key_idx] = key + "=" + s_value;// +"   " + note;
 				}
 				else
 				{
-					int section_end = findSectionEnd(section_start);
-					content.insert(content.begin() + section_end, key + "=" + value);
+					int section_end;
+					if (section.size() > 0)
+						section_end = findSectionEnd(section_start);
+					else section_end = content.size();
+					content.insert(content.begin() + section_end, key + "=" + s_value);
 				}
 			}
 			else
 			{
 				content.push_back("[" + section + "]");
-				content.push_back(key + "=" + value);
+				content.push_back(key + "=" + s_value);
 			}
+		}
+
+		/*	@brief 根据key设置值
+		*	@param value: int、float等数字类型或char、string等字符类型，使用sstream转换为字符串
+		*/
+		template<class T>
+		void setValue(const std::string& key, const T& value)
+		{
+			setValue("", key, value);
 		}
 
 	private:
@@ -136,7 +167,7 @@ namespace mineutils
 		std::fstream file;
 		char rwstatus = 'r';
 		std::vector<std::string> content;
-		const std::vector<std::string> note_signs = {";", "#", "//"};
+		const std::vector<std::string> note_signs = {"#", "//"};
 
 		/*查找section所在位置，未找到则返回-1*/
 		int findSection(const std::string& section) const
@@ -160,7 +191,7 @@ namespace mineutils
 					{
 						if (isSection(content[i]))
 							break;
-						else if (split(content[i], "=")[0] == key)
+						else if (content[i].find("=") != -1 and split(split(content[i], "=")[0])[0] == key)
 							return i;
 					}
 				}
@@ -184,7 +215,7 @@ namespace mineutils
 		//	else return -1;
 		//}
 
-		/*查找Section的最后一行的下一行所在位置，未找到则返回-1*/
+		/*查找Section的最后一行的下一行所在位置*/
 		int findSectionEnd(const int& section_start) const
 		{
 			for (int i = section_start + 1; i < content.size(); ++i)
@@ -193,17 +224,21 @@ namespace mineutils
 				{
 					if (content[i][0] == '[')
 						return i;
-					else if (i == content.size() - 1)
-						return content.size();
 				}
-				else for (int j = i + 1; j < content.size(); ++j)
-				{
-					if (content[j].size() > 0)
-						if (content[j][0] == '[' or j == content.size() - 1)
-							return i;	
-				}
+				//else for (int j = i + 1; j < content.size(); ++j)
+				//{
+				//	if (content[j].size() > 0)
+				//	{
+				//		if (content[j][0] == '[' or j == content.size() - 1)
+				//			return i;
+				//		else break;
+				//	}
+				//	else if (j == content.size() - 1)
+				//		return i;
+				//	
+				//}
 			}
-			return -1;
+			return content.size();
 		}
 
 		/*查找Section的最后一行的下一行所在位置，未找到则返回-1*/
@@ -219,9 +254,11 @@ namespace mineutils
 		{
 			file.close();
 			file.open(file_path, std::ios::binary | std::ios::trunc | std::ios::out);
-			for (std::string& line : content)
+			for (int i = 0; i < content.size(); ++i)
 			{
-				file << line << std::endl;
+				if (i == content.size() - 1)
+					file << content[i];
+				else file << content[i] << std::endl;
 			}
 		}
 	};

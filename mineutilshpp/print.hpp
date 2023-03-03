@@ -189,7 +189,7 @@ namespace mineutils
 
 	inline void _print(const std::string& str)
 	{
-		std::cout << str;
+		std::cout << "\"" << str << "\"";
 	}
 
 	inline void _print(const bool& arg)
