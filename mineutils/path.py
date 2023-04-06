@@ -125,6 +125,10 @@ class Path:
         
     @classmethod
     def join(cls, *strs):
+        s = strs[0]
+        if strs[0][-1] == ":":
+            strs = list(strs)
+            strs[0] += "/"
         path = os.path.join(*strs)
         return cls.normalPath(path)
 
@@ -212,6 +216,8 @@ class Path:
         path = cls.normalPath(path)
         abspath = cls.normalPath(os.path.abspath(path))
         absparent = cls.normalPath(os.path.dirname(abspath))
+        # if absparent[-1] == ":":
+        #     absparent += "/"
         if not use_abspath:
             work_path = cls.normalPath(os.getcwd())
             level_work = len(work_path.split("/"))   ###从根目录到工作目录的级数

@@ -117,20 +117,9 @@ class PixelMarker:
         for xy in self.points:
             x, y = xy[0], xy[1]
             cv2.circle(img_drawn, (x, y), 3, (0, 0, 255), thickness=-1)
-            text_x, text_y = self._setTextPosition((x, y))
-            cv2.putText(img_drawn, str(xy), (text_x, text_y), cv2.FONT_HERSHEY_DUPLEX, 0.5, (255, 255, 255),
+            cv2.putText(img_drawn, str(xy), (x, y), cv2.FONT_HERSHEY_DUPLEX, 0.5, (255, 255, 255),
                         thickness=1)
         cv2.imshow(self.title, img_drawn)
-
-        
-    def _setTextPosition(self, point):
-        x, y = point
-        w, h = self.size
-        if x > w / 5 * 3:
-            x = x - w // 10
-        if y < h / 10:
-            y = y + h // 10
-        return x, y
     
     def _onclick(self, event, x, y, flags, param):
         """
@@ -139,6 +128,7 @@ class PixelMarker:
         if event == cv2.EVENT_LBUTTONDOWN:
             self.points.append((x, y))
             self._drawMark()
+            print(ColorStr.blue("PixelMarker: 当前绘制的点坐标:"), [x, y])
     
     def start(self):
         cv2.namedWindow(self.title, cv2.WINDOW_AUTOSIZE)

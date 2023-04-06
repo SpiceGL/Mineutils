@@ -1,12 +1,13 @@
 import cv2
 import time
+import datetime
 import sys
 sys.path.append("..")
 from mineutils.path import Path
 
 
 def pullStream():
-    rtsp_url = 'rtmp://169.254.152.111:1935/live/home'
+    rtsp_url = 'rtmp://175.178.15.53:1935/live/pgltest'
     ###ffmpeg -re -stream_loop -1 -i .\Normal_Fri_Aug_13_14_14_37_2021_Slomo.mp4 -f rtsp rtsp://192.168.74.1:8554/video
     cap = cv2.VideoCapture(rtsp_url)
 
@@ -24,13 +25,13 @@ def pullStream():
     
 
 def pullStreamSave():
-    rtsp_url = 'rtmp://192.168.0.111:1935/live/home'
+    rtsp_url = 'rtmp://175.178.15.53:1935/live/pgltest'
     time_tp = time.localtime(time.time())
     save_path = f"E:/Datasets/AgriRobot_pull/ArgiRobot_{time_tp[0]:0>4}{time_tp[1]:0>2}{time_tp[2]:0>2}_{time_tp[3]:0>2}{time_tp[4]:0>2}{time_tp[5]:0>2}.avi"
     if not Path.exists(Path.parent(save_path)):
         Path.makeDirs(Path.parent(save_path))
     # save_path = time.strftime("%Y_%2m%2d_%2H:%2M:%2S", time.localtime())
-    save_fps = 25
+    save_fps = 10
     ###ffmpeg -re -stream_loop -1 -i .\Normal_Fri_Aug_13_14_14_37_2021_Slomo.mp4 -f rtsp rtsp://192.168.74.1:8554/video
     cap = cv2.VideoCapture(rtsp_url)
     writer = cv2.VideoWriter()
@@ -55,5 +56,5 @@ def pullStreamSave():
 
 
 if __name__ == "__main__":
-    # pullStream()
+    pullStreamSave()
     print("   ".split())
