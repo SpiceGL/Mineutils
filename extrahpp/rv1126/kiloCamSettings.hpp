@@ -1,4 +1,4 @@
-﻿//在一个项目中只能被一个cpp调用
+//在一个项目中只能被一个cpp调用
 #pragma once
 #include<gpio.h>
 #include<chrono>
@@ -124,12 +124,17 @@ public:
 		cam_ptr->start_stream(false);
 	}
 
-	void setViewer(int chan_id, LTRBBox<unsigned int> rect, bool is_rgb)   //也许rgb和yuv上屏不能一起，暂不确定
+	/*	@brief 图像上屏设置
+	*	@param rect: 屏幕显示区域 [left, top, right, bottom]
+	*	@param is_rgb: 是否使用RGB图像上屏
+	*	@param rgb_w & rgb_h: 只在is_rgb为true的时候生效，设置上屏的rgb图像宽高
+	*/
+	void setViewer(int chan_id, LTRBBox<unsigned int> rect, bool is_rgb, int rgb_w=CAM_WIDTH, int rgb_h=CAM_HEIGHT)   //也许rgb和yuv上屏不能一起，暂不确定
 	{
 		//设置rgb上屏，rgb和bgr设置疑似反了，图像是RGB的时候反而应该设置IMAGE_TYPE_BGR888
 		_rects[chan_id] = { rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top };
 		if (is_rgb)
-			addRgbConfig(chan_id, CAM_WIDTH, CAM_HEIGHT, IMAGE_TYPE_BGR888, _viewer, &(_rects[chan_id]));
+			addRgbConfig(chan_id, rgb_w, rgb_h, IMAGE_TYPE_BGR888, _viewer, &(_rects[chan_id]));
 		else addCamConfig(_cams[chan_id], _viewer, &(_rects[chan_id]));
 	}
 
@@ -212,6 +217,7 @@ private:
 		viewer->add_cam(chan_id, true, w, h, type, *rect);
 	}
 };
+
 
 
 
