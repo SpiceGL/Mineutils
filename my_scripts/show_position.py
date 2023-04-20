@@ -86,6 +86,7 @@ class LabelMarker(PM):
     def _drawMark(self):
         if len(self.points) == 0:
             img_drawn = self.img.copy()
+            self.res_img = self.img.copy()
         else:
             img_drawn = self.res_img.copy()
             
@@ -172,7 +173,7 @@ def mainMarkRect():
 
 ###手动画检测框，结果保存为输入图像同一级目录下的mainMrawLabel.jpg
 def mainMrawLabel():
-    img_path = r"E:\20220524-0-00005.jpg"
+    img_path = r"E:\00005.jpg"
     save_path = Path.join(Path.parent(img_path, True), "mainMrawLabel.jpg")
     img = cv2.imread(img_path)
     labels = ["crop", "weed", "OutOfRange"]

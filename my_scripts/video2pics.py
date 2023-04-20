@@ -61,6 +61,9 @@ class BoxMarker(PixelMarker):
         super().__init__(title, img, window_size, position)
         self.lines = []
         
+    def _setTextPosition(self, point):
+        return point
+
     def _drawMark(self):
         img_drawn = self.img.copy()
         for xy in self.points:

@@ -7,7 +7,7 @@ from mineutils.path import Path
 
 
 def pullStream():
-    rtsp_url = 'rtmp://175.178.15.53:1935/live/pgltest'
+    rtsp_url = 'rtmp://120.24.100.10:8000/live/pgltest'
     ###ffmpeg -re -stream_loop -1 -i .\Normal_Fri_Aug_13_14_14_37_2021_Slomo.mp4 -f rtsp rtsp://192.168.74.1:8554/video
     cap = cv2.VideoCapture(rtsp_url)
 
@@ -25,18 +25,18 @@ def pullStream():
     
 
 def pullStreamSave():
-    rtsp_url = 'rtmp://175.178.15.53:1935/live/pgltest'
+    rtsp_url = 'rtmp://120.24.100.10:8000/live/pgltest'
     time_tp = time.localtime(time.time())
     save_path = f"E:/Datasets/AgriRobot_pull/ArgiRobot_{time_tp[0]:0>4}{time_tp[1]:0>2}{time_tp[2]:0>2}_{time_tp[3]:0>2}{time_tp[4]:0>2}{time_tp[5]:0>2}.avi"
     if not Path.exists(Path.parent(save_path)):
         Path.makeDirs(Path.parent(save_path))
     # save_path = time.strftime("%Y_%2m%2d_%2H:%2M:%2S", time.localtime())
-    save_fps = 10
+    save_fps = 30
     ###ffmpeg -re -stream_loop -1 -i .\Normal_Fri_Aug_13_14_14_37_2021_Slomo.mp4 -f rtsp rtsp://192.168.74.1:8554/video
     cap = cv2.VideoCapture(rtsp_url)
     writer = cv2.VideoWriter()
     if cap.isOpened():
-        writer.open(save_path, cv2.VideoWriter_fourcc('D', 'I', 'V', 'X'), save_fps,
+        writer.open(save_path, cv2.VideoWriter_fourcc('M', 'P', '4', '2'), save_fps,
                     (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))), True)
     while cap.isOpened():
         ret, frame = cap.read()
@@ -56,5 +56,6 @@ def pullStreamSave():
 
 
 if __name__ == "__main__":
-    pullStreamSave()
+    # pullStreamSave()
+    pullStream()
     print("   ".split())
