@@ -120,7 +120,7 @@ namespace mineutils
 	template<class T>
 	inline std::string toStr(const T& arg)
 	{
-		static std::ostringstream str_buf;   //给toStr函数使用的字符串流
+		std::ostringstream str_buf;   //给toStr函数使用的字符串流
 		str_buf.clear();
 		str_buf.str("");
 		str_buf << arg;

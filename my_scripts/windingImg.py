@@ -107,7 +107,9 @@ def mainWindingImg():
     classes = ["normal", "wrong"]
     videos_dirpath = r"E:\Datasets\Z75\Normal"
     label = 0
+
     save_interval = 10   #>=1
+    
     rand_cut_rate = 0.1
     
     imgsave_dirpath = Path.join(videos_dirpath, "imgs")

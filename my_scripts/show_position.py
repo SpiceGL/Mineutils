@@ -145,7 +145,7 @@ def mainMarkPixel():
 def mainMarkRect():
     cv2.destroyAllWindows()
     title = "NewType"
-    source_path = r"E:\20220524-0-00005.jpg"   #img or video
+    source_path = r"E:\Datasets\coor\ZTC1000V663-1\ZTC1000V663-1_LP207_Normal_Fri_Feb_17_10_55_06_2023.avi"   #img or video
     w, h = 720, 480
     cap = None
     if Path.isImage(source_path):
@@ -172,7 +172,7 @@ def mainMarkRect():
 
 
 ###手动画检测框，结果保存为输入图像同一级目录下的mainMrawLabel.jpg
-def mainMrawLabel():
+def mainMrakLabel():
     img_path = r"E:\00005.jpg"
     save_path = Path.join(Path.parent(img_path, True), "mainMrawLabel.jpg")
     img = cv2.imread(img_path)
@@ -187,7 +187,7 @@ def mainMrawLabel():
 
 
 if __name__ == '__main__':
-    mainMrawLabel()
+    mainMarkRect()
 
 
 
