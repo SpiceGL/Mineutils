@@ -217,6 +217,29 @@ namespace mineutils
 		cv::merge(ma_mb_mc, mat);
 	}
 
+	//static class TypesGet
+	//{
+	//private:
+	//	uchar a = 0;
+	//	char b = 0;
+	//	ushort c = 0;
+	//	short d = 0;
+	//	int e = 0;
+	//	float f = 0;
+	//	double g = 0;
+	//public:
+	//	template<class T>
+	//	T operator[](const int id)
+	//	{
+	//		if (id == 0) return a;
+	//		else if (id == 1) return b;
+	//		else if (id == 2) return c;
+	//		else if (id == 3) return d;
+	//		else if (id == 4) return e;
+	//		else if (id == 5) return f;
+	//		else if (id == 6) return g;
+	//	}
+	//};
 
 	//显示cv::Mat的值
 	template<class Tx, class Ty, class Tc>
@@ -230,6 +253,11 @@ namespace mineutils
 		CV_32S	4	12	20	28       int
 		CV_32F	5	13	21	29       float
 		CV_64F	6	14	22	30       double */
+
+		//static std::tuple<uchar, char, ushort, short, int, float, double> types_tp = { 0, 0, 0, 0, 0, 0, 0 };
+
+
+		//static TypesGet types;
 		using cs = ColorStr;
 		using pt = std::pair<int, int>;
 
@@ -256,6 +284,17 @@ namespace mineutils
 		else if (img.type() == 22)
 			_printCVMat<cv::Vec3d>(img, xstart, xend, ystart, yend, cstart, cend, false);
 		else std::cout << makeMessageW(__func__, "该图像的cv::Mat::type()暂不支持，已跳过输出！")  << std::endl;
+
+
+		//if (img.channels() == 1)
+		//{
+		//	//std::get<img.depth()>(types_tp);
+		//	_printCVMat<decltype(types[img.depth()])>(img, xstart, xend, ystart, yend, true);
+		//}
+		//else
+		//{
+		//	_printCVMat<cv::Vec<decltype(std::get<img.depth()>(types_tp), img.channels()>>(img, xstart, xend, ystart, yend, cstart, cend, true);
+		//}
 	}
 
 

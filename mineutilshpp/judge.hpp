@@ -9,25 +9,25 @@ namespace mineutils
 {
 /*--------------------------------------------声明----------------------------------------------*/
 	template<class T1, class T2, class ...Ts>
-	bool isSameType();
+	constexpr bool isSameType();
 
 	template<class T1, class T2, class ...Ts>
-	bool isSameType(T1& arg1, T2& arg2, Ts& ...args);
+	constexpr bool isSameType(T1& arg1, T2& arg2, Ts& ...args);
 
 	template<class T1, class T2, class ...Ts>
-	bool _isSameType(Sign::CaseTag1 tag);
+	constexpr bool _isSameType(Sign::CaseTag1 tag);
 
 	template<class T1, class T2>
-	bool _isSameType(Sign::CaseTag0 tag);
+	constexpr bool _isSameType(Sign::CaseTag0 tag);
 
 	template<class T, class T1, class... Types>
-	bool isInTypes();
+	constexpr bool isInTypes();
 
 	template<class T, class T1, class... Types>
-	bool _isInTypes(Sign::CaseTag1 tag);
+	constexpr bool _isInTypes(Sign::CaseTag1 tag);
 
 	template<class T, class T1>
-	bool _isInTypes(Sign::CaseTag0 tag);
+	constexpr bool _isInTypes(Sign::CaseTag0 tag);
 
 /*--------------------------------------------定义----------------------------------------------*/
 
@@ -40,7 +40,7 @@ namespace mineutils
 			-涉及指针的时候忽略不了const。
 	*/
 	template<class T1, class T2, class ...Ts>
-	inline bool isSameType()
+	inline constexpr bool isSameType()
 	{
 		constexpr int type_id = (sizeof...(Ts) > 0);
 		auto type_tag = std::get<type_id>(Sign::BOOL_TAGS);
@@ -49,26 +49,26 @@ namespace mineutils
 
 	//用于判断输入参数是不是相同类型。
 	template<class T1, class T2, class ...Ts>
-	inline bool isSameType(T1& arg1, T2& arg2, Ts& ...args)
+	inline constexpr bool isSameType(T1& arg1, T2& arg2, Ts& ...args)
 	{
 		return isSameType<T1, T2, Ts...>();
 	}
 
 	template<class T1, class T2, class ...Ts>
-	inline bool _isSameType(Sign::CaseTag1 tag)
+	inline constexpr bool _isSameType(Sign::CaseTag1 tag)
 	{
 		return std::is_same<typename std::decay<T1>::type, typename std::decay<T2>::type>::value and isSameType<T1, Ts...>();
 	}
 
 	template<class T1, class T2>
-	inline bool _isSameType(Sign::CaseTag0 tag)
+	inline constexpr bool _isSameType(Sign::CaseTag0 tag)
 	{
 		return std::is_same<typename std::decay<T1>::type, typename std::decay<T2>::type>::value;
 	}
 
 	//用于判断T是否属于后面的多种类型。
 	template<class T, class T1, class... Types>
-	inline bool isInTypes()
+	inline constexpr bool isInTypes()
 	{
 		constexpr int type_id = (sizeof...(Types) > 0);
 		auto type_tag = std::get<type_id>(Sign::BOOL_TAGS);
@@ -76,13 +76,13 @@ namespace mineutils
 	}
 
 	template<class T, class T1, class... Types>
-	inline bool _isInTypes(Sign::CaseTag1 tag)
+	inline constexpr bool _isInTypes(Sign::CaseTag1 tag)
 	{
 		return isSameType<T, T1>() or isInTypes<T, Types...>();
 	}
 
 	template<class T, class T1>
-	inline bool _isInTypes(Sign::CaseTag0 tag)
+	inline constexpr bool _isInTypes(Sign::CaseTag0 tag)
 	{
 		return isSameType<T, T1>();
 	}

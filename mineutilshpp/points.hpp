@@ -18,21 +18,14 @@ namespace mineutils
 	protected:
 		T data[4];
 	public:
-		BaseBox() {}
+		BaseBox() 
+		{ 
+			static_assert(std::is_integral<T>::value || std::is_floating_point<T>::value, "class T is not integral or floating_point!"); 
+		}
 
 		BaseBox(const T& v0, const T& v1, const T& v2, const T& v3)
 		{
-			//if (input_list.size() != 4)
-			//{
-			//	std::cout << makeMessageE("BaseBox", __func__, "输入长度必须为4！") << std::endl;
-			//	exit(0)
-			//}
-			//int idx = 0;
-			//for (int value : input_list)
-			//{
-			//	this->data[idx] = value;
-			//	++idx;
-			//}
+			static_assert(std::is_integral<T>::value || std::is_floating_point<T>::value, "class T is not integral or floating_point!");
 			data[0] = v0;
 			data[1] = v1;
 			data[2] = v2;
@@ -59,14 +52,13 @@ namespace mineutils
 			return this->data[idx];
 		}
 
-
-		/*在对象是整型的时候四舍五入*/
-		static T roundWhenInt(float x)   
+		static bool belongToIntSeries()
 		{
-			if (isInTypes<T, char, unsigned char, short, unsigned short,
-				int, unsigned int, long, unsigned long, long long, unsigned long long>())
-				return round(x);
-			else return x;
+			/*if (isInTypes<T, char, unsigned char, short, unsigned short,
+				int, unsigned int, long, unsigned long, long long, unsigned long long>())*/
+			if (std::is_integral<T>::value)
+				return true;
+			else return false;
 		}
 	};
 
@@ -107,12 +99,16 @@ namespace mineutils
 			return *this;
 		}
 
-		LTRBBox<int> toPixel() const
+		//将坐标转化为像素坐标
+		template<class PT = int>
+		LTRBBox<PT> toPixel() const
 		{
-			return { (int)round(left), (int)round(top), (int)round(right), (int)round(bottom) };
+			return { PT(floor(left)), PT(floor(top)), PT(floor(right)), PT(floor(bottom)) };
 		}
 
+		//若自身数据为整数类型，则按像素运算，否则按连续数值运算
 		XYWHBox<T> toXYWH() const;
+		//若自身数据为整数类型，则按像素运算，否则按连续数值运算
 		LTWHBox<T> toLTWH() const;
 	};
 
@@ -139,12 +135,16 @@ namespace mineutils
 			return *this;
 		}
 
-		XYWHBox<int> toPixel() const
+		//将坐标转化为像素坐标
+		template<class PT = int>
+		XYWHBox<PT> toPixel() const
 		{
-			return { (int)round(x), (int)round(y), (int)round(w), (int)round(h) };
+			return { PT(floor(x)), PT(floor(y)), PT(floor(w)), PT(floor(h)) };
 		}
 
+		//若自身数据为整数类型，则按像素运算，否则按连续数值运算
 		LTRBBox<T> toLTRB() const;
+		//若自身数据为整数类型，则按像素运算，否则按连续数值运算
 		LTWHBox<T> toLTWH() const;
 	};
 
@@ -174,12 +174,16 @@ namespace mineutils
 			return *this;
 		}
 
-		LTWHBox<int> toPixel() const
+		/*将坐标转化为像素坐标，向下取整*/
+		template<class PT = int>
+		LTWHBox<PT> toPixel() const
 		{
-			return { (int)round(l), (int)round(t), (int)round(w), (int)round(h) };
+			return { PT(floor(l)), PT(floor(t)), PT(floor(w)), PT(floor(h)) };
 		}
 
+		//若自身数据为整数类型，则按像素运算，否则按连续数值运算
 		LTRBBox<T> toLTRB() const;
+		//若自身数据为整数类型，则按像素运算，否则按连续数值运算
 		XYWHBox<T> toXYWH() const;
 	};
 
@@ -187,38 +191,76 @@ namespace mineutils
 	template<class T>
 	XYWHBox<T> LTRBBox<T>::toXYWH() const
 	{
-		T w = this->right - this->left;
-		T h = this->bottom - this->top;
-		T x = BaseBox<T>::roundWhenInt(this->left + (float)w / 2);
-		T y = BaseBox<T>::roundWhenInt(this->top + (float)h / 2);
-		return { x,y,w,h };
+
+		if (BaseBox<T>::belongToIntSeries())
+		{
+			
+			T _w = this->right - this->left + 1;
+			T _h = this->bottom - this->top + 1;
+			T _x = this->left + ceil(double(_w - 1) / 2);
+			T _y = this->top + ceil(double(_h - 1) / 2);
+			return { _x,_y,_w,_h };
+		}
+		else
+		{
+			T _w = this->right - this->left;
+			T _h = this->bottom - this->top;
+			T _x = this->left + _w / 2;
+			T _y = this->top + _h / 2;
+			return { _x,_y,_w,_h };
+		}
 	}
 
 	template<class T>
 	LTWHBox<T> LTRBBox<T>::toLTWH() const
 	{
-		T w = this->right - this->left;
-		T h = this->bottom - this->top;
-		return { this->l, this->t, w, h };
+		T _w = this->right - this->left;
+		T _h = this->bottom - this->top;
+		if (BaseBox<T>::belongToIntSeries())
+		{
+			_w += 1;
+			_h += 1;
+		}
+		return { this->l, this->t, _w, _h };
 	}
 
 	/*-----------------------------------------------*/
 	template<class T>
 	LTRBBox<T> XYWHBox<T>::toLTRB() const
 	{
-		T l = BaseBox<T>::roundWhenInt(this->x - (float)this->w / 2);
-		T t = BaseBox<T>::roundWhenInt(this->y - (float)this->h / 2);
-		T r = BaseBox<T>::roundWhenInt(this->x + (float)this->w / 2);
-		T b = BaseBox<T>::roundWhenInt(this->y + (float)this->h / 2);
-		return { l,t,r,b };
+		if (BaseBox<T>::belongToIntSeries())
+		{
+			T _l = this->x - ceil(double(this->w - 1) / 2);
+			T _t = this->y - ceil(double(this->h - 1) / 2);
+			T _r = _l + this->w - 1;
+			T _b = _t + this->h - 1;
+			return { _l,_t,_r,_b };
+		}
+		else
+		{
+			T _l = this->x - this->w / 2;
+			T _t = this->y - this->h / 2;
+			T _r = _l + this->w;
+			T _b = _t + this->h;
+			return { _l,_t,_r,_b };
+		}
 	}
 
 	template<class T>
 	LTWHBox<T> XYWHBox<T>::toLTWH() const
 	{
-		T l = BaseBox<T>::roundWhenInt(this->x - (float)this->w / 2);
-		T t = BaseBox<T>::roundWhenInt(this->y - (float)this->h / 2);
-		return { l, t, this->w, this->h };
+		if (BaseBox<T>::belongToIntSeries())
+		{
+			T _l = this->x - ceil(double(this->w - 1) / 2);
+			T _t = this->y - ceil(double(this->h - 1) / 2);
+			return { _l, _t, this->w, this->h };
+		}
+		else
+		{
+			T _l = this->x - this->w / 2;
+			T _t = this->y - this->h / 2;
+			return { _l, _t, this->w, this->h };
+		}
 	}
 
 	/*-----------------------------------------------*/
@@ -227,15 +269,30 @@ namespace mineutils
 	{
 		T r = this->left + this->w;
 		T b = this->top + this->h;
+		if (BaseBox<T>::belongToIntSeries())
+		{
+			r -= 1;
+			b -= 1;
+		}
 		return { this->l, this->t, r, b };
 	}
 
 	template<class T>
 	XYWHBox<T> LTWHBox<T>::toXYWH() const
 	{
-		T x = BaseBox<T>::roundWhenInt(this->left + (float)w / 2);
-		T y = BaseBox<T>::roundWhenInt(this->top + (float)h / 2);
-		return { x, y, this->w, this->h };
+		if (BaseBox<T>::belongToIntSeries())
+		{
+			T _x = this->left + ceil(double(this->w - 1) / 2);
+			T _y = this->top + ceil(double(this->h - 1) / 2);
+			return { _x, _y, this->w, this->h };
+		}
+		else
+		{
+			T _x = this->left + this->w / 2;
+			T _y = this->top + this->h / 2;
+			return { _x, _y, this->w, this->h };
+		}
+		
 	}
 
 	/*------------------------------------------------------------------------------*/

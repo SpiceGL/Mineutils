@@ -115,6 +115,13 @@ class Path:
         ----判断路径是否是一个真实图像文件。
         """
         return os.path.isfile(path) and cls.isImageType(path)
+
+    @classmethod
+    def isVideo(cls, path: str) -> bool:
+        """
+        ----判断路径是否是一个真实视频文件。
+        """
+        return os.path.isfile(path) and cls.isVideoType(path)
     
     @classmethod
     def isImageType(cls, name: str) -> bool:
@@ -122,6 +129,13 @@ class Path:
         --根据字符串结尾判断字符串是否是合法的图像格式名。
         """
         return any(name.endswith(extension) for extension in [".png", ".jpg", ".jpeg", ".PNG", ".JPG", ".JPEG"])
+
+    @classmethod
+    def isVideoType(cls, name: str) -> bool:
+        """
+        --根据字符串结尾判断字符串是否是合法的视频格式名。
+        """
+        return any(name.endswith(extension) for extension in ["avi", "AVI", "mp4", "MP4", "flv", "FLV"])
         
     @classmethod
     def join(cls, *strs):
